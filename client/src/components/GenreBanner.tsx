@@ -10,12 +10,12 @@ export function GenreBanner({ selectedGenre, onGenreChange }: GenreBannerProps) 
   const genres = [
     { key: 'all', label: 'All' },
     { key: 'movies', label: 'Movies' },
-    { key: 'live-sports', label: 'Live Sports' },
+    { key: 'shows', label: 'Shows' },
     { key: 'live-tv', label: 'Live TV' },
-    { key: 'reality-tv', label: 'Reality TV' },
+    { key: 'sports', label: 'Sports' },
     { key: 'documentaries', label: 'Documentaries' },
     { key: 'comedy', label: 'Comedy' },
-    { key: 'music', label: 'Music' },
+    { key: 'news', label: 'News' },
   ];
 
   return (

@@ -6,6 +6,7 @@ import { ContentRow } from "@/components/ContentRow";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { HeadlinerBanner } from "@/components/HeadlinerBanner";
 import { GuideView } from "@/components/GuideView";
+import { LiveTVGuide } from "@/components/LiveTVGuide";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -49,9 +50,8 @@ export default function Home() {
 
   // Filter content by type for different sections
   const movies = typedContent.filter((item: Content) => item.type === 'movie');
-  const shows = typedContent.filter((item: Content) => item.type === 'show');
-  const music = typedContent.filter((item: Content) => item.type === 'music');
-  const liveContent = typedContent.filter((item: Content) => item.isLive);
+  const shows = typedContent.filter((item: Content) => item.type === 'show' && !['spotify', 'apple-music'].includes(item.service || ''));
+  const liveContent = typedContent.filter((item: Content) => item.isLive || ['youtube-tv', 'espn-plus'].includes(item.service || ''));
 
   // Extract favorite content IDs
   const favoriteIds = typedFavorites.map((fav: any) => fav.contentId);
@@ -155,26 +155,35 @@ export default function Home() {
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
             imageUrl={headlinerContent.imageUrl || undefined}
-            platform={headlinerContent.service}
+            platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
             type={headlinerContent.isLive ? 'live-event' : headlinerContent.type as any}
           />
         )}
 
-        {/* Guide View */}
+        {/* Guide View or Live TV Guide */}
         {viewMode === 'guide' ? (
-          <GuideView
-            content={typedContent}
-            favorites={favoriteIds}
-            onToggleFavorite={handleToggleFavorite}
-            onPlay={handlePlay}
-          />
+          selectedGenre === 'live-tv' ? (
+            <LiveTVGuide
+              content={typedContent}
+              favorites={favoriteIds}
+              onToggleFavorite={handleToggleFavorite}
+              onPlay={handlePlay}
+            />
+          ) : (
+            <GuideView
+              content={typedContent}
+              favorites={favoriteIds}
+              onToggleFavorite={handleToggleFavorite}
+              onPlay={handlePlay}
+            />
+          )
         ) : (
           /* Card View - Existing Content Rows */
           <>
-            {/* Continue Watching Section */}
-            {typedContinueWatching.length > 0 && (
+            {/* Continue Watching Section - Only show in "All" tab */}
+            {selectedGenre === 'all' && typedContinueWatching.length > 0 && (
               <ContentRow
                 title="Continue Watching"
                 content={typedContinueWatching.map((item: any) => item.content)}
