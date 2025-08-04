@@ -16,7 +16,7 @@ export default function Home() {
 
   // Fetch content based on selected genre
   const { data: content = [], isLoading: isLoadingContent } = useQuery({
-    queryKey: ["/api/content", { genre: selectedGenre }],
+    queryKey: selectedGenre === 'all' ? ["/api/content"] : ["/api/content", { genre: selectedGenre }],
     retry: false,
   });
 
