@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { User, Settings, Link, Shield, Bell, Palette, Tv } from "lucide-react";
+import { User, Settings, Link, Shield, Bell, Palette, Tv, Home, MessageSquare, HelpCircle, Send } from "lucide-react";
 import { SiNetflix, SiSpotify, SiAmazonprime, SiYoutube } from "react-icons/si";
 
 export default function Profile() {
@@ -154,13 +154,22 @@ export default function Profile() {
       <Header viewMode={viewMode} onViewModeChange={setViewMode} />
       
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-cream mb-2">Account Settings</h1>
-          <p className="text-gray-400">Manage your profile, streaming connections, and preferences</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-cream mb-2">Account Settings</h1>
+            <p className="text-gray-400">Manage your profile, streaming connections, and preferences</p>
+          </div>
+          <Button 
+            className="bg-blue-primary hover:bg-blue-600 text-white font-bold px-6 py-3 text-lg border border-blue-primary"
+            data-testid="button-make-homepage"
+          >
+            <Home className="w-5 h-5 mr-2" />
+            Make allplay my homepage
+          </Button>
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-800/50">
+          <TabsList className="grid w-full grid-cols-6 bg-gray-800/50">
             <TabsTrigger value="profile" className="data-[state=active]:bg-blue-primary">
               <User className="w-4 h-4 mr-2" />
               Profile
@@ -176,6 +185,14 @@ export default function Profile() {
             <TabsTrigger value="privacy" className="data-[state=active]:bg-blue-primary">
               <Shield className="w-4 h-4 mr-2" />
               Privacy
+            </TabsTrigger>
+            <TabsTrigger value="support" className="data-[state=active]:bg-blue-primary">
+              <HelpCircle className="w-4 h-4 mr-2" />
+              Support
+            </TabsTrigger>
+            <TabsTrigger value="feedback" className="data-[state=active]:bg-blue-primary">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Feedback
             </TabsTrigger>
           </TabsList>
 
@@ -489,6 +506,139 @@ export default function Profile() {
                   >
                     Delete Account
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Support Tab */}
+          <TabsContent value="support" className="space-y-6">
+            <Card className="bg-gray-900/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-cream">Help & Support</CardTitle>
+                <CardDescription className="text-gray-400">
+                  Get help with Allplay features, troubleshooting, and setup
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-cream">Getting Started</h3>
+                    <div className="space-y-2">
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Setting up your TV homescreen
+                      </a>
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Connecting streaming services
+                      </a>
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Managing family profiles
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-cream">Troubleshooting</h3>
+                    <div className="space-y-2">
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Streaming playback issues
+                      </a>
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Login and authentication
+                      </a>
+                      <a href="#" className="block text-blue-primary hover:text-blue-400 transition-colors">
+                        Device compatibility
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator className="bg-gray-700" />
+                
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-cream mb-2">Need More Help?</h3>
+                  <p className="text-gray-400 mb-4">
+                    Contact our support team for personalized assistance
+                  </p>
+                  <Button 
+                    className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
+                    data-testid="button-contact-support"
+                  >
+                    Contact Support
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Feedback Tab */}
+          <TabsContent value="feedback" className="space-y-6">
+            <Card className="bg-gray-900/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-cream">We're on Your Team</CardTitle>
+                <CardDescription className="text-gray-400">
+                  Help us make Allplay better for you
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-6">
+                  <h3 className="text-xl font-bold text-cream mb-4">
+                    We're Not on Team Netflix or Team Hulu. We're on Your Team.
+                  </h3>
+                  <div className="space-y-3 text-gray-300">
+                    <p>
+                      Allplay doesn't care where the show lives. We don't have a horse in the race. 
+                      We're not trying to push one service over another.
+                    </p>
+                    <p>
+                      We exist to make streaming work for you. Your taste, your time, your subscriptions.
+                    </p>
+                    <p className="text-white font-semibold">
+                      We're not just another app. We're the TV experience you've been waiting for.
+                    </p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold text-cream mb-4">Share Your Ideas</h3>
+                  <p className="text-gray-400 mb-4">
+                    We're the platform of the people. We take your feedback seriously because we want to 
+                    make the experience better for you, the customer. Tell us what features you'd love to see.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="feedback-type" className="text-cream">Feedback Type</Label>
+                      <select 
+                        id="feedback-type"
+                        className="w-full mt-1 bg-gray-800 border border-gray-600 text-cream rounded-md px-3 py-2"
+                        data-testid="select-feedback-type"
+                      >
+                        <option value="feature">Feature Request</option>
+                        <option value="improvement">Improvement Suggestion</option>
+                        <option value="bug">Bug Report</option>
+                        <option value="general">General Feedback</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="feedback-message" className="text-cream">Your Feedback</Label>
+                      <textarea
+                        id="feedback-message"
+                        placeholder="Tell us what you think, what features you'd love, or how we can improve Allplay for you..."
+                        className="w-full mt-1 bg-gray-800 border border-gray-600 text-cream rounded-md px-3 py-2 h-32 resize-none"
+                        data-testid="textarea-feedback"
+                      />
+                    </div>
+                    
+                    <Button 
+                      className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
+                      data-testid="button-submit-feedback"
+                    >
+                      <Send className="w-4 h-4 mr-2" />
+                      Send Feedback
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

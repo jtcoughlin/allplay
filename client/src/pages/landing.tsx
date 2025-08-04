@@ -8,12 +8,13 @@ export default function Landing() {
       <header className="border-b border-navy-lighter">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-2xl font-bold text-white">
-              Allplay
-            </h1>
+            <div className="flex items-center space-x-1 text-2xl font-bold text-white">
+              <Play className="w-6 h-6 text-blue-primary" />
+              <span className="lowercase">allplay</span>
+            </div>
             <Button 
               asChild
-              className="bg-blue-primary hover:bg-blue-600 text-white"
+              className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
               data-testid="button-login"
             >
               <a href="/api/login">Log In</a>
@@ -38,7 +39,7 @@ export default function Landing() {
           <Button 
             asChild
             size="lg"
-            className="bg-blue-primary hover:bg-blue-600 text-white text-xl px-12 py-6"
+            className="bg-blue-primary hover:bg-blue-600 text-white text-xl px-12 py-6 border border-blue-primary"
             data-testid="button-get-started"
           >
             <a href="/api/login">Start Watching</a>
@@ -123,7 +124,7 @@ export default function Landing() {
             <Button 
               asChild
               size="lg"
-              className="bg-blue-primary hover:bg-blue-600 text-white text-xl px-12 py-6"
+              className="bg-blue-primary hover:bg-blue-600 text-white text-xl px-12 py-6 border border-blue-primary"
               data-testid="button-join-now"
             >
               <a href="/api/login">Join the Revolution</a>
@@ -136,7 +137,10 @@ export default function Landing() {
       <footer className="border-t border-navy-lighter mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">Allplay</h3>
+            <div className="flex items-center justify-center space-x-1 text-2xl font-bold text-white mb-4">
+              <Play className="w-6 h-6 text-blue-primary" />
+              <span className="lowercase">allplay</span>
+            </div>
             <p className="text-gray-400 mb-6">TV was broken. We fixed it.</p>
             <div className="flex justify-center space-x-8 text-sm text-gray-400">
               <span>Privacy Policy</span>

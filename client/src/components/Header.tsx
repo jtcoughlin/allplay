@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { User, ChevronDown, Grid3X3, List } from "lucide-react";
+import { User, ChevronDown, Grid3X3, List, Play, Home, Settings, LogOut } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,8 +34,15 @@ export function Header({ viewMode, onViewModeChange }: HeaderProps) {
     <header className="bg-navy-light px-2 py-2 border-b border-navy-lighter" data-testid="header-main">
       <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
         {/* Logo */}
-        <Link href="/" data-testid="link-home">
-          <Logo />
+        <Link 
+          href="/" 
+          className="flex items-center space-x-1 text-2xl font-bold text-cream hover:text-blue-primary transition-colors"
+          data-testid="link-home"
+        >
+          <div className="relative">
+            <Play className="w-6 h-6 text-blue-primary" />
+          </div>
+          <span className="lowercase">allplay</span>
         </Link>
         
         {/* Inline Navigation */}
@@ -109,19 +116,31 @@ export function Header({ viewMode, onViewModeChange }: HeaderProps) {
             <DropdownMenuContent align="end" className="bg-navy-light border-navy-lighter">
               <DropdownMenuItem asChild>
                 <Link 
+                  href="/" 
+                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer flex items-center"
+                  data-testid="link-homepage"
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Make allplay my homepage
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link 
                   href="/profile" 
-                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer"
+                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer flex items-center"
                   data-testid="link-profile"
                 >
+                  <Settings className="w-4 h-4 mr-2" />
                   Profile & Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <a 
                   href="/api/logout" 
-                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer"
+                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer flex items-center"
                   data-testid="link-logout"
                 >
+                  <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </a>
               </DropdownMenuItem>
