@@ -38,6 +38,18 @@ export interface IStorage {
   getUserWatchHistory(userId: string): Promise<(WatchHistory & { content: Content })[]>;
   getContinueWatching(userId: string): Promise<(WatchHistory & { content: Content })[]>;
   updateWatchProgress(watchHistory: InsertWatchHistory): Promise<WatchHistory>;
+  
+  // User connections operations
+  getUserConnections(userId: string): Promise<any[]>;
+  connectService(userId: string, service: string): Promise<any>;
+  disconnectService(userId: string, service: string): Promise<void>;
+  
+  // Preferences operations
+  getUserPreferences(userId: string): Promise<any>;
+  updateUserPreferences(userId: string, preferences: any): Promise<any>;
+  
+  // Enhanced favorites operations
+  toggleFavorite(userId: string, contentId: string): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -175,6 +187,58 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return updatedHistory;
+  }
+
+  // Enhanced favorites operations
+  async toggleFavorite(userId: string, contentId: string): Promise<any> {
+    const existing = await this.isFavorite(userId, contentId);
+    
+    if (existing) {
+      await this.removeFromFavorites(userId, contentId);
+      return { action: 'removed', isFavorite: false };
+    } else {
+      await this.addToFavorites({ userId, contentId });
+      return { action: 'added', isFavorite: true };
+    }
+  }
+
+  // User connections operations
+  async getUserConnections(userId: string): Promise<any[]> {
+    // Simulate connections for now - would connect to actual database table
+    return [
+      { service: 'netflix', status: 'connected' },
+      { service: 'spotify', status: 'connected' },
+    ];
+  }
+
+  async connectService(userId: string, service: string): Promise<any> {
+    // Simulate connection - would save to database
+    return { userId, service, status: 'connected', connectedAt: new Date() };
+  }
+
+  async disconnectService(userId: string, service: string): Promise<void> {
+    // Simulate disconnection - would remove from database
+    console.log(`Disconnecting ${service} for user ${userId}`);
+  }
+
+  // Preferences operations
+  async getUserPreferences(userId: string): Promise<any> {
+    // Simulate preferences - would fetch from database
+    return {
+      defaultViewMode: 'cards',
+      autoplayPreviews: true,
+      showAdultContent: true,
+      newContentAlerts: true,
+      liveEventReminders: true,
+      trackWatchHistory: true,
+      shareData: false,
+    };
+  }
+
+  async updateUserPreferences(userId: string, preferences: any): Promise<any> {
+    // Simulate update - would save to database
+    console.log(`Updating preferences for user ${userId}:`, preferences);
+    return { userId, ...preferences, updatedAt: new Date() };
   }
 }
 

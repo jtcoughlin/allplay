@@ -1,14 +1,20 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { GenreBanner } from "@/components/GenreBanner";
 import { ContentRow } from "@/components/ContentRow";
 import { MusicPlayer } from "@/components/MusicPlayer";
+import { HeadlinerBanner } from "@/components/HeadlinerBanner";
+import { GuideView } from "@/components/GuideView";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { isUnauthorizedError } from "@/lib/authUtils";
 import type { Content } from "@shared/schema";
 
 export default function Home() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [viewMode, setViewMode] = useState<'cards' | 'guide'>('cards');
   const [currentTrack, setCurrentTrack] = useState<Content | undefined>();
@@ -36,20 +42,58 @@ export default function Home() {
     return null;
   }
 
+  // Type-safe content filtering
+  const typedContent = (content as Content[]) || [];
+  const typedFavorites = (favorites as any[]) || [];
+  const typedContinueWatching = (continueWatching as any[]) || [];
+
   // Filter content by type for different sections
-  const movies = content.filter((item: Content) => item.type === 'movie');
-  const shows = content.filter((item: Content) => item.type === 'show');
-  const music = content.filter((item: Content) => item.type === 'music');
-  const liveContent = content.filter((item: Content) => item.isLive);
+  const movies = typedContent.filter((item: Content) => item.type === 'movie');
+  const shows = typedContent.filter((item: Content) => item.type === 'show');
+  const music = typedContent.filter((item: Content) => item.type === 'music');
+  const liveContent = typedContent.filter((item: Content) => item.isLive);
 
   // Extract favorite content IDs
-  const favoriteIds = favorites.map((fav: any) => fav.contentId);
+  const favoriteIds = typedFavorites.map((fav: any) => fav.contentId);
 
   // Get top-rated content
-  const topPicks = content
+  const topPicks = typedContent
     .filter((item: Content) => item.rating && parseFloat(item.rating) >= 8.0)
     .sort((a: Content, b: Content) => parseFloat(b.rating || '0') - parseFloat(a.rating || '0'))
     .slice(0, 10);
+
+  // Toggle favorite mutation
+  const toggleFavorite = useMutation({
+    mutationFn: async (contentId: string) => {
+      const response = await apiRequest("POST", "/api/favorites/toggle", { contentId });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to update favorites. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleToggleFavorite = (contentId: string) => {
+    toggleFavorite.mutate(contentId);
+  };
 
   const handlePlayTrack = (track: Content) => {
     setCurrentTrack(track);
@@ -60,72 +104,115 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   };
 
+  const handlePlay = (content: Content) => {
+    if (content.type === 'music') {
+      handlePlayTrack(content);
+    } else {
+      // Handle video content play
+      toast({
+        title: "Playing Content",
+        description: `Now playing: ${content.title}`,
+      });
+    }
+  };
+
+  // Get headliner content (top-rated live event or high-profile content)
+  const headlinerContent = typedContent.find((item: Content) => 
+    item.isLive && item.genre === 'live-sports'
+  ) || topPicks[0];
+
   return (
     <div className="min-h-screen bg-navy text-cream" data-testid="page-home">
       <Header viewMode={viewMode} onViewModeChange={setViewMode} />
       <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
       
       <main className="px-2 py-4 max-w-screen-2xl mx-auto pb-20">
-        {/* Continue Watching Section */}
-        {continueWatching.length > 0 && (
-          <ContentRow
-            title="Continue Watching"
-            content={continueWatching.map((item: any) => item.content)}
-            watchHistory={continueWatching}
-            favorites={favoriteIds}
-            showProgress={true}
-            size="medium"
+        {/* Headliner Banner - Only show in card view */}
+        {viewMode === 'cards' && headlinerContent && (
+          <HeadlinerBanner
+            title={headlinerContent.title}
+            description={headlinerContent.description || "Experience premium entertainment"}
+            imageUrl={headlinerContent.imageUrl}
+            platform={headlinerContent.platform}
+            eventDate={headlinerContent.isLive ? "Live Now" : undefined}
+            eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
+            type={headlinerContent.isLive ? 'live-event' : headlinerContent.type as any}
           />
         )}
 
-        {/* Top Picks Section */}
-        {topPicks.length > 0 && (
-          <ContentRow
-            title="Top Picks for You"
-            content={topPicks}
+        {/* Guide View */}
+        {viewMode === 'guide' ? (
+          <GuideView
+            content={typedContent}
             favorites={favoriteIds}
-            size="small"
+            onToggleFavorite={handleToggleFavorite}
+            onPlay={handlePlay}
           />
-        )}
+        ) : (
+          /* Card View - Existing Content Rows */
+          <>
+            {/* Continue Watching Section */}
+            {typedContinueWatching.length > 0 && (
+              <ContentRow
+                title="Continue Watching"
+                content={typedContinueWatching.map((item: any) => item.content)}
+                watchHistory={typedContinueWatching}
+                favorites={favoriteIds}
+                showProgress={true}
+                size="medium"
+              />
+            )}
 
-        {/* Live Sports & TV Section */}
-        {liveContent.length > 0 && (
-          <ContentRow
-            title="Live Now"
-            content={liveContent}
-            favorites={favoriteIds}
-            size="large"
-          />
-        )}
+            {/* Top Picks Section */}
+            {topPicks.length > 0 && (
+              <ContentRow
+                title="Top Picks for You"
+                content={topPicks}
+                favorites={favoriteIds}
+                size="small"
+              />
+            )}
 
-        {/* Movies Section */}
-        {movies.length > 0 && (
-          <ContentRow
-            title="Movies"
-            content={movies.slice(0, 10)}
-            favorites={favoriteIds}
-            size="small"
-          />
-        )}
+            {/* Live Sports & TV Section */}
+            {liveContent.length > 0 && (
+              <ContentRow
+                title="Live Now"
+                content={liveContent}
+                favorites={favoriteIds}
+                size="large"
+              />
+            )}
 
-        {/* TV Shows Section */}
-        {shows.length > 0 && (
-          <ContentRow
-            title="TV Shows"
-            content={shows.slice(0, 10)}
-            favorites={favoriteIds}
-            size="small"
-          />
-        )}
+            {/* Movies Section */}
+            {movies.length > 0 && (
+              <ContentRow
+                title="Movies"
+                content={movies.slice(0, 10)}
+                favorites={favoriteIds}
+                size="small"
+              />
+            )}
 
-        {/* Music Section */}
-        {music.length > 0 && (
-          <ContentRow
-            title="Trending Music"
-            content={music.slice(0, 10)}
-            favorites={favoriteIds}
-            size="small"
-          />
+            {/* TV Shows Section */}
+            {shows.length > 0 && (
+              <ContentRow
+                title="TV Shows"
+                content={shows.slice(0, 10)}
+                favorites={favoriteIds}
+                size="small"
+              />
+            )}
+
+            {/* Music Section */}
+            {music.length > 0 && (
+              <ContentRow
+                title="Trending Music"
+                content={music.slice(0, 10)}
+                favorites={favoriteIds}
+                size="small"
+              />
+            )}
+          </>
         )}
 
         {/* Loading State */}
@@ -137,7 +224,7 @@ export default function Home() {
         )}
 
         {/* Empty State */}
-        {!isLoadingContent && content.length === 0 && (
+        {!isLoadingContent && typedContent.length === 0 && (
           <div className="text-center py-12" data-testid="empty-content">
             <p className="text-gray-400 text-lg mb-4">No content available</p>
             <p className="text-gray-500 text-sm">

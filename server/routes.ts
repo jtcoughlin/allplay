@@ -105,6 +105,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Favorites toggle endpoint
+  app.post('/api/favorites/toggle', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { contentId } = req.body;
+      const result = await storage.toggleFavorite(userId, contentId);
+      res.json(result);
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      res.status(500).json({ message: "Failed to toggle favorite" });
+    }
+  });
+
+  // User connections endpoints
+  app.get('/api/user/connections', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const connections = await storage.getUserConnections(userId);
+      res.json(connections);
+    } catch (error) {
+      console.error("Error fetching user connections:", error);
+      res.status(500).json({ message: "Failed to fetch connections" });
+    }
+  });
+
+  app.post('/api/user/connect', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { service } = req.body;
+      
+      // Simulate OAuth connection flow
+      const connection = await storage.connectService(userId, service);
+      res.json({ connection, authUrl: `https://oauth.${service}.com/authorize` });
+    } catch (error) {
+      console.error("Error connecting service:", error);
+      res.status(500).json({ message: "Failed to connect service" });
+    }
+  });
+
+  app.delete('/api/user/connect/:service', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { service } = req.params;
+      
+      await storage.disconnectService(userId, service);
+      res.json({ message: "Service disconnected successfully" });
+    } catch (error) {
+      console.error("Error disconnecting service:", error);
+      res.status(500).json({ message: "Failed to disconnect service" });
+    }
+  });
+
+  // User preferences endpoints
+  app.get('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.getUserPreferences(userId);
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      res.status(500).json({ message: "Failed to fetch preferences" });
+    }
+  });
+
+  app.patch('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.updateUserPreferences(userId, req.body);
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+      res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+
   app.get('/api/favorites/:contentId/check', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;

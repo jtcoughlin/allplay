@@ -108,6 +108,15 @@ export function Header({ viewMode, onViewModeChange }: HeaderProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-navy-light border-navy-lighter">
               <DropdownMenuItem asChild>
+                <Link 
+                  href="/profile" 
+                  className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer"
+                  data-testid="link-profile"
+                >
+                  Profile & Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <a 
                   href="/api/logout" 
                   className="text-cream hover:text-blue-primary hover:bg-navy-lighter cursor-pointer"
