@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Play, Pause, Heart, MoreHorizontal, Plus, Search, Clock, Music as MusicIcon } from "lucide-react";
+import { ExternalLink, Music as MusicIcon, Plus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { MusicPlayer } from "@/components/MusicPlayer";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -14,149 +11,141 @@ import type { Content } from "@shared/schema";
 export default function Music() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [currentTrack, setCurrentTrack] = useState<Content | undefined>();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch music content
-  const { data: content = [], isLoading } = useQuery({
-    queryKey: ["/api/content", { type: "music" }],
+  // Fetch user connections to see which music services are connected
+  const { data: connections = [], isLoading: isLoadingConnections } = useQuery({
+    queryKey: ["/api/user/connections"],
     retry: false,
   });
 
-  // Fetch favorites
-  const { data: favorites = [] } = useQuery({
-    queryKey: ["/api/favorites"],
-    retry: false,
-  });
-
-  // Fetch recently played
-  const { data: recentlyPlayed = [] } = useQuery({
-    queryKey: ["/api/continue-watching"],
-    retry: false,
+  // Connect to service mutation
+  const connectService = useMutation({
+    mutationFn: async (service: string) => {
+      const response = await apiRequest("POST", "/api/user/connect", { service });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      if (data.authUrl) {
+        // For OAuth services like Spotify, redirect to auth URL
+        window.open(data.authUrl, '_blank');
+      } else if (data.requiresVerification) {
+        // For subscription verification services
+        toast({
+          title: "Service Connection",
+          description: "Please verify your subscription to complete the connection.",
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Connection Failed",
+        description: "Failed to connect to the music service",
+        variant: "destructive",
+      });
+    },
   });
 
   if (!user) {
     return null;
   }
 
-  const musicContent = (content as Content[]).filter(item => item.type === 'music');
-  const favoriteIds = (favorites as any[]).map((fav: any) => fav.contentId);
-  const favoriteMusic = musicContent.filter(track => favoriteIds.includes(track.id));
-  const recentMusic = (recentlyPlayed as any[]).filter(item => 
-    musicContent.some(track => track.id === item.contentId)
+  const musicServices = [
+    {
+      id: 'spotify',
+      name: 'Spotify',
+      description: 'Stream millions of songs and playlists',
+      icon: '🎵',
+      color: 'bg-green-600',
+      url: 'https://open.spotify.com/',
+      type: 'oauth'
+    },
+    {
+      id: 'apple-music',
+      name: 'Apple Music',
+      description: 'Access your Apple Music library and playlists',
+      icon: '🍎',
+      color: 'bg-black',
+      url: 'https://music.apple.com/',
+      type: 'oauth'
+    }
+  ];
+
+  const connectedServices = (connections as any[]).filter(conn => 
+    musicServices.some(service => service.id === conn.service)
   );
 
-  // Filter music based on search
-  const filteredMusic = searchQuery 
-    ? musicContent.filter(track => 
-        track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (track.artist && track.artist.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-    : musicContent;
-
-  // Toggle favorite mutation
-  const toggleFavorite = useMutation({
-    mutationFn: async (contentId: string) => {
-      const response = await apiRequest("POST", "/api/favorites/toggle", { contentId });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to update favorites",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handlePlay = (track: Content) => {
-    setCurrentTrack(track);
-    setIsPlaying(true);
+  const handleOpenService = (service: typeof musicServices[0]) => {
+    window.open(service.url, '_blank');
   };
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+  const handleConnectService = (serviceId: string) => {
+    connectService.mutate(serviceId);
   };
 
-  const handleToggleFavorite = (contentId: string) => {
-    toggleFavorite.mutate(contentId);
+  const isServiceConnected = (serviceId: string) => {
+    return connectedServices.some(conn => conn.service === serviceId);
   };
 
-  const TrackCard = ({ track, showArtist = true }: { track: Content; showArtist?: boolean }) => {
-    const isFavorite = favoriteIds.includes(track.id);
+  const ServiceCard = ({ service }: { service: typeof musicServices[0] }) => {
+    const isConnected = isServiceConnected(service.id);
     
     return (
       <Card 
-        className="bg-navy-light hover:bg-navy-lighter transition-colors cursor-pointer group"
-        data-testid={`card-track-${track.id}`}
+        className="bg-navy-light hover:bg-navy-lighter transition-colors cursor-pointer group border-navy-lighter"
+        data-testid={`card-service-${service.id}`}
       >
-        <CardContent className="p-4">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-12 h-12 rounded bg-navy-lighter flex items-center justify-center overflow-hidden">
-                {track.imageUrl ? (
-                  <img 
-                    src={track.imageUrl} 
-                    alt={track.title}
-                    className="w-full h-full object-cover"
-                    data-testid={`img-track-${track.id}`}
-                  />
-                ) : (
-                  <MusicIcon className="w-6 h-6 text-gray-400" />
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className={`w-16 h-16 rounded-lg ${service.color} flex items-center justify-center text-2xl`}>
+                {service.icon}
+              </div>
+              
+              <div className="flex-1">
+                <h3 
+                  className="text-lg font-semibold text-cream" 
+                  data-testid={`text-service-name-${service.id}`}
+                >
+                  {service.name}
+                </h3>
+                <p 
+                  className="text-sm text-gray-400 mt-1" 
+                  data-testid={`text-service-description-${service.id}`}
+                >
+                  {service.description}
+                </p>
+                {isConnected && (
+                  <div className="flex items-center mt-2">
+                    <Check className="w-4 h-4 text-green-400 mr-1" />
+                    <span className="text-xs text-green-400" data-testid={`text-connected-${service.id}`}>
+                      Connected
+                    </span>
+                  </div>
                 )}
               </div>
-              <Button
-                onClick={() => handlePlay(track)}
-                className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity w-12 h-12 rounded flex items-center justify-center"
-                data-testid={`button-play-${track.id}`}
-              >
-                <Play className="w-4 h-4 text-white fill-white" />
-              </Button>
             </div>
             
-            <div className="flex-1 min-w-0">
-              <h3 
-                className="text-sm font-medium text-cream truncate" 
-                title={track.title}
-                data-testid={`text-title-${track.id}`}
-              >
-                {track.title}
-              </h3>
-              {showArtist && (
-                <p 
-                  className="text-xs text-gray-400 truncate" 
-                  title={track.artist}
-                  data-testid={`text-artist-${track.id}`}
+            <div className="flex flex-col space-y-2">
+              {!isConnected && (
+                <Button
+                  onClick={() => handleConnectService(service.id)}
+                  disabled={connectService.isPending}
+                  className="bg-blue-gradient hover:bg-blue-primary text-white"
+                  data-testid={`button-connect-${service.id}`}
                 >
-                  {track.artist || 'Unknown Artist'}
-                </p>
+                  {connectService.isPending ? "Connecting..." : "Connect"}
+                </Button>
               )}
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleToggleFavorite(track.id)}
-                className={`text-red-400 hover:text-red-300 transition-colors w-8 h-8 p-0 ${
-                  isFavorite ? 'text-red-400' : 'text-gray-400'
-                }`}
-                data-testid={`button-favorite-${track.id}`}
-              >
-                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
-              </Button>
               
               <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-cream transition-colors w-8 h-8 p-0"
-                data-testid={`button-more-${track.id}`}
+                onClick={() => handleOpenService(service)}
+                variant="outline"
+                className="border-navy-lighter text-cream hover:bg-navy-lighter"
+                data-testid={`button-open-${service.id}`}
               >
-                <MoreHorizontal className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Open {service.name}
               </Button>
             </div>
           </div>
@@ -171,21 +160,13 @@ export default function Music() {
       <div className="sticky top-0 z-10 bg-navy border-b border-navy-lighter">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-cream" data-testid="heading-music">
-              Music
-            </h1>
-            
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  placeholder="Search songs, artists..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-navy-light border-navy-lighter text-cream placeholder-gray-400 w-64"
-                  data-testid="input-search-music"
-                />
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-cream" data-testid="heading-music">
+                Music
+              </h1>
+              <p className="text-sm text-gray-400 mt-1" data-testid="text-music-subtitle">
+                Connect your music services to access your content
+              </p>
             </div>
           </div>
         </div>
@@ -193,194 +174,119 @@ export default function Music() {
 
       {/* Main Content */}
       <div className="px-6 py-6">
-        <Tabs defaultValue="library" className="w-full">
-          <TabsList className="bg-navy-light" data-testid="tabs-music-navigation">
-            <TabsTrigger value="library" data-testid="tab-library">Your Library</TabsTrigger>
-            <TabsTrigger value="favorites" data-testid="tab-favorites">Liked Songs</TabsTrigger>
-            <TabsTrigger value="recent" data-testid="tab-recent">Recently Played</TabsTrigger>
-            <TabsTrigger value="discover" data-testid="tab-discover">Discover</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="library" className="mt-6">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-cream" data-testid="heading-all-songs">
-                  All Songs
-                </h2>
-                <Button variant="outline" size="sm" data-testid="button-create-playlist">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Playlist
-                </Button>
-              </div>
-              
-              {isLoading ? (
-                <div className="space-y-3">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-16 bg-navy-light rounded animate-pulse" />
-                  ))}
-                </div>
-              ) : filteredMusic.length > 0 ? (
-                <div className="space-y-2">
-                  {filteredMusic.map((track) => (
-                    <TrackCard key={track.id} track={track} />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <MusicIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400" data-testid="text-no-songs">
-                    {searchQuery ? 'No songs match your search' : 'No songs in your library'}
-                  </p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="favorites" className="mt-6">
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-red-500 rounded flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-white fill-white" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-cream" data-testid="heading-liked-songs">
-                    Liked Songs
-                  </h2>
-                  <p className="text-sm text-gray-400" data-testid="text-liked-count">
-                    {favoriteMusic.length} songs
-                  </p>
-                </div>
-              </div>
-              
-              {favoriteMusic.length > 0 ? (
-                <div className="space-y-2">
-                  {favoriteMusic.map((track) => (
-                    <TrackCard key={track.id} track={track} />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Heart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400" data-testid="text-no-favorites">
-                    No liked songs yet. Start by hearting some tracks!
-                  </p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="recent" className="mt-6">
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-blue-500 rounded flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-cream" data-testid="heading-recent">
-                    Recently Played
-                  </h2>
-                  <p className="text-sm text-gray-400" data-testid="text-recent-count">
-                    {recentMusic.length} songs
-                  </p>
-                </div>
-              </div>
-              
-              {recentMusic.length > 0 ? (
-                <div className="space-y-2">
-                  {recentMusic.map((item: any) => {
-                    const track = musicContent.find(t => t.id === item.contentId);
-                    return track ? <TrackCard key={track.id} track={track} /> : null;
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400" data-testid="text-no-recent">
-                    No recently played songs
-                  </p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="discover" className="mt-6">
-            <div className="space-y-6">
-              <h2 className="text-lg font-semibold text-cream" data-testid="heading-discover">
-                Discover New Music
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {musicContent.slice(0, 9).map((track) => (
-                  <Card key={track.id} className="bg-navy-light hover:bg-navy-lighter transition-colors cursor-pointer group">
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div className="relative">
-                          <div className="w-full aspect-square rounded bg-navy-lighter flex items-center justify-center overflow-hidden">
-                            {track.imageUrl ? (
-                              <img 
-                                src={track.imageUrl} 
-                                alt={track.title}
-                                className="w-full h-full object-cover"
-                                data-testid={`img-discover-${track.id}`}
-                              />
-                            ) : (
-                              <MusicIcon className="w-8 h-8 text-gray-400" />
-                            )}
-                          </div>
-                          <Button
-                            onClick={() => handlePlay(track)}
-                            className="absolute bottom-2 right-2 bg-blue-gradient opacity-0 group-hover:opacity-100 transition-opacity w-12 h-12 rounded-full flex items-center justify-center"
-                            data-testid={`button-play-discover-${track.id}`}
-                          >
-                            <Play className="w-5 h-5 text-white fill-white" />
-                          </Button>
-                        </div>
-                        
-                        <div>
-                          <h3 className="text-sm font-medium text-cream truncate" title={track.title}>
-                            {track.title}
-                          </h3>
-                          <p className="text-xs text-gray-400 truncate" title={track.artist}>
-                            {track.artist || 'Unknown Artist'}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+        <div className="space-y-6">
+          {/* Connected Services Status */}
+          {connectedServices.length > 0 && (
+            <div className="bg-navy-light border border-navy-lighter rounded-lg p-4">
+              <h3 className="text-sm font-medium text-cream mb-2" data-testid="heading-connected-services">
+                Connected Services
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {connectedServices.map((service: any) => (
+                  <div 
+                    key={service.id}
+                    className="bg-navy-lighter px-3 py-1 rounded-full text-xs text-cream"
+                    data-testid={`badge-connected-${service.service}`}
+                  >
+                    {musicServices.find(s => s.id === service.service)?.name || service.service}
+                  </div>
                 ))}
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+          )}
 
-      {/* Music Player */}
-      <MusicPlayer
-        currentTrack={currentTrack}
-        isPlaying={isPlaying}
-        isVisible={!!currentTrack}
-        onPlayPause={handlePlayPause}
-        onNext={() => {
-          const currentIndex = musicContent.findIndex(track => track.id === currentTrack?.id);
-          const nextTrack = musicContent[currentIndex + 1];
-          if (nextTrack) {
-            setCurrentTrack(nextTrack);
-          }
-        }}
-        onPrevious={() => {
-          const currentIndex = musicContent.findIndex(track => track.id === currentTrack?.id);
-          const prevTrack = musicContent[currentIndex - 1];
-          if (prevTrack) {
-            setCurrentTrack(prevTrack);
-          }
-        }}
-        onToggleFavorite={() => {
-          if (currentTrack) {
-            handleToggleFavorite(currentTrack.id);
-          }
-        }}
-        isFavorite={currentTrack ? favoriteIds.includes(currentTrack.id) : false}
-      />
+          {/* Music Services */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-cream" data-testid="heading-music-services">
+                Music Services
+              </h2>
+              <p className="text-sm text-gray-400" data-testid="text-services-count">
+                {musicServices.length} services available
+              </p>
+            </div>
+            
+            {isLoadingConnections ? (
+              <div className="space-y-4">
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="h-24 bg-navy-light rounded-lg animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {musicServices.map((service) => (
+                  <ServiceCard key={service.id} service={service} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* How It Works */}
+          <div className="bg-navy-light border border-navy-lighter rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-cream mb-4" data-testid="heading-how-it-works">
+              How It Works
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-gradient rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  1
+                </div>
+                <div>
+                  <p className="text-cream font-medium">Connect Your Services</p>
+                  <p className="text-sm text-gray-400">Link your Spotify or Apple Music account securely through OAuth</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-gradient rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  2
+                </div>
+                <div>
+                  <p className="text-cream font-medium">Access Native Apps</p>
+                  <p className="text-sm text-gray-400">Click "Open" to launch directly into your music service's app</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-gradient rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  3
+                </div>
+                <div>
+                  <p className="text-cream font-medium">Seamless Experience</p>
+                  <p className="text-sm text-gray-400">Return to AllPlay anytime to switch between TV, movies, and music</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* No Services Connected */}
+          {connectedServices.length === 0 && !isLoadingConnections && (
+            <div className="text-center py-12">
+              <MusicIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-cream mb-2" data-testid="heading-no-services">
+                No Music Services Connected
+              </h3>
+              <p className="text-gray-400 mb-6" data-testid="text-connect-prompt">
+                Connect to Spotify or Apple Music to access your music library and playlists
+              </p>
+              <Button
+                onClick={() => handleConnectService('spotify')}
+                className="bg-green-600 hover:bg-green-700 text-white mr-3"
+                data-testid="button-quick-connect-spotify"
+              >
+                Connect Spotify
+              </Button>
+              <Button
+                onClick={() => handleConnectService('apple-music')}
+                className="bg-black hover:bg-gray-800 text-white"
+                data-testid="button-quick-connect-apple"
+              >
+                Connect Apple Music
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@ Key features include service connection management, unified content discovery, c
 - Focus: TV homescreen application that becomes the default interface when turning on TV
 - Core value proposition: Single UI for all streaming services - users never leave Allplay to watch content
 - Target experience: Always logged in, seamless switching between all connected services
+- Music integration: Direct integration with native Apple Music and Spotify apps rather than recreating music interfaces
 
 # System Architecture
 
