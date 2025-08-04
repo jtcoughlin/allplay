@@ -62,6 +62,7 @@ export const content = pgTable("content", {
   genre: varchar("genre").notNull(),
   service: varchar("service").notNull(), // 'netflix', 'spotify', etc.
   serviceContentId: varchar("service_content_id").notNull(), // ID in the source service
+  directUrl: text("direct_url"), // Direct URL to content page on streaming service
   imageUrl: text("image_url"),
   rating: varchar("rating"), // PG, R, TV-14, etc.
   year: integer("year"),

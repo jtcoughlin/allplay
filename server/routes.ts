@@ -312,8 +312,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Content not found" });
       }
       
-      // Generate deep links for the service using content's service_content_id
-      const { appUrl, webUrl } = generateDeepLink(contentDetails.service, 'play', contentDetails.serviceContentId);
+      // Generate deep links for the service using content's service_content_id and direct URL
+      const { appUrl, webUrl } = generateDeepLink(contentDetails.service, 'play', contentDetails.serviceContentId, contentDetails.directUrl || undefined);
       
       // Log the play attempt
       await storage.updateWatchProgress({

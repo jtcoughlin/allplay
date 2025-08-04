@@ -229,7 +229,7 @@ export async function getUserProfile(service: string, accessToken: string): Prom
 }
 
 // Generate deep link for playing content on services without APIs
-export function generateDeepLink(service: string, action: 'play' | 'search', identifier: string): { appUrl: string; webUrl: string } {
+export function generateDeepLink(service: string, action: 'play' | 'search', identifier: string, directUrl?: string): { appUrl: string; webUrl: string } {
   const config = deepLinkConfigs[service as keyof typeof deepLinkConfigs];
   if (!config) {
     throw new Error(`Deep link not configured for service: ${service}`);
@@ -241,25 +241,30 @@ export function generateDeepLink(service: string, action: 'play' | 'search', ide
   if (action === 'play' && config.playUrl) {
     appUrl = config.playUrl(identifier);
     
-    // Generate proper web URLs for each service
-    switch (service) {
-      case 'netflix':
-        // Netflix uses title IDs, search for the content
-        webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-netflix', '').replace(/-/g, ' '))}`;
-        break;
-      case 'amazon-prime':
-        // Amazon Prime uses ASIN IDs, go to main video page for search
-        webUrl = `${config.webUrl}/search/ref=atv_nb_sr?phrase=${encodeURIComponent(identifier.replace('-prime', '').replace(/-/g, ' '))}`;
-        break;
-      case 'disney-plus':
-        webUrl = `${config.webUrl}/search/?q=${encodeURIComponent(identifier.replace('-disney', '').replace(/-/g, ' '))}`;
-        break;
-      case 'hulu':
-        webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-hulu', '').replace(/-/g, ' '))}`;
-        break;
-      default:
-        // Fallback to service homepage
-        webUrl = config.webUrl;
+    // Use direct URL if provided, otherwise generate URLs
+    if (directUrl) {
+      webUrl = directUrl;
+    } else {
+      // Generate proper web URLs for each service
+      switch (service) {
+        case 'netflix':
+          // Netflix uses title IDs
+          webUrl = `${config.webUrl}/title/${identifier}`;
+          break;
+        case 'amazon-prime':
+          // Amazon Prime uses ASIN IDs
+          webUrl = `${config.webUrl}/detail/${identifier}/`;
+          break;
+        case 'disney-plus':
+          webUrl = `${config.webUrl}/search/?q=${encodeURIComponent(identifier.replace('-disney', '').replace(/-/g, ' '))}`;
+          break;
+        case 'hulu':
+          webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-hulu', '').replace(/-/g, ' '))}`;
+          break;
+        default:
+          // Fallback to service homepage
+          webUrl = config.webUrl;
+      }
     }
   } else if (action === 'search' && config.searchUrl) {
     appUrl = config.searchUrl(identifier);
