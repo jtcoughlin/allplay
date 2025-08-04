@@ -170,10 +170,11 @@ export default function Profile() {
       const response = await apiRequest("POST", "/api/user/verify-subscription", { service, hasSubscription });
       return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
+      const serviceName = verificationModal.service?.name || 'Service';
       toast({
-        title: "Service Connected",
-        description: data.message || "Service connected successfully",
+        title: `${serviceName} Linked Successfully!`,
+        description: `${serviceName} is now connected to Allplay. Content will open in the ${serviceName} app when selected.`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
       setVerificationModal({ isOpen: false });
@@ -823,7 +824,7 @@ export default function Profile() {
               {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) ? (
                 `You'll be redirected to ${authModal.service?.name} for real authentication with your existing account.`
               ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) ? (
-                `This connects ${authModal.service?.name} via deep links. Content will open in their app and return to Allplay.`
+                `This links ${authModal.service?.name} to Allplay. Content will open in the ${authModal.service?.name} app using your existing login.`
               ) : (
                 `This simulates connecting to ${authModal.service?.name}. Real connection requires API partnerships.`
               )}
@@ -847,12 +848,13 @@ export default function Profile() {
             {/* Deep Link Services */}
             {['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) && (
               <div className="bg-orange-primary/10 border border-orange-primary/20 rounded-lg p-4">
-                <h4 className="font-semibold text-cream mb-2">Deep Link Integration:</h4>
+                <h4 className="font-semibold text-cream mb-2">App Integration (No Login Required):</h4>
                 <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Links to your existing {authModal.service?.name} subscription</li>
                   <li>• Content opens directly in the {authModal.service?.name} app</li>
                   <li>• Returns to Allplay when you're done watching</li>
-                  <li>• Uses your existing {authModal.service?.name} subscription</li>
-                  <li>• No API needed - works immediately</li>
+                  <li>• Uses your device's existing {authModal.service?.name} login</li>
+                  <li>• No username/password needed in Allplay</li>
                 </ul>
               </div>
             )}
@@ -940,12 +942,13 @@ export default function Profile() {
           
           <div className="space-y-4">
             <div className="bg-orange-primary/10 border border-orange-primary/20 rounded-lg p-4">
-              <h4 className="font-semibold text-cream mb-2">Subscription Required</h4>
+              <h4 className="font-semibold text-cream mb-2">How {verificationModal.service?.name} Integration Works</h4>
               <ul className="text-sm text-gray-300 space-y-1">
-                <li>• You need an active {verificationModal.service?.name} subscription</li>
-                <li>• Content will open directly in the {verificationModal.service?.name} app</li>
-                <li>• You'll be returned to Allplay when finished watching</li>
-                <li>• Your login credentials stay with {verificationModal.service?.name}</li>
+                <li>• Requires an active {verificationModal.service?.name} subscription</li>
+                <li>• Content opens directly in the {verificationModal.service?.name} app</li>
+                <li>• Uses your device's existing {verificationModal.service?.name} login</li>
+                <li>• Returns to Allplay when you're done watching</li>
+                <li>• No need to enter credentials in Allplay</li>
               </ul>
             </div>
             
@@ -956,7 +959,7 @@ export default function Profile() {
               </div>
               <p className="text-xs text-gray-300">
                 Allplay never stores your {verificationModal.service?.name} login credentials. 
-                We only create deep links to launch content in their official app.
+                We only link to content that opens in their official app using your existing device login.
               </p>
             </div>
             

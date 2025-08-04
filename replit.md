@@ -1,6 +1,12 @@
 # Overview
 
-Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience where users watch content directly within Allplay's interface - never redirected to individual service apps. Key features include universal login with saved credentials, unified watchlist across all platforms, smart cross-platform recommendations, family profiles with parental controls, and TV homescreen functionality for always-on access.
+Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience. The application supports three types of service integrations:
+
+1. **Real OAuth Authentication** (Spotify, YouTube, Apple Music) - Full API integration with secure credential storage
+2. **App Integration/Deep Linking** (Netflix, Amazon Prime, Disney+, etc.) - Links to content that opens in the service's native app using existing device logins
+3. **Demo Connections** (Other services) - Simulated connections for demonstration purposes
+
+Key features include service connection management, unified content discovery, cross-platform recommendations, and seamless content launching through native apps.
 
 # User Preferences
 
@@ -40,11 +46,29 @@ The application uses PostgreSQL as the primary database, accessed through Drizzl
 Database operations are abstracted through a storage interface, allowing for easy testing and potential future database migrations.
 
 ## Authentication and Authorization
-The application implements Replit's OIDC authentication system with session-based authorization. Users authenticate through Replit's OAuth flow, and sessions are managed server-side with PostgreSQL session storage. The authentication system includes:
+The application implements multiple authentication strategies:
+
+### Platform Authentication (Replit OIDC)
 - **OIDC integration**: Secure authentication through Replit's identity provider
-- **Session management**: Persistent sessions with configurable TTL
+- **Session management**: Persistent sessions with PostgreSQL storage
 - **User profile management**: Automatic user creation and profile updates
 - **Protected routes**: Middleware-based route protection for authenticated endpoints
+
+### Service Integration Types
+1. **OAuth Services** (Spotify, YouTube, Apple Music):
+   - Full OAuth2 flow with secure token storage
+   - Real API integration for content discovery
+   - Encrypted credential storage in database
+
+2. **App Integration Services** (Netflix, Amazon Prime, Disney+, etc.):
+   - Deep link integration without credential storage
+   - Subscription verification flow
+   - Content launches in native service apps
+   - Uses existing device logins (no password storage required)
+
+3. **Demo Services**: 
+   - Simulated connections for demonstration
+   - No real authentication or API calls
 
 # External Dependencies
 
