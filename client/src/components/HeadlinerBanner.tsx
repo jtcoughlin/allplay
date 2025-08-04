@@ -21,14 +21,20 @@ export function HeadlinerBanner({
   eventTime, 
   type 
 }: HeadlinerBannerProps) {
-  const getPlatformColor = (platform: string) => {
+  const getPlatformColor = (platform: string | null | undefined) => {
+    if (!platform) return 'bg-blue-primary';
     switch (platform.toLowerCase()) {
       case 'netflix': return 'bg-red-600';
-      case 'disney': return 'bg-blue-600';
+      case 'disney-plus': return 'bg-blue-600';
       case 'hulu': return 'bg-green-600';
-      case 'hbo': return 'bg-purple-600';
-      case 'apple': return 'bg-gray-800';
+      case 'max': return 'bg-purple-600';
+      case 'amazon-prime': return 'bg-orange-600';
+      case 'apple-tv': return 'bg-gray-800';
+      case 'apple-music': return 'bg-gray-800';
       case 'spotify': return 'bg-green-500';
+      case 'youtube': return 'bg-red-600';
+      case 'youtube-tv': return 'bg-red-600';
+      case 'paramount-plus': return 'bg-blue-800';
       default: return 'bg-blue-primary';
     }
   };

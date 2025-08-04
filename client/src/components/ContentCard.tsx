@@ -74,15 +74,20 @@ export function ContentCard({
     },
   });
 
-  const getPlatformColor = (platform: string) => {
+  const getPlatformColor = (platform: string | null | undefined) => {
+    if (!platform) return 'bg-gray-600';
     const colors: { [key: string]: string } = {
       netflix: 'bg-red-600',
-      disney: 'bg-blue-600',
+      'disney-plus': 'bg-blue-600',
       hulu: 'bg-green-600',
-      hbo: 'bg-purple-600',
+      max: 'bg-purple-600',
+      'amazon-prime': 'bg-orange-600',
+      'apple-tv': 'bg-gray-800',
+      'apple-music': 'bg-gray-800',
       spotify: 'bg-green-500',
-      apple: 'bg-gray-800',
-      youtube: 'bg-red-600'
+      youtube: 'bg-red-600',
+      'youtube-tv': 'bg-red-600',
+      'paramount-plus': 'bg-blue-800'
     };
     return colors[platform.toLowerCase()] || 'bg-gray-600';
   };
