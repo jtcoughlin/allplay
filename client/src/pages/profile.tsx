@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { User, Settings, Link, Shield, Bell, Palette } from "lucide-react";
+import { User, Settings, Link, Shield, Bell, Palette, Tv } from "lucide-react";
 import { SiNetflix, SiSpotify, SiAmazonprime, SiYoutube } from "react-icons/si";
 
 export default function Profile() {
@@ -260,9 +260,9 @@ export default function Profile() {
           <TabsContent value="connections" className="space-y-6">
             <Card className="bg-gray-900/50 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-cream">Streaming Services</CardTitle>
+                <CardTitle className="text-cream">Universal Login</CardTitle>
                 <CardDescription className="text-gray-400">
-                  Connect your streaming services to access all your content in one place
+                  Connect all your streaming services once. Allplay securely saves your credentials and payment info for seamless access. Watch everything from one interface - no more app switching.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -309,6 +309,26 @@ export default function Profile() {
                       </div>
                     );
                   })}
+                </div>
+                
+                <Separator className="bg-gray-700" />
+                
+                <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Tv className="w-5 h-5 text-blue-primary" />
+                    <span className="font-semibold text-cream">TV Homescreen Mode</span>
+                  </div>
+                  <p className="text-sm text-gray-400 mb-3">
+                    Set Allplay as your TV's default homescreen. When you turn on your TV, you'll be automatically logged in and ready to watch from any connected service.
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-blue-primary text-blue-primary hover:bg-blue-primary hover:text-white"
+                    data-testid="button-tv-homescreen"
+                  >
+                    Enable TV Homescreen
+                  </Button>
                 </div>
               </CardContent>
             </Card>

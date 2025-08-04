@@ -1,10 +1,14 @@
 # Overview
 
-Allplay is a comprehensive streaming content aggregation platform that unifies entertainment discovery across multiple streaming services and platforms. The application allows users to search, browse, and manage content from Netflix, Hulu, Disney+, Spotify, Apple Music, and other popular streaming platforms in a single interface. It features user authentication, personalized favorites, watch history tracking, and a modern, responsive UI built with React and TypeScript.
+Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience where users watch content directly within Allplay's interface - never redirected to individual service apps. Key features include universal login with saved credentials, unified watchlist across all platforms, smart cross-platform recommendations, family profiles with parental controls, and TV homescreen functionality for always-on access.
 
 # User Preferences
 
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language
+- Brand messaging: "TV was broken. We fixed it." as primary tagline
+- Focus: TV homescreen application that becomes the default interface when turning on TV
+- Core value proposition: Single UI for all streaming services - users never leave Allplay to watch content
+- Target experience: Always logged in, seamless switching between all connected services
 
 # System Architecture
 

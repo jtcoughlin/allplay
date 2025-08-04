@@ -104,15 +104,37 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   };
 
-  const handlePlay = (content: Content) => {
+  const handlePlay = async (content: Content) => {
     if (content.type === 'music') {
       handlePlayTrack(content);
     } else {
-      // Handle video content play
-      toast({
-        title: "Playing Content",
-        description: `Now playing: ${content.title}`,
-      });
+      try {
+        // Call play endpoint to simulate in-Allplay streaming
+        const response = await fetch(`/api/play/${content.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (response.ok) {
+          console.log('Now streaming within Allplay:', content.title);
+          toast({
+            title: "Now Playing in Allplay",
+            description: `${content.title} is streaming directly in Allplay - no app switching needed!`,
+          });
+          
+          // Invalidate continue watching to refresh the data
+          queryClient.invalidateQueries({ queryKey: ['/api/continue-watching'] });
+        }
+      } catch (error) {
+        console.error('Error starting playback:', error);
+        toast({
+          title: "Playback Error",
+          description: "Unable to start streaming. Please check your connection.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

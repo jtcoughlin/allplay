@@ -180,6 +180,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Play content endpoint - simulate direct streaming
+  app.post('/api/play/:contentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const { contentId } = req.params;
+      const userId = req.user.claims.sub;
+      
+      // Log play event and update watch history
+      await storage.updateWatchProgress({
+        userId,
+        contentId,
+        progress: 0,
+        lastWatched: new Date(),
+        isCompleted: false
+      });
+      
+      // Return streaming URL (simulated)
+      res.json({ 
+        streamUrl: `https://stream.allplay.tv/${contentId}`,
+        message: "Now playing within Allplay interface" 
+      });
+    } catch (error) {
+      console.error("Error starting playback:", error);
+      res.status(500).json({ message: "Failed to start playback" });
+    }
+  });
+
   app.get('/api/favorites/:contentId/check', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
