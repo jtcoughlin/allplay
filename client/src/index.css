@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(45, 18%, 93%);
+  --muted: hsl(220, 15%, 20%);
+  --muted-foreground: hsl(220, 10%, 60%);
+  --popover: hsl(220, 20%, 15%);
+  --popover-foreground: hsl(45, 18%, 93%);
+  --card: hsl(220, 20%, 15%);
+  --card-foreground: hsl(45, 18%, 93%);
+  --border: hsl(220, 15%, 25%);
+  --input: hsl(220, 15%, 25%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(220, 15%, 20%);
+  --secondary-foreground: hsl(45, 18%, 93%);
+  --accent: hsl(220, 15%, 25%);
+  --accent-foreground: hsl(45, 18%, 93%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(60, 9%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.5rem;
+  
+  /* Custom Allplay colors */
+  --navy: hsl(220, 25%, 11%);
+  --navy-light: hsl(220, 20%, 16%);
+  --navy-lighter: hsl(220, 15%, 20%);
+  --cream: hsl(45, 18%, 93%);
+  --blue-primary: hsl(207, 90%, 54%);
+  --blue-secondary: hsl(249, 84%, 65%);
+}
+
+.dark {
+  --background: hsl(220, 25%, 11%);
+  --foreground: hsl(45, 18%, 93%);
+  --muted: hsl(220, 15%, 20%);
+  --muted-foreground: hsl(220, 10%, 60%);
+  --popover: hsl(220, 20%, 15%);
+  --popover-foreground: hsl(45, 18%, 93%);
+  --card: hsl(220, 20%, 15%);
+  --card-foreground: hsl(45, 18%, 93%);
+  --border: hsl(220, 15%, 25%);
+  --input: hsl(220, 15%, 25%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(220, 15%, 20%);
+  --secondary-foreground: hsl(45, 18%, 93%);
+  --accent: hsl(220, 15%, 25%);
+  --accent-foreground: hsl(45, 18%, 93%);
+  --destructive: hsl(0, 62%, 51%);
+  --destructive-foreground: hsl(45, 18%, 93%);
+  --ring: hsl(207, 90%, 54%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background-color: var(--navy);
+    color: var(--cream);
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar styles */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Blue gradient background */
+  .bg-blue-gradient {
+    background: linear-gradient(45deg, var(--blue-primary), var(--blue-secondary));
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+  }
+  
+  /* Custom navy color utilities */
+  .bg-navy {
+    background-color: var(--navy);
+  }
+  
+  .bg-navy-light {
+    background-color: var(--navy-light);
+  }
+  
+  .bg-navy-lighter {
+    background-color: var(--navy-lighter);
+  }
+  
+  .text-cream {
+    color: var(--cream);
+  }
+  
+  .text-blue-primary {
+    color: var(--blue-primary);
+  }
+  
+  .text-blue-secondary {
+    color: var(--blue-secondary);
+  }
+  
+  .border-navy-lighter {
+    border-color: var(--navy-lighter);
+  }
+  
+  /* Compact spacing utilities */
+  .space-x-compact > * + * {
+    margin-left: 0.5rem;
+  }
+  
+  .space-y-compact > * + * {
+    margin-top: 0.5rem;
+  }
+}

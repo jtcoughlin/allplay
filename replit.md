@@ -1,0 +1,67 @@
+# Overview
+
+Allplay is a comprehensive streaming content aggregation platform that unifies entertainment discovery across multiple streaming services and platforms. The application allows users to search, browse, and manage content from Netflix, Hulu, Disney+, Spotify, Apple Music, and other popular streaming platforms in a single interface. It features user authentication, personalized favorites, watch history tracking, and a modern, responsive UI built with React and TypeScript.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+The client-side application is built with React 18 and TypeScript, utilizing a modern component-based architecture with functional components and hooks. The application uses Wouter for lightweight routing and TanStack Query for efficient server state management and caching. The UI is constructed with shadcn/ui components, providing a consistent design system built on top of Radix UI primitives and styled with Tailwind CSS.
+
+The frontend follows a modular structure with clear separation of concerns:
+- **Components**: Reusable UI components including content cards, navigation, and specialized components for different content types
+- **Pages**: Route-level components for landing, home, search, and favorites views
+- **Hooks**: Custom React hooks for authentication and other shared logic
+- **Utilities**: Helper functions and type definitions
+
+## Backend Architecture
+The server is built with Express.js and TypeScript, implementing a RESTful API architecture. The application uses a session-based authentication system integrated with Replit's OpenID Connect (OIDC) authentication service. The server handles content management, user preferences, favorites tracking, and watch history.
+
+Key server components include:
+- **Route handlers**: Organized API endpoints for content, authentication, and user data
+- **Storage layer**: Abstracted database operations through a storage interface
+- **Authentication middleware**: Replit OIDC integration with session management
+- **Database connection**: PostgreSQL integration using Neon serverless
+
+## Data Storage Solutions
+The application uses PostgreSQL as the primary database, accessed through Drizzle ORM for type-safe database operations. The database schema includes:
+- **User management**: User profiles with OAuth integration
+- **Content catalog**: Movies, shows, music, and live content with metadata
+- **User interactions**: Favorites, watch history with progress tracking
+- **Session storage**: Secure session management for authentication
+
+Database operations are abstracted through a storage interface, allowing for easy testing and potential future database migrations.
+
+## Authentication and Authorization
+The application implements Replit's OIDC authentication system with session-based authorization. Users authenticate through Replit's OAuth flow, and sessions are managed server-side with PostgreSQL session storage. The authentication system includes:
+- **OIDC integration**: Secure authentication through Replit's identity provider
+- **Session management**: Persistent sessions with configurable TTL
+- **User profile management**: Automatic user creation and profile updates
+- **Protected routes**: Middleware-based route protection for authenticated endpoints
+
+# External Dependencies
+
+## Database Services
+- **Neon PostgreSQL**: Serverless PostgreSQL database for primary data storage
+- **Drizzle ORM**: Type-safe database operations and migrations
+
+## Authentication Services
+- **Replit OIDC**: Primary authentication provider using OpenID Connect
+- **Passport.js**: Authentication middleware for Express integration
+
+## Frontend Libraries
+- **React 18**: Core frontend framework with hooks and modern features
+- **TypeScript**: Type safety and enhanced developer experience
+- **Vite**: Fast development server and build tool
+- **TanStack Query**: Server state management and caching
+- **Wouter**: Lightweight client-side routing
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **shadcn/ui**: Component library built on Radix UI primitives
+
+## Development Tools
+- **ESBuild**: Fast bundling for production builds
+- **PostCSS**: CSS processing with Tailwind integration
+- **Drizzle Kit**: Database schema management and migrations
