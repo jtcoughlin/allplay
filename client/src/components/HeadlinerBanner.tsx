@@ -58,13 +58,15 @@ export function HeadlinerBanner({
               <Badge variant="destructive" className="bg-red-600 text-white">
                 LIVE EVENT
               </Badge>
-              <Badge className={`${getPlatformColor(platform)} text-white`}>
-                {platform.toUpperCase()}
-              </Badge>
+              {platform && (
+                <Badge className={`${getPlatformColor(platform)} text-white`}>
+                  {platform.toUpperCase()}
+                </Badge>
+              )}
             </div>
           )}
           
-          {type !== 'live-event' && (
+          {type !== 'live-event' && platform && (
             <Badge className={`${getPlatformColor(platform)} text-white mb-4`}>
               {platform.toUpperCase()}
             </Badge>

@@ -144,12 +144,14 @@ export function ContentCard({
         )}
 
         {/* Platform badge */}
-        <Badge 
-          className={`absolute top-2 right-2 ${getPlatformColor(content.platform)} text-white text-xs font-bold px-2 py-1`}
-          data-testid={`badge-platform-${content.id}`}
-        >
-          {content.platform.toUpperCase()}
-        </Badge>
+        {content.platform && (
+          <Badge 
+            className={`absolute top-2 right-2 ${getPlatformColor(content.platform)} text-white text-xs font-bold px-2 py-1`}
+            data-testid={`badge-platform-${content.id}`}
+          >
+            {content.platform.toUpperCase()}
+          </Badge>
+        )}
 
         {/* Rating */}
         {content.rating && (

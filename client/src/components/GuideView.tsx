@@ -74,11 +74,13 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
                   </div>
                   
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge 
-                      className={`${getPlatformColor(item.platform)} text-white text-xs`}
-                    >
-                      {item.platform.toUpperCase()}
-                    </Badge>
+                    {item.platform && (
+                      <Badge 
+                        className={`${getPlatformColor(item.platform)} text-white text-xs`}
+                      >
+                        {item.platform.toUpperCase()}
+                      </Badge>
+                    )}
                     {item.year && (
                       <span className="text-xs text-gray-400">{item.year}</span>
                     )}
@@ -135,11 +137,13 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
                   </h2>
                   
                   <div className="flex items-center gap-3 mb-3">
-                    <Badge 
-                      className={`${getPlatformColor(selectedContent.platform)} text-white`}
-                    >
-                      {selectedContent.platform.toUpperCase()}
-                    </Badge>
+                    {selectedContent.platform && (
+                      <Badge 
+                        className={`${getPlatformColor(selectedContent.platform)} text-white`}
+                      >
+                        {selectedContent.platform.toUpperCase()}
+                      </Badge>
+                    )}
                     
                     {selectedContent.rating && (
                       <div className="flex items-center gap-1 text-yellow-400">
