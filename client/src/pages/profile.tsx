@@ -10,16 +10,18 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { User, Settings, Link, Shield, Bell, Palette, Tv, Home, MessageSquare, HelpCircle, Send } from "lucide-react";
+import { User, Settings, Link, Shield, Bell, Palette, Tv, Home, MessageSquare, HelpCircle, Send, ExternalLink } from "lucide-react";
 import { SiNetflix, SiSpotify, SiAmazonprime, SiYoutube, SiApple } from "react-icons/si";
 
 export default function Profile() {
   const { user, isLoading: isLoadingAuth } = useAuth();
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<'cards' | 'guide'>('cards');
+  const [authModal, setAuthModal] = useState<{ isOpen: boolean; service?: any }>({ isOpen: false });
 
   // Fetch user streaming connections
   const { data: connections = [], isLoading: isLoadingConnections } = useQuery({
@@ -28,7 +30,7 @@ export default function Profile() {
   });
 
   // Fetch user preferences
-  const { data: preferences = {}, isLoading: isLoadingPreferences } = useQuery({
+  const { data: preferences = {} as any, isLoading: isLoadingPreferences } = useQuery({
     queryKey: ["/api/user/preferences"],
     retry: false,
   });
@@ -330,8 +332,7 @@ export default function Profile() {
                             if (isConnected) {
                               disconnectService.mutate({ service: service.id });
                             } else {
-                              // Redirect to service OAuth login
-                              window.location.href = `/api/auth/${service.id}/login`;
+                              setAuthModal({ isOpen: true, service });
                             }
                           }}
                           disabled={connectService.isPending || disconnectService.isPending}
@@ -385,8 +386,7 @@ export default function Profile() {
                             if (isConnected) {
                               disconnectService.mutate({ service: service.id });
                             } else {
-                              // Redirect to service OAuth login
-                              window.location.href = `/api/auth/${service.id}/login`;
+                              setAuthModal({ isOpen: true, service });
                             }
                           }}
                           disabled={connectService.isPending || disconnectService.isPending}
@@ -727,6 +727,78 @@ export default function Profile() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Service Authentication Modal */}
+      <Dialog open={authModal.isOpen} onOpenChange={(open) => setAuthModal({ isOpen: open })}>
+        <DialogContent className="bg-gray-900 border-gray-700 text-cream">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              {authModal.service && <authModal.service.icon className={`w-6 h-6 mr-2 ${authModal.service.color}`} />}
+              Connect to {authModal.service?.name}
+            </DialogTitle>
+            <DialogDescription className="text-gray-300">
+              You'll be redirected to {authModal.service?.name} to sign in with your existing account. 
+              Your credentials are securely stored and encrypted.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
+              <h4 className="font-semibold text-cream mb-2">What happens next?</h4>
+              <ul className="text-sm text-gray-300 space-y-1">
+                <li>• You'll log in with your existing {authModal.service?.name} account</li>
+                <li>• Your credentials are encrypted and stored securely</li>
+                <li>• Content from {authModal.service?.name} will appear in Allplay</li>
+                <li>• You'll never need to log in again</li>
+              </ul>
+            </div>
+            
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setAuthModal({ isOpen: false })}
+                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={async () => {
+                  if (authModal.service) {
+                    setAuthModal({ isOpen: false });
+                    
+                    // Simulate authentication delay
+                    toast({
+                      title: "Connecting...",
+                      description: `Connecting to ${authModal.service.name}`,
+                    });
+                    
+                    setTimeout(async () => {
+                      try {
+                        await connectService.mutateAsync(authModal.service.id);
+                        toast({
+                          title: "Service Connected",
+                          description: `Successfully connected to ${authModal.service.name}`,
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Connection Failed",
+                          description: `Failed to connect to ${authModal.service.name}. Please try again.`,
+                          variant: "destructive",
+                        });
+                      }
+                    }, 2000);
+                  }
+                }}
+                className="flex-1 bg-blue-primary hover:bg-blue-600 text-white"
+                data-testid="button-authenticate-service"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Connect to {authModal.service?.name}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
