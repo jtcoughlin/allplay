@@ -37,7 +37,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Content routes
   app.get('/api/content', async (req, res) => {
     try {
-      const { genre, platform, search } = req.query;
+      const { genre, platform, search, type } = req.query;
       
       let content;
       if (search) {
@@ -48,6 +48,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content = await storage.getContentByPlatform(platform as string);
       } else {
         content = await storage.getAllContent();
+      }
+      
+      // Filter by type if specified
+      if (type && type !== 'all') {
+        content = content.filter(item => item.type === type);
       }
       
       res.json(content);

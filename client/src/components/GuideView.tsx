@@ -33,10 +33,10 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
   };
 
   return (
-    <div className="flex gap-4 h-screen pt-4 pb-4" data-testid="guide-view">
+    <div className="flex gap-4 h-screen pt-4 pb-4 overflow-hidden" data-testid="guide-view">
       {/* Left Side - Content List */}
-      <div className="w-2/5 flex flex-col">
-        <div className="bg-gray-900/50 rounded-lg p-4 flex-1 flex flex-col">
+      <div className="w-2/5 flex flex-col overflow-hidden">
+        <div className="bg-gray-900/50 rounded-lg p-4 flex-1 flex flex-col overflow-hidden">
           <h2 className="text-xl font-semibold text-cream mb-4">Browse Content</h2>
           <div className="space-y-2 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
             {content.map((item) => (
@@ -103,7 +103,7 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
       </div>
 
       {/* Right Side - Preview */}
-      <div className="w-3/5 flex flex-col sticky top-4">
+      <div className="w-3/5 flex flex-col overflow-hidden">
         {selectedContent ? (
           <div className="bg-gray-900/50 rounded-lg overflow-hidden flex-1 flex flex-col">
             {/* Preview Image */}
