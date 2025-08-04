@@ -91,17 +91,20 @@ export function ContentCard({
     },
     onSuccess: (data) => {
       if (data.appUrl && data.webUrl) {
-        // Try to open the app first, fallback to web
-        const appLink = document.createElement('a');
-        appLink.href = data.appUrl;
-        appLink.click();
+        // Try to open the app using window.location.href for better Safari compatibility
+        try {
+          window.location.href = data.appUrl;
+        } catch (error) {
+          console.log('App URL failed, opening web URL:', error);
+          window.open(data.webUrl, '_blank');
+        }
         
         // Fallback to web after a delay if app doesn't open
         setTimeout(() => {
           if (confirm(`If ${content.service} app didn't open, click OK to open in browser.`)) {
             window.open(data.webUrl, '_blank');
           }
-        }, 2000);
+        }, 3000);
         
         toast({
           title: `Opening in ${content.service}`,
