@@ -73,6 +73,18 @@ export const deepLinkConfigs = {
     playUrl: (contentId: string) => `peacocktv://entity/${contentId}`,
     searchUrl: (query: string) => `peacocktv://search?q=${encodeURIComponent(query)}`,
   },
+  'youtube-tv': {
+    webUrl: 'https://tv.youtube.com',
+    appUrl: 'youtubetv://',
+    playUrl: (contentId: string) => `youtubetv://browse/${contentId}`,
+    searchUrl: (query: string) => `youtubetv://search?q=${encodeURIComponent(query)}`,
+  },
+  'espn-plus': {
+    webUrl: 'https://www.espn.com/watch',
+    appUrl: 'espn://',
+    playUrl: (contentId: string) => `espn://watch/${contentId}`,
+    searchUrl: (query: string) => `espn://search?q=${encodeURIComponent(query)}`,
+  },
 };
 
 // OAuth configuration for services with public APIs
@@ -260,6 +272,14 @@ export function generateDeepLink(service: string, action: 'play' | 'search', ide
           break;
         case 'hulu':
           webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-hulu', '').replace(/-/g, ' '))}`;
+          break;
+        case 'youtube-tv':
+          // Use direct URL if available, otherwise browse to content
+          webUrl = directUrl || `${config.webUrl}/browse/${identifier}`;
+          break;
+        case 'espn-plus':
+          // Use direct URL if available, otherwise watch page
+          webUrl = directUrl || `${config.webUrl}/${identifier}`;
           break;
         default:
           // Fallback to service homepage

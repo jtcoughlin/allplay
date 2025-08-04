@@ -253,7 +253,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } 
       // Services with deep link support - require verification
-      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(service)) {
+      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock', 'youtube-tv', 'espn-plus'].includes(service)) {
         // Don't auto-connect, require verification
         res.json({ 
           requiresVerification: true,
