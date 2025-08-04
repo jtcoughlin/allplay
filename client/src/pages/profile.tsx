@@ -737,20 +737,33 @@ export default function Profile() {
               Connect to {authModal.service?.name}
             </DialogTitle>
             <DialogDescription className="text-gray-300">
-              You'll be redirected to {authModal.service?.name} to sign in with your existing account. 
-              Your credentials are securely stored and encrypted.
+              <span className="inline-flex items-center px-2 py-1 bg-blue-900/30 border border-blue-700 rounded text-blue-400 text-xs font-medium mr-2">
+                DEMO MODE
+              </span>
+              This simulates connecting to {authModal.service?.name}. In production, you'd be redirected to their secure login page.
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">
             <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
-              <h4 className="font-semibold text-cream mb-2">What happens next?</h4>
+              <h4 className="font-semibold text-cream mb-2">In the full version:</h4>
               <ul className="text-sm text-gray-300 space-y-1">
                 <li>• You'll log in with your existing {authModal.service?.name} account</li>
                 <li>• Your credentials are encrypted and stored securely</li>
                 <li>• Content from {authModal.service?.name} will appear in Allplay</li>
                 <li>• You'll never need to log in again</li>
               </ul>
+            </div>
+            
+            <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Info className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium text-amber-400">Demo Environment</span>
+              </div>
+              <p className="text-xs text-gray-300">
+                This demonstration shows how Allplay would work with real streaming services. 
+                Clicking "Demo Connect" will simulate a successful connection for testing purposes.
+              </p>
             </div>
             
             <div className="flex gap-3">
@@ -768,8 +781,8 @@ export default function Profile() {
                     
                     // Simulate authentication delay
                     toast({
-                      title: "Connecting...",
-                      description: `Connecting to ${authModal.service.name}`,
+                      title: "Demo Connection Started",
+                      description: `Simulating connection to ${authModal.service.name}`,
                     });
                     
                     setTimeout(async () => {
@@ -793,7 +806,7 @@ export default function Profile() {
                 data-testid="button-authenticate-service"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                Connect to {authModal.service?.name}
+                Demo Connect to {authModal.service?.name}
               </Button>
             </div>
           </div>
