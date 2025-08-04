@@ -11,7 +11,7 @@ const realContent = [
     service: 'netflix',
     serviceContentId: '80057281',
     directUrl: 'https://www.netflix.com/title/80057281',
-    imageUrl: 'https://dnm.nflximg.net/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABRxQDbBk5j3KfOyJSQJb5Nt-71Fwkup4YXMfzL3-Nb1lGqMAPXRhbPU7-jJRXQvF5urEVrGIBQ31fynuC4zQqD5NzSKz4O7hBCDN.jpg?r=e6e',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg',
     duration: 51,
     year: 2016,
     rating: 'TV-14'
@@ -24,7 +24,7 @@ const realContent = [
     service: 'netflix',
     serviceContentId: '81231974',
     directUrl: 'https://www.netflix.com/title/81231974',
-    imageUrl: 'https://dnm.nflximg.net/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABRVJrHqDDQ5vHCRUVaZOFv8AYpDwTXNp9_nW3EQpBKVCo0JEvAKNJPfELFxKZ4DyOdKLGHtqNZE2klS6HLj3KqAhyMLKrR8jnE7C.jpg?r=f71',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg',
     duration: 45,
     year: 2022,
     rating: 'TV-14'
@@ -37,7 +37,7 @@ const realContent = [
     service: 'netflix',
     serviceContentId: '81040344',
     directUrl: 'https://www.netflix.com/title/81040344',
-    imageUrl: 'https://dnm.nflximg.net/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABSaO4nQD63k3eOMkSbY7zVBQa1qfj_I2uXjB3oMU0CWBkHGeLYmq8TI96vD_gSDRX7LKhAH4jNJJD0vNnAhB2GjKdlUdYJRUHznQ.jpg?r=229',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg',
     duration: 60,
     year: 2021,
     rating: 'TV-MA'
@@ -112,7 +112,7 @@ const realContent = [
     service: 'amazon-prime',
     serviceContentId: 'B0875JNV76',
     directUrl: 'https://www.amazon.com/gp/video/detail/B0875JNV76/',
-    imageUrl: 'https://m.media-amazon.com/images/S/pv-target-images/c3c70fe80adc1d6f5b1d57f8b5893b5f4b9c45a5b5d6fac6f5a3e2e28c86b447._SX300_FMwebp_.jpg',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/stTEycfG9928HYGEISBFaG1ngjM.jpg',
     duration: 60,
     year: 2019,
     rating: 'TV-MA'
@@ -123,8 +123,9 @@ const realContent = [
     genre: 'comedy',
     type: 'show',
     service: 'amazon-prime',
-    serviceContentId: 'marvelous-mrs-maisel-prime',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=600&fit=crop',
+    serviceContentId: 'B077RMZL8J',
+    directUrl: 'https://www.amazon.com/gp/video/detail/B077RMZL8J/',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/zS7fQiOZiKCVH2vlYSiIsFWW8hh.jpg',
     duration: 50,
     year: 2017,
     rating: 'TV-14'
@@ -161,7 +162,7 @@ const realContent = [
     service: 'amazon-prime',
     serviceContentId: 'B00BQJMRWI',
     directUrl: 'https://www.amazon.com/gp/video/detail/B00BQJMRWI/ref=atv_sr_fle_c_sr6eee57_3_1_3?sr=1-3&pageTypeIdSource=ASIN&pageTypeId=B00HMCLSV4&qid=1754337348926',
-    imageUrl: '@assets/Screenshot 2025-08-04 at 2.57.03 PM_1754337467077.png',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/yDWJYRAwMNKbIYT8ZB9ximAWtso.jpg',
     duration: 45,
     year: 2021,
     rating: 'TV-MA'

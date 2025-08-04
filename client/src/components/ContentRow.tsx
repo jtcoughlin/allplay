@@ -49,7 +49,7 @@ export function ContentRow({
       </div>
       
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex space-x-3 pb-2">
+        <div className="flex space-x-4 pb-4">
           {content.map((item) => (
             <ContentCard
               key={item.id}

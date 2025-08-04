@@ -29,14 +29,14 @@ export function ContentCard({
 
   const sizeClasses = {
     small: 'w-36',
-    medium: 'w-44',
-    large: 'w-52'
+    medium: 'w-40',
+    large: 'w-48'
   };
 
   const imageSizeClasses = {
     small: 'h-48',
-    medium: 'h-24',
-    large: 'h-28'
+    medium: 'h-60',
+    large: 'h-72'
   };
 
   const toggleFavoriteMutation = useMutation({
@@ -155,7 +155,7 @@ export function ContentCard({
 
   return (
     <div 
-      className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer`}
+      className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer mr-4 mb-4`}
       data-testid={`card-content-${content.id}`}
     >
       <div className="relative mb-2">
@@ -249,9 +249,9 @@ export function ContentCard({
         </Button>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-1 px-1">
         <h3 
-          className="text-sm font-medium text-cream truncate" 
+          className="text-sm font-medium text-cream truncate leading-tight" 
           title={content.title}
           data-testid={`text-title-${content.id}`}
         >
@@ -259,7 +259,7 @@ export function ContentCard({
         </h3>
         
         <p 
-          className="text-xs text-gray-400 truncate"
+          className="text-xs text-gray-400 truncate leading-tight"
           data-testid={`text-info-${content.id}`}
         >
           {content.type === 'music' && content.artist 
@@ -286,16 +286,18 @@ export function ContentCard({
             e.stopPropagation();
             playContent.mutate(content.id);
           }}
-          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2"
+          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
           disabled={playContent.isPending}
           data-testid={`button-play-${content.id}`}
         >
-          <Play className="w-4 h-4 mr-2" />
-          {playContent.isPending ? 'Opening...' : 
-           ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') 
-             ? `Open in ${content.service}`
-             : 'Play'
-          }
+          <Play className="w-3 h-3 mr-1" />
+          <span className="text-xs truncate">
+            {playContent.isPending ? 'Opening...' : 
+             ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') 
+               ? `Open in ${content.service === 'amazon-prime' ? 'Prime' : content.service}`
+               : 'Play'
+            }
+          </span>
         </Button>
       </div>
     </div>
