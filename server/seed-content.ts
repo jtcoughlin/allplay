@@ -60,8 +60,9 @@ const realContent = [
     genre: 'crime',
     type: 'show',
     service: 'netflix',
-    serviceContentId: 'ozark-netflix',
-    imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop',
+    serviceContentId: '80117552',
+    directUrl: 'https://www.netflix.com/watch/80117552',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/m73QjSFgKQ05OKyZbIJqYklAc4G.jpg',
     duration: 60,
     year: 2017,
     rating: 'TV-MA'
@@ -97,8 +98,9 @@ const realContent = [
     genre: 'mystery',
     type: 'movie',
     service: 'netflix',
-    serviceContentId: 'glass-onion-netflix',
-    imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop',
+    serviceContentId: '81458416',
+    directUrl: 'https://www.netflix.com/watch/81458416',
+    imageUrl: 'https://image.tmdb.org/t/p/w500/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg',
     duration: 139,
     year: 2022,
     rating: 'PG-13'

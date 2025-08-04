@@ -33,12 +33,12 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
   };
 
   return (
-    <div className="flex gap-6 min-h-[600px]" data-testid="guide-view">
+    <div className="flex gap-4 h-screen pt-4 pb-4" data-testid="guide-view">
       {/* Left Side - Content List */}
-      <div className="w-1/2">
-        <div className="bg-gray-900/50 rounded-lg p-4">
+      <div className="w-2/5 flex flex-col">
+        <div className="bg-gray-900/50 rounded-lg p-4 flex-1 flex flex-col">
           <h2 className="text-xl font-semibold text-cream mb-4">Browse Content</h2>
-          <div className="space-y-2 max-h-[500px] overflow-y-auto">
+          <div className="space-y-2 flex-1 overflow-y-auto">
             {content.map((item) => (
               <div
                 key={item.id}
@@ -74,11 +74,11 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
                   </div>
                   
                   <div className="flex items-center gap-2 mt-1">
-                    {item.platform && (
+                    {item.service && (
                       <Badge 
-                        className={`${getPlatformColor(item.platform)} text-white text-xs`}
+                        className={`${getPlatformColor(item.service)} text-white text-xs`}
                       >
-                        {item.platform.toUpperCase()}
+                        {item.service.toUpperCase()}
                       </Badge>
                     )}
                     {item.year && (
@@ -103,11 +103,11 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
       </div>
 
       {/* Right Side - Preview */}
-      <div className="w-1/2">
+      <div className="w-3/5 flex flex-col">
         {selectedContent ? (
-          <div className="bg-gray-900/50 rounded-lg overflow-hidden">
+          <div className="bg-gray-900/50 rounded-lg overflow-hidden flex-1 flex flex-col">
             {/* Preview Image */}
-            <div className="relative h-64">
+            <div className="relative h-80">
               <img
                 src={selectedContent.imageUrl || ''}
                 alt={selectedContent.title}
@@ -129,7 +129,7 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
             </div>
             
             {/* Content Details */}
-            <div className="p-6">
+            <div className="p-6 flex-1 overflow-y-auto">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-2xl font-bold text-cream mb-2">
@@ -137,11 +137,11 @@ export function GuideView({ content, favorites, onToggleFavorite, onPlay }: Guid
                   </h2>
                   
                   <div className="flex items-center gap-3 mb-3">
-                    {selectedContent.platform && (
+                    {selectedContent.service && (
                       <Badge 
-                        className={`${getPlatformColor(selectedContent.platform)} text-white`}
+                        className={`${getPlatformColor(selectedContent.service)} text-white`}
                       >
-                        {selectedContent.platform.toUpperCase()}
+                        {selectedContent.service.toUpperCase()}
                       </Badge>
                     )}
                     

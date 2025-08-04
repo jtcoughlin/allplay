@@ -99,7 +99,7 @@ export default function Landing() {
 
         {/* Brand Story Section */}
         <div className="bg-gray-900/30 rounded-2xl p-12 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">The Problem We Solved</h2>
+          <h2 className="text-3xl font-bold text-white mb-6">Stop The Streaming Chaos</h2>
           <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-300">
             <p>
               Remember when you had one remote, one TV guide, and everything just worked? 
