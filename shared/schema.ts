@@ -36,6 +36,22 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Service connections for streaming platforms
+export const serviceConnections = pgTable("service_connections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  service: varchar("service").notNull(), // netflix, disney, hulu, etc.
+  accessToken: varchar("access_token"),
+  refreshToken: varchar("refresh_token"),
+  expiresAt: timestamp("expires_at"),
+  accountId: varchar("account_id"), // service-specific user ID
+  accountEmail: varchar("account_email"),
+  profileName: varchar("profile_name"),
+  status: varchar("status").notNull().default("connected"), // connected, expired, error
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Content table for movies, shows, music, etc.
 export const content = pgTable("content", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -43,14 +59,16 @@ export const content = pgTable("content", {
   description: text("description"),
   type: varchar("type").notNull(), // 'movie', 'show', 'music', 'live'
   genre: varchar("genre").notNull(),
-  platform: varchar("platform").notNull(), // 'netflix', 'spotify', etc.
+  service: varchar("service").notNull(), // 'netflix', 'spotify', etc.
+  serviceContentId: varchar("service_content_id").notNull(), // ID in the source service
   imageUrl: text("image_url"),
-  rating: decimal("rating", { precision: 3, scale: 1 }),
+  rating: varchar("rating"), // PG, R, TV-14, etc.
   year: integer("year"),
   artist: text("artist"), // for music content
   album: text("album"), // for music content
   duration: integer("duration"), // in minutes
   isLive: boolean("is_live").default(false),
+  availability: jsonb("availability"), // regions, subscription tiers
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -58,25 +76,35 @@ export const content = pgTable("content", {
 // User favorites
 export const favorites = pgTable("favorites", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull(),
-  contentId: varchar("content_id").notNull(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  contentId: varchar("content_id").notNull().references(() => content.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Watch history and progress
 export const watchHistory = pgTable("watch_history", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull(),
-  contentId: varchar("content_id").notNull(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  contentId: varchar("content_id").notNull().references(() => content.id, { onDelete: "cascade" }),
   progress: integer("progress").default(0), // percentage or time in seconds
   lastWatched: timestamp("last_watched").defaultNow(),
   isCompleted: boolean("is_completed").default(false),
+  season: varchar("season"), // for TV shows
+  episode: varchar("episode"), // for TV shows
 });
 
 // Define relations
 export const usersRelations = relations(users, ({ many }) => ({
+  serviceConnections: many(serviceConnections),
   favorites: many(favorites),
   watchHistory: many(watchHistory),
+}));
+
+export const serviceConnectionsRelations = relations(serviceConnections, ({ one }) => ({
+  user: one(users, {
+    fields: [serviceConnections.userId],
+    references: [users.id],
+  }),
 }));
 
 export const contentRelations = relations(content, ({ many }) => ({
@@ -114,6 +142,12 @@ export const insertUserSchema = createInsertSchema(users).pick({
   profileImageUrl: true,
 });
 
+export const insertServiceConnectionSchema = createInsertSchema(serviceConnections).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const insertContentSchema = createInsertSchema(content).omit({
   id: true,
   createdAt: true,
@@ -133,8 +167,14 @@ export const insertWatchHistorySchema = createInsertSchema(watchHistory).omit({
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+export type ServiceConnection = typeof serviceConnections.$inferSelect;
+export type InsertServiceConnection = z.infer<typeof insertServiceConnectionSchema>;
 export type Content = typeof content.$inferSelect;
 export type InsertContent = z.infer<typeof insertContentSchema>;
+export type Favorite = typeof favorites.$inferSelect;
+export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
+export type WatchHistory = typeof watchHistory.$inferSelect;
+export type InsertWatchHistory = z.infer<typeof insertWatchHistorySchema>;
 export type Favorite = typeof favorites.$inferSelect;
 export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
 export type WatchHistory = typeof watchHistory.$inferSelect;

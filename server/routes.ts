@@ -118,6 +118,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Service authentication route (simulates OAuth flow)
+  app.get("/api/auth/:service/login", isAuthenticated, async (req: any, res) => {
+    const { service } = req.params;
+    const userId = req.user.claims.sub;
+    
+    try {
+      // Simulate OAuth connection
+      await storage.connectService(userId, service);
+      
+      // Redirect back to profile with success message
+      res.redirect(`/profile?connected=${service}`);
+    } catch (error) {
+      console.error(`Error connecting to ${service}:`, error);
+      res.redirect(`/profile?error=connection_failed&service=${service}`);
+    }
+  });
+
   // User connections endpoints
   app.get('/api/user/connections', isAuthenticated, async (req: any, res) => {
     try {

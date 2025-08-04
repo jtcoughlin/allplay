@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { User, Settings, Link, Shield, Bell, Palette, Tv, Home, MessageSquare, HelpCircle, Send } from "lucide-react";
-import { SiNetflix, SiSpotify, SiAmazonprime, SiYoutube } from "react-icons/si";
+import { SiNetflix, SiSpotify, SiAmazonprime, SiYoutube, SiApple } from "react-icons/si";
 
 export default function Profile() {
   const { user, isLoading: isLoadingAuth } = useAuth();
@@ -136,15 +136,34 @@ export default function Profile() {
     );
   }
 
+  // Separate music services
+  const musicServices = [
+    { id: 'spotify', name: 'Spotify', icon: SiSpotify, color: 'text-green-500', category: 'music' },
+    { id: 'apple-music', name: 'Apple Music', icon: User, color: 'text-gray-800', category: 'music' },
+  ];
+
+  // Main streaming services
   const streamingServices = [
-    { id: 'netflix', name: 'Netflix', icon: SiNetflix, color: 'text-red-600' },
-    { id: 'disney', name: 'Disney+', icon: User, color: 'text-blue-600' },
-    { id: 'hulu', name: 'Hulu', icon: User, color: 'text-green-600' },
-    { id: 'hbo', name: 'HBO Max', icon: User, color: 'text-purple-600' },
-    { id: 'spotify', name: 'Spotify', icon: SiSpotify, color: 'text-green-500' },
-    { id: 'apple', name: 'Apple TV+', icon: User, color: 'text-gray-800' },
-    { id: 'prime', name: 'Prime Video', icon: SiAmazonprime, color: 'text-blue-400' },
-    { id: 'youtube', name: 'YouTube TV', icon: SiYoutube, color: 'text-red-500' },
+    { id: 'netflix', name: 'Netflix', icon: SiNetflix, color: 'text-red-600', category: 'video' },
+    { id: 'amazon-prime', name: 'Amazon Prime Video', icon: SiAmazonprime, color: 'text-blue-400', category: 'video' },
+    { id: 'disney-plus', name: 'Disney+', icon: User, color: 'text-blue-600', category: 'video' },
+    { id: 'max', name: 'Max (HBO Max)', icon: User, color: 'text-purple-600', category: 'video' },
+    { id: 'paramount-plus', name: 'Paramount+', icon: User, color: 'text-blue-500', category: 'video' },
+    { id: 'hulu', name: 'Hulu', icon: User, color: 'text-green-600', category: 'video' },
+    { id: 'apple-tv', name: 'Apple TV+', icon: User, color: 'text-gray-600', category: 'video' },
+    { id: 'peacock', name: 'Peacock', icon: User, color: 'text-purple-500', category: 'video' },
+    { id: 'espn-plus', name: 'ESPN+', icon: User, color: 'text-red-500', category: 'sports' },
+    { id: 'starz', name: 'Starz', icon: User, color: 'text-black', category: 'video' },
+    { id: 'curiosity-stream', name: 'CuriosityStream', icon: User, color: 'text-orange-500', category: 'documentary' },
+    { id: 'tubi', name: 'Tubi', icon: User, color: 'text-orange-600', category: 'free' },
+    { id: 'pluto-tv', name: 'Pluto TV', icon: User, color: 'text-purple-400', category: 'free' },
+    { id: 'roku-channel', name: 'The Roku Channel', icon: User, color: 'text-purple-700', category: 'free' },
+    { id: 'youtube', name: 'YouTube', icon: SiYoutube, color: 'text-red-500', category: 'free' },
+    { id: 'youtube-tv', name: 'YouTube TV', icon: SiYoutube, color: 'text-red-600', category: 'live' },
+    { id: 'mubi', name: 'Mubi', icon: User, color: 'text-blue-300', category: 'arthouse' },
+    { id: 'crunchyroll', name: 'Crunchyroll', icon: User, color: 'text-orange-400', category: 'anime' },
+    { id: 'amazon-freevee', name: 'Amazon Freevee', icon: SiAmazonprime, color: 'text-blue-300', category: 'free' },
+    { id: 'discovery-plus', name: 'Discovery+', icon: User, color: 'text-blue-700', category: 'documentary' },
   ];
 
   const connectedServices = connections.map((conn: any) => conn.service);
@@ -273,80 +292,143 @@ export default function Profile() {
             </Card>
           </TabsContent>
 
-          {/* Streaming Services Tab */}
+          {/* Services Tab */}
           <TabsContent value="connections" className="space-y-6">
+            {/* Music Services Section */}
             <Card className="bg-gray-900/50 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-cream">Universal Login</CardTitle>
+                <CardTitle className="text-cream flex items-center">
+                  <Bell className="w-5 h-5 mr-2 text-blue-primary" />
+                  Music Services
+                </CardTitle>
                 <CardDescription className="text-gray-400">
-                  Connect all your streaming services once. Allplay securely saves your credentials and payment info for seamless access. Watch everything from one interface - no more app switching.
+                  Connect your music streaming accounts
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {streamingServices.map((service) => {
-                    const isConnected = connectedServices.includes(service.id);
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {musicServices.map((service) => {
                     const IconComponent = service.icon;
+                    const isConnected = connectedServices.includes(service.id);
                     
                     return (
-                      <div
-                        key={service.id}
-                        className="flex items-center justify-between p-4 border border-gray-700 rounded-lg bg-gray-800/30"
-                      >
+                      <div key={service.id} className="flex items-center justify-between p-4 border border-gray-700 rounded-lg bg-gray-800/30">
                         <div className="flex items-center space-x-3">
                           <IconComponent className={`w-6 h-6 ${service.color}`} />
-                          <span className="font-medium text-cream">{service.name}</span>
+                          <span className="text-cream font-medium">{service.name}</span>
                         </div>
                         
-                        <div className="flex items-center space-x-2">
-                          {isConnected && (
-                            <Badge variant="secondary" className="bg-green-600 text-white">
-                              Connected
-                            </Badge>
-                          )}
-                          
-                          <Button
-                            variant={isConnected ? "outline" : "default"}
-                            size="sm"
-                            onClick={() => 
-                              isConnected 
-                                ? disconnectService.mutate(service.id)
-                                : connectService.mutate(service.id)
+                        <Button
+                          variant={isConnected ? "outline" : "default"}
+                          size="sm"
+                          className={
+                            isConnected 
+                              ? "border-red-600 text-red-400 hover:bg-red-600/10" 
+                              : "bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
+                          }
+                          onClick={() => {
+                            if (isConnected) {
+                              disconnectService.mutate({ service: service.id });
+                            } else {
+                              // Redirect to service OAuth login
+                              window.location.href = `/api/auth/${service.id}/login`;
                             }
-                            disabled={connectService.isPending || disconnectService.isPending}
-                            className={isConnected 
-                              ? "border-gray-600 text-gray-300 hover:bg-gray-800" 
-                              : "bg-blue-primary hover:bg-blue-600 text-white"
-                            }
-                            data-testid={`button-${service.id}-${isConnected ? 'disconnect' : 'connect'}`}
-                          >
-                            {isConnected ? 'Disconnect' : 'Connect'}
-                          </Button>
-                        </div>
+                          }}
+                          disabled={connectService.isPending || disconnectService.isPending}
+                          data-testid={`button-${service.id}-${isConnected ? 'disconnect' : 'connect'}`}
+                        >
+                          {isConnected ? 'Disconnect' : 'Connect'}
+                        </Button>
                       </div>
                     );
                   })}
                 </div>
-                
-                <Separator className="bg-gray-700" />
-                
-                <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Tv className="w-5 h-5 text-blue-primary" />
-                    <span className="font-semibold text-cream">TV Homescreen Mode</span>
-                  </div>
-                  <p className="text-sm text-gray-400 mb-3">
-                    Set Allplay as your TV's default homescreen. When you turn on your TV, you'll be automatically logged in and ready to watch from any connected service.
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="border-blue-primary text-blue-primary hover:bg-blue-primary hover:text-white"
-                    data-testid="button-tv-homescreen"
-                  >
-                    Enable TV Homescreen
-                  </Button>
+              </CardContent>
+            </Card>
+
+            {/* Video Streaming Services */}
+            <Card className="bg-gray-900/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-cream flex items-center">
+                  <Tv className="w-5 h-5 mr-2 text-blue-primary" />
+                  Video Streaming Services
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Connect all your streaming subscriptions in one place
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {streamingServices.map((service) => {
+                    const IconComponent = service.icon;
+                    const isConnected = connectedServices.includes(service.id);
+                    
+                    return (
+                      <div key={service.id} className="flex items-center justify-between p-4 border border-gray-700 rounded-lg bg-gray-800/30">
+                        <div className="flex items-center space-x-3">
+                          <IconComponent className={`w-6 h-6 ${service.color}`} />
+                          <div>
+                            <span className="text-cream font-medium block">{service.name}</span>
+                            <span className="text-xs text-gray-500 capitalize">{service.category}</span>
+                          </div>
+                        </div>
+                        
+                        <Button
+                          variant={isConnected ? "outline" : "default"}
+                          size="sm"
+                          className={
+                            isConnected 
+                              ? "border-red-600 text-red-400 hover:bg-red-600/10" 
+                              : "bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
+                          }
+                          onClick={() => {
+                            if (isConnected) {
+                              disconnectService.mutate({ service: service.id });
+                            } else {
+                              // Redirect to service OAuth login
+                              window.location.href = `/api/auth/${service.id}/login`;
+                            }
+                          }}
+                          disabled={connectService.isPending || disconnectService.isPending}
+                          data-testid={`button-${service.id}-${isConnected ? 'disconnect' : 'connect'}`}
+                        >
+                          {isConnected ? 'Disconnect' : 'Connect'}
+                        </Button>
+                      </div>
+                    );
+                  })}
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Universal Login Section */}
+            <Card className="bg-blue-primary/10 border-blue-primary/20">
+              <CardHeader>
+                <CardTitle className="text-cream flex items-center">
+                  <Shield className="w-5 h-5 mr-2 text-blue-primary" />
+                  Universal Login
+                </CardTitle>
+                <CardDescription className="text-gray-300">
+                  Save your login credentials securely for seamless access across all services
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-gray-900/50 rounded-lg p-4">
+                  <h4 className="text-cream font-semibold mb-2">How Universal Login Works</h4>
+                  <ul className="text-gray-300 text-sm space-y-1">
+                    <li>• Your credentials are encrypted and stored securely</li>
+                    <li>• Automatic login to all connected services</li>
+                    <li>• Single sign-on across the Allplay platform</li>
+                    <li>• No more remembering multiple passwords</li>
+                  </ul>
+                </div>
+                <Button 
+                  className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary w-full"
+                  data-testid="button-setup-universal-login"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  Set Up Universal Login
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>

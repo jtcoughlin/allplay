@@ -1,10 +1,13 @@
 import {
   users,
+  serviceConnections,
   content,
   favorites,
   watchHistory,
   type User,
   type UpsertUser,
+  type ServiceConnection,
+  type InsertServiceConnection,
   type Content,
   type InsertContent,
   type Favorite,
@@ -202,23 +205,64 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  // User connections operations
-  async getUserConnections(userId: string): Promise<any[]> {
-    // Simulate connections for now - would connect to actual database table
-    return [
-      { service: 'netflix', status: 'connected' },
-      { service: 'spotify', status: 'connected' },
-    ];
+  // Service connection operations
+  async getUserConnections(userId: string): Promise<ServiceConnection[]> {
+    return await db.select().from(serviceConnections).where(eq(serviceConnections.userId, userId));
   }
 
-  async connectService(userId: string, service: string): Promise<any> {
-    // Simulate connection - would save to database
-    return { userId, service, status: 'connected', connectedAt: new Date() };
+  async getConnection(userId: string, service: string): Promise<ServiceConnection | undefined> {
+    const [connection] = await db
+      .select()
+      .from(serviceConnections)
+      .where(and(eq(serviceConnections.userId, userId), eq(serviceConnections.service, service)));
+    return connection;
+  }
+
+  async createConnection(connectionData: InsertServiceConnection): Promise<ServiceConnection> {
+    const [connection] = await db
+      .insert(serviceConnections)
+      .values(connectionData)
+      .returning();
+    return connection;
+  }
+
+  async updateConnection(id: string, updates: Partial<InsertServiceConnection>): Promise<ServiceConnection> {
+    const [connection] = await db
+      .update(serviceConnections)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(serviceConnections.id, id))
+      .returning();
+    return connection;
+  }
+
+  async deleteConnection(id: string): Promise<void> {
+    await db.delete(serviceConnections).where(eq(serviceConnections.id, id));
+  }
+
+  async connectService(userId: string, service: string): Promise<ServiceConnection> {
+    // Create or update connection
+    const existing = await this.getConnection(userId, service);
+    if (existing) {
+      return await this.updateConnection(existing.id, { status: 'connected' });
+    } else {
+      return await this.createConnection({
+        userId,
+        service,
+        status: 'connected',
+      });
+    }
   }
 
   async disconnectService(userId: string, service: string): Promise<void> {
-    // Simulate disconnection - would remove from database
-    console.log(`Disconnecting ${service} for user ${userId}`);
+    const connection = await this.getConnection(userId, service);
+    if (connection) {
+      await this.deleteConnection(connection.id);
+    }
+  }
+
+  // Enhanced content operations
+  async getContentByService(service: string): Promise<Content[]> {
+    return await db.select().from(content).where(eq(content.service, service));
   }
 
   // Preferences operations
