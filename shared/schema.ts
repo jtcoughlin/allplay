@@ -9,6 +9,7 @@ import {
   integer,
   decimal,
   boolean,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations } from 'drizzle-orm';
 import { createInsertSchema } from "drizzle-zod";
@@ -91,7 +92,9 @@ export const watchHistory = pgTable("watch_history", {
   isCompleted: boolean("is_completed").default(false),
   season: varchar("season"), // for TV shows
   episode: varchar("episode"), // for TV shows
-});
+}, (table) => [
+  unique("unique_user_content").on(table.userId, table.contentId),
+]);
 
 // Define relations
 export const usersRelations = relations(users, ({ many }) => ({

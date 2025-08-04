@@ -304,11 +304,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/play-external/:contentId', isAuthenticated, async (req: any, res) => {
     try {
       const { contentId } = req.params;
-      const { service, title } = req.body;
       const userId = req.user.claims.sub;
       
-      // Generate deep links for the service
-      const { appUrl, webUrl } = generateDeepLink(service, 'play', contentId);
+      // Get content details from database
+      const contentDetails = await storage.getContentById(contentId);
+      if (!contentDetails) {
+        return res.status(404).json({ message: "Content not found" });
+      }
+      
+      // Generate deep links for the service using content's service_content_id
+      const { appUrl, webUrl } = generateDeepLink(contentDetails.service, 'play', contentDetails.serviceContentId);
       
       // Log the play attempt
       await storage.updateWatchProgress({
@@ -321,10 +326,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ 
         appUrl, 
         webUrl,
-        title,
-        service,
-        message: `Opening ${title} in ${service}...`,
-        returnUrl: `${req.protocol}://${req.get('host')}?returning=true&service=${service}&content=${contentId}`
+        title: contentDetails.title,
+        service: contentDetails.service,
+        message: `Opening ${contentDetails.title} in ${contentDetails.service}...`,
+        returnUrl: `${req.protocol}://${req.get('host')}?returning=true&service=${contentDetails.service}&content=${contentId}`
       });
     } catch (error) {
       console.error("Error generating deep link:", error);
