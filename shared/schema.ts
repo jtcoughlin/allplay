@@ -175,7 +175,3 @@ export type Favorite = typeof favorites.$inferSelect;
 export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
 export type WatchHistory = typeof watchHistory.$inferSelect;
 export type InsertWatchHistory = z.infer<typeof insertWatchHistorySchema>;
-export type Favorite = typeof favorites.$inferSelect;
-export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
-export type WatchHistory = typeof watchHistory.$inferSelect;
-export type InsertWatchHistory = z.infer<typeof insertWatchHistorySchema>;

@@ -199,8 +199,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           serviceUserId: profile.id,
           serviceUserName: profile.display_name || profile.name,
           serviceUserEmail: profile.email,
-        },
-        isActive: true
+        }
       });
       
       // Clean up session
@@ -301,7 +300,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
         contentId,
         progress: 0,
-        lastWatched: new Date(),
         isCompleted: false
       });
       
@@ -366,7 +364,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
         contentId,
         progress: 0,
-        lastWatched: new Date(),
         isCompleted: false
       });
       

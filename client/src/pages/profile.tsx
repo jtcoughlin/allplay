@@ -227,7 +227,7 @@ export default function Profile() {
     { id: 'discovery-plus', name: 'Discovery+', icon: User, color: 'text-blue-700', category: 'documentary' },
   ];
 
-  const connectedServices = connections.map((conn: any) => conn.service);
+  const connectedServices = Array.isArray(connections) ? connections.map((conn: any) => conn.service) : [];
 
   return (
     <div className="min-h-screen bg-navy text-cream" data-testid="page-profile">
@@ -288,9 +288,9 @@ export default function Profile() {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 rounded-full bg-blue-primary flex items-center justify-center">
-                    {user.profileImageUrl ? (
+                    {user && (user as any).profileImageUrl ? (
                       <img
-                        src={user.profileImageUrl}
+                        src={(user as any).profileImageUrl}
                         alt="Profile"
                         className="w-16 h-16 rounded-full object-cover"
                       />
@@ -300,12 +300,12 @@ export default function Profile() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-cream">
-                      {user.firstName || user.lastName 
-                        ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
+                      {user && ((user as any).firstName || (user as any).lastName)
+                        ? `${(user as any).firstName || ''} ${(user as any).lastName || ''}`.trim()
                         : 'Allplay User'
                       }
                     </h3>
-                    <p className="text-gray-400">{user.email}</p>
+                    <p className="text-gray-400">{user ? (user as any).email : ''}</p>
                   </div>
                 </div>
 
@@ -316,7 +316,7 @@ export default function Profile() {
                     <Label htmlFor="firstName" className="text-cream">First Name</Label>
                     <Input
                       id="firstName"
-                      defaultValue={user.firstName || ''}
+                      defaultValue={user ? (user as any).firstName || '' : ''}
                       className="bg-gray-800 border-gray-600 text-cream"
                       data-testid="input-firstname"
                     />
@@ -325,7 +325,7 @@ export default function Profile() {
                     <Label htmlFor="lastName" className="text-cream">Last Name</Label>
                     <Input
                       id="lastName"
-                      defaultValue={user.lastName || ''}
+                      defaultValue={user ? (user as any).lastName || '' : ''}
                       className="bg-gray-800 border-gray-600 text-cream"
                       data-testid="input-lastname"
                     />
@@ -337,7 +337,7 @@ export default function Profile() {
                   <Input
                     id="email"
                     type="email"
-                    defaultValue={user.email || ''}
+                    defaultValue={user ? (user as any).email || '' : ''}
                     className="bg-gray-800 border-gray-600 text-cream"
                     data-testid="input-email"
                   />
@@ -389,7 +389,7 @@ export default function Profile() {
                           }
                           onClick={() => {
                             if (isConnected) {
-                              disconnectService.mutate({ service: service.id });
+                              disconnectService.mutate(service.id);
                             } else {
                               setAuthModal({ isOpen: true, service });
                             }
@@ -443,7 +443,7 @@ export default function Profile() {
                           }
                           onClick={() => {
                             if (isConnected) {
-                              disconnectService.mutate({ service: service.id });
+                              disconnectService.mutate(service.id);
                             } else {
                               setAuthModal({ isOpen: true, service });
                             }

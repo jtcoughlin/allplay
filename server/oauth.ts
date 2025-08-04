@@ -1,5 +1,28 @@
 import { nanoid } from 'nanoid';
 
+// Base OAuth configuration interface
+interface BaseOAuthConfig {
+  redirectUri: string;
+  authUrl: string;
+}
+
+// Standard OAuth2 configuration
+interface StandardOAuthConfig extends BaseOAuthConfig {
+  clientId: string | undefined;
+  clientSecret: string | undefined;
+  tokenUrl: string;
+  scopes: string[];
+}
+
+// Apple Music specific configuration
+interface AppleMusicConfig extends BaseOAuthConfig {
+  teamId: string | undefined;
+  keyId: string | undefined;
+  privateKey: string | undefined;
+}
+
+type OAuthConfig = StandardOAuthConfig | AppleMusicConfig;
+
 // Deep link configurations for services without public APIs
 export const deepLinkConfigs = {
   netflix: {
@@ -53,7 +76,7 @@ export const deepLinkConfigs = {
 };
 
 // OAuth configuration for services with public APIs
-export const oauthConfigs = {
+export const oauthConfigs: Record<string, OAuthConfig> = {
   spotify: {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
@@ -80,47 +103,60 @@ export const oauthConfigs = {
   }
 };
 
+// Type guard functions
+function isStandardOAuth(config: OAuthConfig): config is StandardOAuthConfig {
+  return 'clientId' in config && 'scopes' in config;
+}
+
+function isAppleMusicConfig(config: OAuthConfig): config is AppleMusicConfig {
+  return 'teamId' in config;
+}
+
 // Generate OAuth authorization URL
 export function generateAuthUrl(service: string, state: string): string {
-  const config = oauthConfigs[service as keyof typeof oauthConfigs];
+  const config = oauthConfigs[service];
   if (!config) {
     throw new Error(`OAuth not configured for service: ${service}`);
   }
 
-  if (service === 'apple-music') {
+  if (service === 'apple-music' && isAppleMusicConfig(config)) {
     // Apple Music has a different flow
     return `${config.authUrl}?response_type=code&client_id=${config.teamId}&state=${state}`;
   }
 
-  const params = new URLSearchParams({
-    response_type: 'code',
-    client_id: config.clientId!,
-    redirect_uri: config.redirectUri!,
-    scope: config.scopes!.join(' '),
-    state: state,
-    access_type: 'offline', // For refresh tokens
-    prompt: 'consent'
-  });
+  if (isStandardOAuth(config)) {
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: config.clientId!,
+      redirect_uri: config.redirectUri,
+      scope: config.scopes.join(' '),
+      state: state,
+      access_type: 'offline', // For refresh tokens
+      prompt: 'consent'
+    });
 
-  return `${config.authUrl}?${params.toString()}`;
+    return `${config.authUrl}?${params.toString()}`;
+  }
+
+  throw new Error(`Invalid OAuth configuration for service: ${service}`);
 }
 
 // Exchange authorization code for access token
 export async function exchangeCodeForToken(service: string, code: string): Promise<any> {
-  const config = oauthConfigs[service as keyof typeof oauthConfigs];
-  if (!config) {
+  const config = oauthConfigs[service];
+  if (!config || !isStandardOAuth(config)) {
     throw new Error(`OAuth not configured for service: ${service}`);
   }
 
   const tokenData = {
     grant_type: 'authorization_code',
     code: code,
-    redirect_uri: config.redirectUri!,
+    redirect_uri: config.redirectUri,
     client_id: config.clientId!,
     client_secret: config.clientSecret!,
   };
 
-  const response = await fetch(config.tokenUrl!, {
+  const response = await fetch(config.tokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -138,8 +174,8 @@ export async function exchangeCodeForToken(service: string, code: string): Promi
 
 // Refresh access token
 export async function refreshAccessToken(service: string, refreshToken: string): Promise<any> {
-  const config = oauthConfigs[service as keyof typeof oauthConfigs];
-  if (!config) {
+  const config = oauthConfigs[service];
+  if (!config || !isStandardOAuth(config)) {
     throw new Error(`OAuth not configured for service: ${service}`);
   }
 
@@ -150,7 +186,7 @@ export async function refreshAccessToken(service: string, refreshToken: string):
     client_secret: config.clientSecret!,
   };
 
-  const response = await fetch(config.tokenUrl!, {
+  const response = await fetch(config.tokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

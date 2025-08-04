@@ -43,8 +43,9 @@ export interface IStorage {
   updateWatchProgress(watchHistory: InsertWatchHistory): Promise<WatchHistory>;
   
   // User connections operations
-  getUserConnections(userId: string): Promise<any[]>;
-  connectService(userId: string, service: string): Promise<any>;
+  getUserConnections(userId: string): Promise<ServiceConnection[]>;
+  createUserConnection(connection: Omit<InsertServiceConnection, 'id' | 'createdAt' | 'updatedAt'> & { credentials: any }): Promise<ServiceConnection>;
+  connectService(userId: string, service: string): Promise<ServiceConnection>;
   disconnectService(userId: string, service: string): Promise<void>;
   
   // Preferences operations
@@ -87,7 +88,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getContentByPlatform(platform: string): Promise<Content[]> {
-    return await db.select().from(content).where(eq(content.platform, platform));
+    return await db.select().from(content).where(eq(content.service, platform));
   }
 
   async searchContent(query: string): Promise<Content[]> {
@@ -258,6 +259,24 @@ export class DatabaseStorage implements IStorage {
     if (connection) {
       await this.deleteConnection(connection.id);
     }
+  }
+
+  async createUserConnection(connectionData: Omit<InsertServiceConnection, 'id' | 'createdAt' | 'updatedAt'> & { credentials: any }): Promise<ServiceConnection> {
+    // Extract credentials and map to individual fields
+    const { credentials, ...baseData } = connectionData;
+    
+    const insertData: InsertServiceConnection = {
+      ...baseData,
+      accessToken: credentials.accessToken,
+      refreshToken: credentials.refreshToken,
+      expiresAt: credentials.expiresAt ? new Date(credentials.expiresAt) : null,
+      accountId: credentials.serviceUserId,
+      accountEmail: credentials.serviceUserEmail,
+      profileName: credentials.serviceUserName,
+      status: 'connected'
+    };
+
+    return await this.createConnection(insertData);
   }
 
   // Enhanced content operations
