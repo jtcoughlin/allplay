@@ -240,7 +240,27 @@ export function generateDeepLink(service: string, action: 'play' | 'search', ide
 
   if (action === 'play' && config.playUrl) {
     appUrl = config.playUrl(identifier);
-    webUrl = `${config.webUrl}${identifier.includes('/') ? identifier : '/watch/' + identifier}`;
+    
+    // Generate proper web URLs for each service
+    switch (service) {
+      case 'netflix':
+        // Netflix uses title IDs, search for the content
+        webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-netflix', '').replace(/-/g, ' '))}`;
+        break;
+      case 'amazon-prime':
+        // Amazon Prime uses ASIN IDs, go to main video page for search
+        webUrl = `${config.webUrl}/search/ref=atv_nb_sr?phrase=${encodeURIComponent(identifier.replace('-prime', '').replace(/-/g, ' '))}`;
+        break;
+      case 'disney-plus':
+        webUrl = `${config.webUrl}/search/?q=${encodeURIComponent(identifier.replace('-disney', '').replace(/-/g, ' '))}`;
+        break;
+      case 'hulu':
+        webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier.replace('-hulu', '').replace(/-/g, ' '))}`;
+        break;
+      default:
+        // Fallback to service homepage
+        webUrl = config.webUrl;
+    }
   } else if (action === 'search' && config.searchUrl) {
     appUrl = config.searchUrl(identifier);
     webUrl = `${config.webUrl}/search?q=${encodeURIComponent(identifier)}`;

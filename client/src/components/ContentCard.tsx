@@ -91,24 +91,23 @@ export function ContentCard({
     },
     onSuccess: (data) => {
       if (data.appUrl && data.webUrl) {
-        // Try to open the app using window.location.href for better Safari compatibility
-        try {
-          window.location.href = data.appUrl;
-        } catch (error) {
-          console.log('App URL failed, opening web URL:', error);
-          window.open(data.webUrl, '_blank');
-        }
+        // Create a hidden iframe to try app URL first, then open web URL immediately
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = data.appUrl;
+        document.body.appendChild(iframe);
         
-        // Fallback to web after a delay if app doesn't open
+        // Remove iframe after a short delay
         setTimeout(() => {
-          if (confirm(`If ${content.service} app didn't open, click OK to open in browser.`)) {
-            window.open(data.webUrl, '_blank');
-          }
-        }, 3000);
+          document.body.removeChild(iframe);
+        }, 100);
+        
+        // Open web URL immediately as primary action - works on all platforms
+        window.open(data.webUrl, '_blank');
         
         toast({
-          title: `Opening in ${content.service}`,
-          description: data.message || `Content will open in ${content.service} app`,
+          title: `Opening ${content.title}`,
+          description: `Content will open in ${content.service === 'netflix' ? 'Netflix' : content.service === 'amazon-prime' ? 'Amazon Prime Video' : content.service}`,
         });
       } else {
         toast({
