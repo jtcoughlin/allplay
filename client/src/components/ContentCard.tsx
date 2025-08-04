@@ -91,23 +91,17 @@ export function ContentCard({
     },
     onSuccess: (data) => {
       if (data.appUrl && data.webUrl) {
-        // Create a hidden iframe to try app URL first, then open web URL immediately
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = data.appUrl;
-        document.body.appendChild(iframe);
+        // Direct approach: Open web URL immediately - this works reliably on all platforms
+        const newTab = window.open(data.webUrl, '_blank');
         
-        // Remove iframe after a short delay
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-        }, 100);
-        
-        // Open web URL immediately as primary action - works on all platforms
-        window.open(data.webUrl, '_blank');
+        if (!newTab) {
+          // If popup was blocked, try navigating in same window
+          window.location.href = data.webUrl;
+        }
         
         toast({
           title: `Opening ${content.title}`,
-          description: `Content will open in ${content.service === 'netflix' ? 'Netflix' : content.service === 'amazon-prime' ? 'Amazon Prime Video' : content.service}`,
+          description: `Opening ${content.service === 'netflix' ? 'Netflix' : content.service === 'amazon-prime' ? 'Amazon Prime Video' : content.service} in new tab`,
         });
       } else {
         toast({
