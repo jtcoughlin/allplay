@@ -5,6 +5,7 @@ import { setupAuth, isAuthenticated } from "./replitAuth";
 import { generateAuthUrl, exchangeCodeForToken, getUserProfile, generateDeepLink } from "./oauth";
 import { nanoid } from 'nanoid';
 import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema } from "@shared/schema";
+import { seedRealContent } from "./seed-content";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -19,6 +20,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Seed content endpoint
+  app.post('/api/seed-content', async (req, res) => {
+    try {
+      await seedRealContent();
+      res.json({ message: 'Content seeded successfully' });
+    } catch (error) {
+      console.error('Error seeding content:', error);
+      res.status(500).json({ message: 'Failed to seed content' });
     }
   });
 

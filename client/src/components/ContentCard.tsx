@@ -153,7 +153,7 @@ export function ContentCard({
   };
 
   const getProgressPercentage = () => {
-    if (!watchHistory || !content.duration) return 0;
+    if (!watchHistory || !content.duration || !watchHistory.progress) return 0;
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
@@ -203,13 +203,13 @@ export function ContentCard({
           </div>
         )}
 
-        {/* Platform badge */}
-        {content.platform && (
+        {/* Service badge */}
+        {content.service && (
           <Badge 
-            className={`absolute top-2 right-2 ${getPlatformColor(content.platform)} text-white text-xs font-bold px-2 py-1`}
-            data-testid={`badge-platform-${content.id}`}
+            className={`absolute top-2 right-2 ${getPlatformColor(content.service)} text-white text-xs font-bold px-2 py-1`}
+            data-testid={`badge-service-${content.id}`}
           >
-            {content.platform.toUpperCase()}
+            {content.service.toUpperCase()}
           </Badge>
         )}
 

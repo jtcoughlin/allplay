@@ -154,8 +154,8 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.imageUrl}
-            platform={headlinerContent.platform}
+            imageUrl={headlinerContent.imageUrl || undefined}
+            platform={headlinerContent.service}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
             type={headlinerContent.isLive ? 'live-event' : headlinerContent.type as any}
