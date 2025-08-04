@@ -236,7 +236,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } 
       // Services with deep link support - require verification
-      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(service)) {
+      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(service)) {
         // Don't auto-connect, require verification
         res.json({ 
           requiresVerification: true,
@@ -262,7 +262,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { service, hasSubscription } = req.body;
 
+      console.log('Verify subscription request:', { service, hasSubscription, body: req.body });
+
       if (!service || hasSubscription === undefined) {
+        console.log('Missing required parameters:', { service, hasSubscription });
         return res.status(400).json({ message: 'Service and subscription status required' });
       }
 

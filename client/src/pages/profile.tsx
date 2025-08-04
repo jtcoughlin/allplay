@@ -79,6 +79,7 @@ export default function Profile() {
         window.location.href = data.authUrl;
       } else if (data.requiresVerification) {
         // Show verification modal for deep link services
+        console.log('Setting verification modal with service:', authModal.service);
         setVerificationModal({
           isOpen: true,
           service: authModal.service,
@@ -801,7 +802,7 @@ export default function Profile() {
                 <span className="inline-flex items-center px-2 py-1 bg-green-900/30 border border-green-700 rounded text-green-400 text-xs font-medium mr-2">
                   REAL OAUTH
                 </span>
-              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) ? (
+              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) ? (
                 <span className="inline-flex items-center px-2 py-1 bg-orange-900/30 border border-orange-700 rounded text-orange-400 text-xs font-medium mr-2">
                   DEEP LINK
                 </span>
@@ -813,7 +814,7 @@ export default function Profile() {
               
               {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) ? (
                 `You'll be redirected to ${authModal.service?.name} for real authentication with your existing account.`
-              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) ? (
+              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) ? (
                 `This connects ${authModal.service?.name} via deep links. Content will open in their app and return to Allplay.`
               ) : (
                 `This simulates connecting to ${authModal.service?.name}. Real connection requires API partnerships.`
@@ -836,7 +837,7 @@ export default function Profile() {
             )}
             
             {/* Deep Link Services */}
-            {['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) && (
+            {['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) && (
               <div className="bg-orange-primary/10 border border-orange-primary/20 rounded-lg p-4">
                 <h4 className="font-semibold text-cream mb-2">Deep Link Integration:</h4>
                 <ul className="text-sm text-gray-300 space-y-1">
@@ -849,7 +850,7 @@ export default function Profile() {
             )}
             
             {/* Other Services */}
-            {!['spotify', 'youtube', 'apple-music', 'netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) && (
+            {!['spotify', 'youtube', 'apple-music', 'netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) && (
               <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
                 <h4 className="font-semibold text-cream mb-2">Demo Connection:</h4>
                 <ul className="text-sm text-gray-300 space-y-1">
@@ -903,7 +904,7 @@ export default function Profile() {
                 <ExternalLink className="w-4 h-4 mr-2" />
                 {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) 
                   ? `Connect to ${authModal.service?.name}`
-                  : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id)
+                  : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id)
                   ? `Link ${authModal.service?.name} App`
                   : `Demo Connect to ${authModal.service?.name}`
                 }
@@ -958,10 +959,16 @@ export default function Profile() {
               
               <div className="flex space-x-3">
                 <Button
-                  onClick={() => verifySubscription.mutate({ 
-                    service: verificationModal.service?.id || '', 
-                    hasSubscription: false 
-                  })}
+                  onClick={() => {
+                    console.log('Verifying subscription with:', { 
+                      service: verificationModal.service?.id, 
+                      hasSubscription: false 
+                    });
+                    verifySubscription.mutate({ 
+                      service: verificationModal.service?.id || '', 
+                      hasSubscription: false 
+                    });
+                  }}
                   variant="outline"
                   className="flex-1 border-gray-600 text-gray-400 hover:text-cream"
                   disabled={verifySubscription.isPending}
@@ -971,10 +978,16 @@ export default function Profile() {
                 </Button>
                 
                 <Button
-                  onClick={() => verifySubscription.mutate({ 
-                    service: verificationModal.service?.id || '', 
-                    hasSubscription: true 
-                  })}
+                  onClick={() => {
+                    console.log('Verifying subscription with:', { 
+                      service: verificationModal.service?.id, 
+                      hasSubscription: true 
+                    });
+                    verifySubscription.mutate({ 
+                      service: verificationModal.service?.id || '', 
+                      hasSubscription: true 
+                    });
+                  }}
                   className="flex-1 bg-blue-primary hover:bg-blue-600 text-white"
                   disabled={verifySubscription.isPending}
                   data-testid="button-confirm-subscription"
