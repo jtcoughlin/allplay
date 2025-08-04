@@ -77,7 +77,7 @@ export function ContentCard({
   const playContent = useMutation({
     mutationFn: async (contentId: string) => {
       // For deep link services, use the external play endpoint
-      if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '')) {
+      if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock', 'youtube-tv', 'espn-plus'].includes(content.service || '')) {
         const response = await apiRequest("POST", `/api/play-external/${contentId}`, {
           service: content.service,
           title: content.title

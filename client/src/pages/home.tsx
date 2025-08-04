@@ -109,23 +109,56 @@ export default function Home() {
       handlePlayTrack(content);
     } else {
       try {
-        // Call play endpoint to simulate in-Allplay streaming
-        const response = await fetch(`/api/play/${content.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        // For deep link services, use the external play endpoint
+        const isDeepLinkService = ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock', 'youtube-tv', 'espn-plus'].includes(content.service || '');
         
-        if (response.ok) {
-          console.log('Now streaming within Allplay:', content.title);
-          toast({
-            title: "Now Playing in Allplay",
-            description: `${content.title} is streaming directly in Allplay - no app switching needed!`,
+        if (isDeepLinkService) {
+          const response = await fetch(`/api/play-external/${content.id}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
           });
           
-          // Invalidate continue watching to refresh the data
-          queryClient.invalidateQueries({ queryKey: ['/api/continue-watching'] });
+          if (response.ok) {
+            const data = await response.json();
+            if (data.appUrl && data.webUrl) {
+              // Open web URL directly - this works reliably on all platforms
+              const newTab = window.open(data.webUrl, '_blank');
+              
+              if (!newTab) {
+                // If popup was blocked, try navigating in same window
+                window.location.href = data.webUrl;
+              }
+              
+              toast({
+                title: `Opening ${content.title}`,
+                description: `Opening in ${content.service} app`,
+              });
+            }
+            
+            // Invalidate continue watching to refresh the data
+            queryClient.invalidateQueries({ queryKey: ['/api/continue-watching'] });
+          }
+        } else {
+          // Call play endpoint to simulate in-Allplay streaming
+          const response = await fetch(`/api/play/${content.id}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.ok) {
+            console.log('Now streaming within Allplay:', content.title);
+            toast({
+              title: "Now Playing in Allplay",
+              description: `${content.title} is streaming directly in Allplay - no app switching needed!`,
+            });
+            
+            // Invalidate continue watching to refresh the data
+            queryClient.invalidateQueries({ queryKey: ['/api/continue-watching'] });
+          }
         }
       } catch (error) {
         console.error('Error starting playback:', error);
@@ -166,14 +199,21 @@ export default function Home() {
         {viewMode === 'guide' ? (
           selectedGenre === 'live-tv' ? (
             <LiveTVGuide
-              content={typedContent}
+              content={liveContent}
               favorites={favoriteIds}
               onToggleFavorite={handleToggleFavorite}
               onPlay={handlePlay}
             />
           ) : (
             <GuideView
-              content={typedContent}
+              content={typedContent.filter((item: Content) => {
+                if (selectedGenre === 'all') return true;
+                if (selectedGenre === 'movies') return item.type === 'movie';
+                if (selectedGenre === 'shows') return item.type === 'show' && !['spotify', 'apple-music'].includes(item.service || '');
+                if (selectedGenre === 'sports') return item.genre === 'sports' || item.genre === 'live-sports';
+                if (selectedGenre === 'news') return item.genre === 'news';
+                return item.genre === selectedGenre;
+              })}
               favorites={favoriteIds}
               onToggleFavorite={handleToggleFavorite}
               onPlay={handlePlay}
@@ -194,41 +234,112 @@ export default function Home() {
               />
             )}
 
-            {/* Top Picks Section */}
-            {topPicks.length > 0 && (
+            {/* Filter content based on selected genre */}
+            {selectedGenre === 'all' && (
+              <>
+                {/* Top Picks Section */}
+                {topPicks.length > 0 && (
+                  <ContentRow
+                    title="Top Picks for You"
+                    content={topPicks}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
+                {/* Live Sports & TV Section */}
+                {liveContent.length > 0 && (
+                  <ContentRow
+                    title="Live Now"
+                    content={liveContent}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* Movies Section */}
+                {movies.length > 0 && (
+                  <ContentRow
+                    title="Movies"
+                    content={movies.slice(0, 10)}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
+                {/* TV Shows Section */}
+                {shows.length > 0 && (
+                  <ContentRow
+                    title="TV Shows"
+                    content={shows.slice(0, 10)}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+              </>
+            )}
+
+            {/* Movies Genre */}
+            {selectedGenre === 'movies' && movies.length > 0 && (
               <ContentRow
-                title="Top Picks for You"
-                content={topPicks}
+                title="Movies"
+                content={movies}
                 favorites={favoriteIds}
                 size="small"
               />
             )}
 
-            {/* Live Sports & TV Section */}
-            {liveContent.length > 0 && (
+            {/* Shows Genre */}
+            {selectedGenre === 'shows' && shows.length > 0 && (
               <ContentRow
-                title="Live Now"
+                title="TV Shows"
+                content={shows}
+                favorites={favoriteIds}
+                size="small"
+              />
+            )}
+
+            {/* Live TV Genre */}
+            {selectedGenre === 'live-tv' && liveContent.length > 0 && (
+              <ContentRow
+                title="Live TV"
                 content={liveContent}
                 favorites={favoriteIds}
                 size="large"
               />
             )}
 
-            {/* Movies Section */}
-            {movies.length > 0 && (
+            {/* Sports Genre */}
+            {selectedGenre === 'sports' && (
               <ContentRow
-                title="Movies"
-                content={movies.slice(0, 10)}
+                title="Sports"
+                content={typedContent.filter((item: Content) => 
+                  item.genre === 'sports' || item.genre === 'live-sports'
+                )}
+                favorites={favoriteIds}
+                size="large"
+              />
+            )}
+
+            {/* News Genre */}
+            {selectedGenre === 'news' && (
+              <ContentRow
+                title="News"
+                content={typedContent.filter((item: Content) => 
+                  item.genre === 'news'
+                )}
                 favorites={favoriteIds}
                 size="small"
               />
             )}
 
-            {/* TV Shows Section */}
-            {shows.length > 0 && (
+            {/* Other Genres */}
+            {!['all', 'movies', 'shows', 'live-tv', 'sports', 'news'].includes(selectedGenre) && (
               <ContentRow
-                title="TV Shows"
-                content={shows.slice(0, 10)}
+                title={selectedGenre.charAt(0).toUpperCase() + selectedGenre.slice(1)}
+                content={typedContent.filter((item: Content) => 
+                  item.genre === selectedGenre
+                )}
                 favorites={favoriteIds}
                 size="small"
               />
