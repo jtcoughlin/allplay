@@ -22,6 +22,7 @@ export default function Profile() {
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<'cards' | 'guide'>('cards');
   const [authModal, setAuthModal] = useState<{ isOpen: boolean; service?: any }>({ isOpen: false });
+  const [verificationModal, setVerificationModal] = useState<{ isOpen: boolean; service?: any; connectionType?: string }>({ isOpen: false });
 
   // Fetch user streaming connections
   const { data: connections = [], isLoading: isLoadingConnections } = useQuery({
@@ -76,6 +77,14 @@ export default function Profile() {
       if (data.requiresOAuth && data.authUrl) {
         // Redirect to OAuth provider for real authentication
         window.location.href = data.authUrl;
+      } else if (data.requiresVerification) {
+        // Show verification modal for deep link services
+        setVerificationModal({
+          isOpen: true,
+          service: authModal.service,
+          connectionType: data.connectionType
+        });
+        setAuthModal({ isOpen: false });
       } else {
         let description = "Service has been connected successfully.";
         
@@ -83,11 +92,14 @@ export default function Profile() {
           description = data.message || "Connected! Content will open in the service's app when played.";
         } else if (data.connectionType === 'simulated') {
           description = "Demo connection created. Real connection requires API partnership.";
+        } else if (data.connectionType === 'unavailable') {
+          description = data.message || "Service connection is currently unavailable.";
         }
         
         toast({
-          title: "Service Connected", 
+          title: data.connectionType === 'unavailable' ? "Connection Unavailable" : "Service Connected", 
           description,
+          variant: data.connectionType === 'unavailable' ? "destructive" : "default"
         });
         queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
       }
@@ -139,6 +151,39 @@ export default function Profile() {
       toast({
         title: "Disconnection Failed",
         description: "Failed to disconnect service. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const verifySubscription = useMutation({
+    mutationFn: async ({ service, hasSubscription }: { service: string; hasSubscription: boolean }) => {
+      const response = await apiRequest("POST", "/api/user/verify-subscription", { service, hasSubscription });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Service Connected",
+        description: data.message || "Service connected successfully",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
+      setVerificationModal({ isOpen: false });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Verification Failed",
+        description: "Failed to verify subscription. Please try again.",
         variant: "destructive",
       });
     },
@@ -863,6 +908,81 @@ export default function Profile() {
                   : `Demo Connect to ${authModal.service?.name}`
                 }
               </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Subscription Verification Modal */}
+      <Dialog open={verificationModal.isOpen} onOpenChange={(open) => setVerificationModal({ isOpen: open })}>
+        <DialogContent className="bg-gray-900 border-gray-700 text-cream">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              {verificationModal.service && <verificationModal.service.icon className={`w-6 h-6 mr-2 ${verificationModal.service.color}`} />}
+              Verify {verificationModal.service?.name} Subscription
+            </DialogTitle>
+            <DialogDescription className="text-gray-300">
+              <span className="inline-flex items-center px-2 py-1 bg-orange-900/30 border border-orange-700 rounded text-orange-400 text-xs font-medium mr-2">
+                DEEP LINK
+              </span>
+              To connect {verificationModal.service?.name}, please confirm you have an active subscription.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="bg-orange-primary/10 border border-orange-primary/20 rounded-lg p-4">
+              <h4 className="font-semibold text-cream mb-2">Subscription Required</h4>
+              <ul className="text-sm text-gray-300 space-y-1">
+                <li>• You need an active {verificationModal.service?.name} subscription</li>
+                <li>• Content will open directly in the {verificationModal.service?.name} app</li>
+                <li>• You'll be returned to Allplay when finished watching</li>
+                <li>• Your login credentials stay with {verificationModal.service?.name}</li>
+              </ul>
+            </div>
+            
+            <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium text-amber-400">Privacy & Security</span>
+              </div>
+              <p className="text-xs text-gray-300">
+                Allplay never stores your {verificationModal.service?.name} login credentials. 
+                We only create deep links to launch content in their official app.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-sm text-gray-300 mb-4">
+                Do you have an active {verificationModal.service?.name} subscription?
+              </p>
+              
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => verifySubscription.mutate({ 
+                    service: verificationModal.service?.id || '', 
+                    hasSubscription: false 
+                  })}
+                  variant="outline"
+                  className="flex-1 border-gray-600 text-gray-400 hover:text-cream"
+                  disabled={verifySubscription.isPending}
+                  data-testid="button-no-subscription"
+                >
+                  No, I don't have a subscription
+                </Button>
+                
+                <Button
+                  onClick={() => verifySubscription.mutate({ 
+                    service: verificationModal.service?.id || '', 
+                    hasSubscription: true 
+                  })}
+                  className="flex-1 bg-blue-primary hover:bg-blue-600 text-white"
+                  disabled={verifySubscription.isPending}
+                  data-testid="button-confirm-subscription"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  {verifySubscription.isPending ? 'Connecting...' : 'Yes, I have a subscription'}
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>

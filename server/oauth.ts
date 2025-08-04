@@ -57,7 +57,7 @@ export const oauthConfigs = {
   spotify: {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: `${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/oauth/callback/spotify`,
+    redirectUri: `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/oauth/callback/spotify`,
     authUrl: 'https://accounts.spotify.com/authorize',
     tokenUrl: 'https://accounts.spotify.com/api/token',
     scopes: ['user-read-private', 'user-read-email', 'user-library-read', 'user-read-playback-state', 'user-modify-playback-state', 'streaming'],
@@ -65,17 +65,18 @@ export const oauthConfigs = {
   youtube: {
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: `${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/oauth/callback/youtube`,
+    redirectUri: `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/oauth/callback/youtube`,
     authUrl: 'https://accounts.google.com/o/oauth2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: ['https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/userinfo.email'],
   },
   'apple-music': {
-    // Apple Music uses JWT-based authentication, different flow
+    // Apple Music uses MusicKit for web, not OAuth2
     teamId: process.env.APPLE_TEAM_ID,
     keyId: process.env.APPLE_KEY_ID,
     privateKey: process.env.APPLE_PRIVATE_KEY,
-    authUrl: 'https://music.apple.com/authorize',
+    authUrl: 'https://music.apple.com/us/subscribe',
+    redirectUri: `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/oauth/callback/apple-music`,
   }
 };
 

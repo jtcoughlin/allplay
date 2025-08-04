@@ -223,18 +223,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (['spotify', 'youtube', 'apple-music'].includes(service)) {
         const state = nanoid();
         req.session.oauthState = { state, service, userId };
-        const authUrl = generateAuthUrl(service, state);
-        res.json({ authUrl, requiresOAuth: true, connectionType: 'oauth' });
+        
+        try {
+          const authUrl = generateAuthUrl(service, state);
+          res.json({ authUrl, requiresOAuth: true, connectionType: 'oauth' });
+        } catch (error: any) {
+          console.error(`OAuth error for ${service}:`, error);
+          res.status(400).json({ 
+            message: `OAuth not available for ${service}. Please ensure API keys are configured.`,
+            requiresOAuth: false,
+            connectionType: 'unavailable'
+          });
+        }
       } 
-      // Services with deep link support
+      // Services with deep link support - require verification
       else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(service)) {
-        // Create a "connected" status for deep link services
-        const connection = await storage.connectService(userId, service);
+        // Don't auto-connect, require verification
         res.json({ 
-          connection, 
-          requiresOAuth: false, 
+          requiresVerification: true,
           connectionType: 'deeplink',
-          message: `Connected to ${service}. Content will open in the ${service} app when played.`
+          service,
+          message: `To connect ${service}, please confirm you have an active subscription.`
         });
       } 
       // Other services - simulated connection
@@ -245,6 +254,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error connecting service:", error);
       res.status(500).json({ message: "Failed to connect service" });
+    }
+  });
+
+  // Verify deep link service subscription
+  app.post('/api/user/verify-subscription', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { service, hasSubscription } = req.body;
+
+      if (!service || hasSubscription === undefined) {
+        return res.status(400).json({ message: 'Service and subscription status required' });
+      }
+
+      if (!hasSubscription) {
+        return res.status(400).json({ 
+          message: `You need an active ${service} subscription to connect this service.` 
+        });
+      }
+
+      // Create the deep link connection
+      const connection = await storage.connectService(userId, service);
+      res.json({ 
+        connection,
+        connectionType: 'deeplink',
+        message: `${service} connected! Content will open in the ${service} app when played.`
+      });
+    } catch (error) {
+      console.error('Error verifying subscription:', error);
+      res.status(500).json({ message: 'Failed to verify subscription' });
     }
   });
 
