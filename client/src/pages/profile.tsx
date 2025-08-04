@@ -73,10 +73,24 @@ export default function Profile() {
       return response.json();
     },
     onSuccess: (data) => {
-      if (data.authUrl) {
-        window.open(data.authUrl, '_blank', 'width=500,height=600');
+      if (data.requiresOAuth && data.authUrl) {
+        // Redirect to OAuth provider for real authentication
+        window.location.href = data.authUrl;
+      } else {
+        let description = "Service has been connected successfully.";
+        
+        if (data.connectionType === 'deeplink') {
+          description = data.message || "Connected! Content will open in the service's app when played.";
+        } else if (data.connectionType === 'simulated') {
+          description = "Demo connection created. Real connection requires API partnership.";
+        }
+        
+        toast({
+          title: "Service Connected", 
+          description,
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
       }
-      queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -737,34 +751,70 @@ export default function Profile() {
               Connect to {authModal.service?.name}
             </DialogTitle>
             <DialogDescription className="text-gray-300">
-              <span className="inline-flex items-center px-2 py-1 bg-blue-900/30 border border-blue-700 rounded text-blue-400 text-xs font-medium mr-2">
-                DEMO MODE
-              </span>
-              This simulates connecting to {authModal.service?.name}. In production, you'd be redirected to their secure login page.
+              {/* Show different badges based on service type */}
+              {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) ? (
+                <span className="inline-flex items-center px-2 py-1 bg-green-900/30 border border-green-700 rounded text-green-400 text-xs font-medium mr-2">
+                  REAL OAUTH
+                </span>
+              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) ? (
+                <span className="inline-flex items-center px-2 py-1 bg-orange-900/30 border border-orange-700 rounded text-orange-400 text-xs font-medium mr-2">
+                  DEEP LINK
+                </span>
+              ) : (
+                <span className="inline-flex items-center px-2 py-1 bg-blue-900/30 border border-blue-700 rounded text-blue-400 text-xs font-medium mr-2">
+                  DEMO MODE
+                </span>
+              )}
+              
+              {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) ? (
+                `You'll be redirected to ${authModal.service?.name} for real authentication with your existing account.`
+              ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) ? (
+                `This connects ${authModal.service?.name} via deep links. Content will open in their app and return to Allplay.`
+              ) : (
+                `This simulates connecting to ${authModal.service?.name}. Real connection requires API partnerships.`
+              )}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">
-            <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
-              <h4 className="font-semibold text-cream mb-2">In the full version:</h4>
-              <ul className="text-sm text-gray-300 space-y-1">
-                <li>• You'll log in with your existing {authModal.service?.name} account</li>
-                <li>• Your credentials are encrypted and stored securely</li>
-                <li>• Content from {authModal.service?.name} will appear in Allplay</li>
-                <li>• You'll never need to log in again</li>
-              </ul>
-            </div>
-            
-            <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <Info className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium text-amber-400">Demo Environment</span>
+            {/* OAuth Services */}
+            {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) && (
+              <div className="bg-green-primary/10 border border-green-primary/20 rounded-lg p-4">
+                <h4 className="font-semibold text-cream mb-2">Real OAuth Authentication:</h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• You'll log in with your existing {authModal.service?.name} account</li>
+                  <li>• Your credentials are encrypted and stored securely</li>
+                  <li>• Content from {authModal.service?.name} will appear in Allplay</li>
+                  <li>• Full API integration with real data</li>
+                </ul>
               </div>
-              <p className="text-xs text-gray-300">
-                This demonstration shows how Allplay would work with real streaming services. 
-                Clicking "Demo Connect" will simulate a successful connection for testing purposes.
-              </p>
-            </div>
+            )}
+            
+            {/* Deep Link Services */}
+            {['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) && (
+              <div className="bg-orange-primary/10 border border-orange-primary/20 rounded-lg p-4">
+                <h4 className="font-semibold text-cream mb-2">Deep Link Integration:</h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Content opens directly in the {authModal.service?.name} app</li>
+                  <li>• Returns to Allplay when you're done watching</li>
+                  <li>• Uses your existing {authModal.service?.name} subscription</li>
+                  <li>• No API needed - works immediately</li>
+                </ul>
+              </div>
+            )}
+            
+            {/* Other Services */}
+            {!['spotify', 'youtube', 'apple-music', 'netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id) && (
+              <div className="bg-blue-primary/10 border border-blue-primary/20 rounded-lg p-4">
+                <h4 className="font-semibold text-cream mb-2">Demo Connection:</h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Simulates connection for demonstration</li>
+                  <li>• Shows how Allplay would work with this service</li>
+                  <li>• Real connection requires API partnerships</li>
+                  <li>• Content appears in the unified interface</li>
+                </ul>
+              </div>
+            )}
             
             <div className="flex gap-3">
               <Button
@@ -806,7 +856,12 @@ export default function Profile() {
                 data-testid="button-authenticate-service"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                Demo Connect to {authModal.service?.name}
+                {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) 
+                  ? `Connect to ${authModal.service?.name}`
+                  : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(authModal.service?.id)
+                  ? `Link ${authModal.service?.name} App`
+                  : `Demo Connect to ${authModal.service?.name}`
+                }
               </Button>
             </div>
           </div>

@@ -2,6 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { generateAuthUrl, exchangeCodeForToken, getUserProfile, generateDeepLink } from "./oauth";
+import { nanoid } from 'nanoid';
 import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -147,17 +149,135 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+    // Real OAuth initiation route
+  app.get('/api/oauth/initiate/:service', isAuthenticated, async (req: any, res) => {
+    try {
+      const { service } = req.params;
+      const userId = req.user.claims.sub;
+      
+      // Generate state parameter for security
+      const state = nanoid();
+      
+      // Store state temporarily (in production, use Redis or similar)
+      req.session.oauthState = { state, service, userId };
+      
+      const authUrl = generateAuthUrl(service, state);
+      res.json({ authUrl });
+    } catch (error) {
+      console.error('Error initiating OAuth:', error);
+      res.status(500).json({ message: 'Failed to initiate OAuth' });
+    }
+  });
+
+  // OAuth callback route
+  app.get('/api/oauth/callback/:service', async (req: any, res) => {
+    try {
+      const { service } = req.params;
+      const { code, state } = req.query;
+      
+      // Verify state parameter
+      if (!req.session.oauthState || req.session.oauthState.state !== state) {
+        return res.status(400).json({ message: 'Invalid state parameter' });
+      }
+      
+      const { userId } = req.session.oauthState;
+      
+      // Exchange code for tokens
+      const tokens = await exchangeCodeForToken(service, code);
+      
+      // Get user profile from the service
+      const profile = await getUserProfile(service, tokens.access_token);
+      
+      // Store the connection
+      const connection = await storage.createUserConnection({
+        userId,
+        service,
+        credentials: {
+          accessToken: tokens.access_token,
+          refreshToken: tokens.refresh_token,
+          expiresAt: tokens.expires_in ? Date.now() + (tokens.expires_in * 1000) : null,
+          serviceUserId: profile.id,
+          serviceUserName: profile.display_name || profile.name,
+          serviceUserEmail: profile.email,
+        },
+        isActive: true
+      });
+      
+      // Clean up session
+      delete req.session.oauthState;
+      
+      // Redirect back to the app
+      res.redirect('/?connected=' + service);
+    } catch (error) {
+      console.error('Error in OAuth callback:', error);
+      res.redirect('/?error=connection_failed');
+    }
+  });
+
   app.post('/api/user/connect', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const { service } = req.body;
       
-      // Simulate OAuth connection flow
-      const connection = await storage.connectService(userId, service);
-      res.json({ connection, authUrl: `https://oauth.${service}.com/authorize` });
+      // Services with OAuth support
+      if (['spotify', 'youtube', 'apple-music'].includes(service)) {
+        const state = nanoid();
+        req.session.oauthState = { state, service, userId };
+        const authUrl = generateAuthUrl(service, state);
+        res.json({ authUrl, requiresOAuth: true, connectionType: 'oauth' });
+      } 
+      // Services with deep link support
+      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(service)) {
+        // Create a "connected" status for deep link services
+        const connection = await storage.connectService(userId, service);
+        res.json({ 
+          connection, 
+          requiresOAuth: false, 
+          connectionType: 'deeplink',
+          message: `Connected to ${service}. Content will open in the ${service} app when played.`
+        });
+      } 
+      // Other services - simulated connection
+      else {
+        const connection = await storage.connectService(userId, service);
+        res.json({ connection, requiresOAuth: false, connectionType: 'simulated' });
+      }
     } catch (error) {
       console.error("Error connecting service:", error);
       res.status(500).json({ message: "Failed to connect service" });
+    }
+  });
+
+  // Deep link content route
+  app.post('/api/play-external/:contentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const { contentId } = req.params;
+      const { service, title } = req.body;
+      const userId = req.user.claims.sub;
+      
+      // Generate deep links for the service
+      const { appUrl, webUrl } = generateDeepLink(service, 'play', contentId);
+      
+      // Log the play attempt
+      await storage.updateWatchProgress({
+        userId,
+        contentId,
+        progress: 0,
+        lastWatched: new Date(),
+        isCompleted: false
+      });
+      
+      res.json({ 
+        appUrl, 
+        webUrl,
+        title,
+        service,
+        message: `Opening ${title} in ${service}...`,
+        returnUrl: `${req.protocol}://${req.get('host')}?returning=true&service=${service}&content=${contentId}`
+      });
+    } catch (error) {
+      console.error("Error generating deep link:", error);
+      res.status(500).json({ message: "Failed to open content" });
     }
   });
 

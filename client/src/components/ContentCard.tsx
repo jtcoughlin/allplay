@@ -74,6 +74,66 @@ export function ContentCard({
     },
   });
 
+  const playContent = useMutation({
+    mutationFn: async (contentId: string) => {
+      // For deep link services, use the external play endpoint
+      if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '')) {
+        const response = await apiRequest("POST", `/api/play-external/${contentId}`, {
+          service: content.service,
+          title: content.title
+        });
+        return response.json();
+      } else {
+        // For other services, use the regular play endpoint
+        const response = await apiRequest("POST", `/api/play/${contentId}`);
+        return response.json();
+      }
+    },
+    onSuccess: (data) => {
+      if (data.appUrl && data.webUrl) {
+        // Try to open the app first, fallback to web
+        const appLink = document.createElement('a');
+        appLink.href = data.appUrl;
+        appLink.click();
+        
+        // Fallback to web after a delay if app doesn't open
+        setTimeout(() => {
+          if (confirm(`If ${content.service} app didn't open, click OK to open in browser.`)) {
+            window.open(data.webUrl, '_blank');
+          }
+        }, 2000);
+        
+        toast({
+          title: `Opening in ${content.service}`,
+          description: data.message || `Content will open in ${content.service} app`,
+        });
+      } else {
+        toast({
+          title: "Now Playing",
+          description: data.message || "Content is now playing in Allplay interface",
+        });
+      }
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Playback Error",
+        description: "Failed to start playback. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const getPlatformColor = (platform: string | null | undefined) => {
     if (!platform) return 'bg-gray-600';
     const colors: { [key: string]: string } = {
@@ -223,6 +283,24 @@ export function ContentCard({
             }
           </p>
         )}
+        
+        {/* Play button */}
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            playContent.mutate(content.id);
+          }}
+          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2"
+          disabled={playContent.isPending}
+          data-testid={`button-play-${content.id}`}
+        >
+          <Play className="w-4 h-4 mr-2" />
+          {playContent.isPending ? 'Opening...' : 
+           ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') 
+             ? `Open in ${content.service}`
+             : 'Play'
+          }
+        </Button>
       </div>
     </div>
   );
