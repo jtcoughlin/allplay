@@ -73,16 +73,24 @@ export default function Profile() {
       const response = await apiRequest("POST", "/api/user/connect", { service });
       return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (data.requiresOAuth && data.authUrl) {
         // Redirect to OAuth provider for real authentication
         window.location.href = data.authUrl;
       } else if (data.requiresVerification) {
         // Show verification modal for deep link services
-        console.log('Setting verification modal with service:', authModal.service);
+        const currentService = authModal.service;
+        console.log('Setting verification modal with service:', currentService);
+        console.log('Service ID from variables:', variables);
+        console.log('Service data from server:', data);
+        
+        // Find the service object by ID if authModal.service is undefined
+        const serviceObject = currentService || 
+          [...streamingServices, ...musicServices].find(s => s.id === variables);
+        
         setVerificationModal({
           isOpen: true,
-          service: authModal.service,
+          service: serviceObject,
           connectionType: data.connectionType
         });
         setAuthModal({ isOpen: false });
@@ -960,14 +968,20 @@ export default function Profile() {
               <div className="flex space-x-3">
                 <Button
                   onClick={() => {
-                    console.log('Verifying subscription with:', { 
-                      service: verificationModal.service?.id, 
-                      hasSubscription: false 
+                    const serviceId = verificationModal.service?.id;
+                    console.log('Verifying subscription - No:', { 
+                      service: serviceId, 
+                      hasSubscription: false,
+                      serviceObject: verificationModal.service 
                     });
-                    verifySubscription.mutate({ 
-                      service: verificationModal.service?.id || '', 
-                      hasSubscription: false 
-                    });
+                    if (serviceId) {
+                      verifySubscription.mutate({ 
+                        service: serviceId, 
+                        hasSubscription: false 
+                      });
+                    } else {
+                      console.error('No service ID available for verification');
+                    }
                   }}
                   variant="outline"
                   className="flex-1 border-gray-600 text-gray-400 hover:text-cream"
@@ -979,14 +993,20 @@ export default function Profile() {
                 
                 <Button
                   onClick={() => {
-                    console.log('Verifying subscription with:', { 
-                      service: verificationModal.service?.id, 
-                      hasSubscription: true 
+                    const serviceId = verificationModal.service?.id;
+                    console.log('Verifying subscription - Yes:', { 
+                      service: serviceId, 
+                      hasSubscription: true,
+                      serviceObject: verificationModal.service 
                     });
-                    verifySubscription.mutate({ 
-                      service: verificationModal.service?.id || '', 
-                      hasSubscription: true 
-                    });
+                    if (serviceId) {
+                      verifySubscription.mutate({ 
+                        service: serviceId, 
+                        hasSubscription: true 
+                      });
+                    } else {
+                      console.error('No service ID available for verification');
+                    }
                   }}
                   className="flex-1 bg-blue-primary hover:bg-blue-600 text-white"
                   disabled={verifySubscription.isPending}
