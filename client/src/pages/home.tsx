@@ -154,7 +154,7 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.imageUrl || undefined}
+            imageUrl={headlinerContent.imageUrl}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
@@ -234,15 +234,7 @@ export default function Home() {
               />
             )}
 
-            {/* Music Section */}
-            {music.length > 0 && (
-              <ContentRow
-                title="Trending Music"
-                content={music.slice(0, 10)}
-                favorites={favoriteIds}
-                size="small"
-              />
-            )}
+
           </>
         )}
 
