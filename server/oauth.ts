@@ -80,7 +80,7 @@ export const deepLinkConfigs = {
     searchUrl: (query: string) => `youtubetv://search?q=${encodeURIComponent(query)}`,
   },
   'espn-plus': {
-    webUrl: 'https://www.espn.com/watch',
+    webUrl: 'https://www.espn.com/watch/espnplus',
     appUrl: 'espn://',
     playUrl: (contentId: string) => `espn://watch/${contentId}`,
     searchUrl: (query: string) => `espn://search?q=${encodeURIComponent(query)}`,
@@ -278,8 +278,8 @@ export function generateDeepLink(service: string, action: 'play' | 'search', ide
           webUrl = directUrl || `${config.webUrl}/browse/${identifier}`;
           break;
         case 'espn-plus':
-          // Use direct URL if available, otherwise watch page
-          webUrl = directUrl || `${config.webUrl}/${identifier}`;
+          // Use direct URL if available, otherwise ESPN+ main page
+          webUrl = directUrl || 'https://www.espn.com/watch/espnplus/?om-navmethod=topnav';
           break;
         default:
           // Fallback to service homepage

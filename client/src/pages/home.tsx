@@ -52,6 +52,11 @@ export default function Home() {
   const movies = typedContent.filter((item: Content) => item.type === 'movie');
   const shows = typedContent.filter((item: Content) => item.type === 'show' && !['spotify', 'apple-music'].includes(item.service || ''));
   const liveContent = typedContent.filter((item: Content) => item.isLive || ['youtube-tv', 'espn-plus'].includes(item.service || ''));
+  
+  // Debug logging
+  console.log('Total content items:', typedContent.length);
+  console.log('Live content items:', liveContent.length);
+  console.log('Selected genre:', selectedGenre);
 
   // Extract favorite content IDs
   const favoriteIds = typedFavorites.map((fav: any) => fav.contentId);
@@ -300,13 +305,20 @@ export default function Home() {
             )}
 
             {/* Live TV Genre */}
-            {selectedGenre === 'live-tv' && liveContent.length > 0 && (
-              <ContentRow
-                title="Live TV"
-                content={liveContent}
-                favorites={favoriteIds}
-                size="large"
-              />
+            {selectedGenre === 'live-tv' && (
+              <>
+                <div className="mb-4">
+                  <p className="text-gray-400 text-sm">
+                    Found {liveContent.length} live TV channels
+                  </p>
+                </div>
+                <ContentRow
+                  title="Live TV"
+                  content={liveContent}
+                  favorites={favoriteIds}
+                  size="large"
+                />
+              </>
             )}
 
             {/* Sports Genre */}
