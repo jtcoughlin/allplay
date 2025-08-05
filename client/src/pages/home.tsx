@@ -200,7 +200,7 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.imageUrl}
+            imageUrl={headlinerContent.imageUrl || undefined}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
