@@ -45,8 +45,11 @@ export function HeadlinerBanner({
     <div className="relative h-80 md:h-96 mb-8 rounded-lg overflow-hidden bg-gray-900" data-testid="headliner-banner">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${imageUrl})` }}
+        className="absolute inset-0 bg-cover bg-no-repeat"
+        style={{ 
+          backgroundImage: `url(${imageUrl})`,
+          backgroundPosition: 'center 30%'
+        }}
         onError={() => console.error('HeadlinerBanner background image failed to load:', imageUrl)}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
