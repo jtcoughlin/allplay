@@ -48,15 +48,16 @@ export function HeadlinerBanner({
         className="absolute inset-0 bg-no-repeat"
         style={{ 
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')) ? 'contain' : 'cover',
-          backgroundPosition: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'right center' : 
+          backgroundSize: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? '80% auto' :
+                          (imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')) ? 'contain' : 'cover',
+          backgroundPosition: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'center right' : 
                              imageUrl.includes('image_1754368633196') ? 'right center' : 
-                             imageUrl.includes('image_1754434659807') ? 'center center' : 'center 30%'
+                             imageUrl.includes('image_1754434659807') ? 'right center' : 'center 30%'
         }}
         onError={() => console.error('HeadlinerBanner background image failed to load:', imageUrl)}
       >
         <div className={`absolute inset-0 ${
-          imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196') 
+          imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')
             ? 'bg-gradient-to-r from-black/90 via-black/60 to-black/20' 
             : 'bg-gradient-to-r from-black/80 via-black/40 to-transparent'
         }`}></div>
