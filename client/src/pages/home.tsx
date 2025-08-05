@@ -65,7 +65,7 @@ export default function Home() {
     liveContent: liveContent.length,
     selectedGenre,
     isLoadingContent,
-    rawContentLength: content?.length || 0
+    rawContentLength: (content as any)?.length || 0
   });
   
   if (selectedGenre === 'live-tv') {
@@ -263,11 +263,11 @@ export default function Home() {
   const headlinerContent = getHeadlinerContent();
 
   return (
-    <div className="min-h-screen bg-navy text-cream" data-testid="page-home">
+    <div className="min-h-screen bg-navy text-cream w-full overflow-x-hidden" data-testid="page-home">
       <Header viewMode={viewMode} onViewModeChange={setViewMode} />
       <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
       
-      <main className="px-2 py-4 max-w-screen-2xl mx-auto pb-20">
+      <main className="px-2 py-4 w-full max-w-none pb-20">
         {/* Headliner Banner - Only show in card view */}
         {viewMode === 'cards' && headlinerContent && (
           <HeadlinerBanner

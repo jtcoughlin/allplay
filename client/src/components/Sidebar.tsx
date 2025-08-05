@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { 
   Home, 
@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 interface SidebarProps {
   className?: string;
 }
+
+
 
 export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -73,13 +75,10 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <div 
       className={cn(
-        "fixed left-0 top-0 h-full bg-navy-light border-r border-navy-lighter transition-all duration-300 z-40",
+        "h-screen bg-navy-light border-r border-navy-lighter transition-all duration-300 z-40 flex-shrink-0 relative",
         isCollapsed ? "w-16" : "w-64",
         className
       )}
-      style={{
-        '--sidebar-width': isCollapsed ? '4rem' : '16rem',
-      } as React.CSSProperties}
       data-testid="sidebar"
     >
       {/* Toggle Button */}

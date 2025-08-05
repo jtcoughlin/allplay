@@ -26,9 +26,9 @@ function Router() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full overflow-hidden">
       <Sidebar />
-      <main className="flex-1 transition-all duration-300" style={{ marginLeft: 'var(--sidebar-width, 16rem)' }}>
+      <main className="flex-1 min-w-0 overflow-auto">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/search" component={Search} />

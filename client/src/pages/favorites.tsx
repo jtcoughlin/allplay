@@ -25,13 +25,13 @@ export default function Favorites() {
   }
 
   // Extract content from favorites
-  const favoriteContent: Content[] = favorites.map((fav: any) => fav.content);
-  const favoriteIds = favorites.map((fav: any) => fav.contentId);
+  const favoriteContent: Content[] = (favorites as any[]).map((fav: any) => fav.content);
+  const favoriteIds = (favorites as any[]).map((fav: any) => fav.contentId);
 
   // Filter favorites by genre and platform
   const filteredFavorites = favoriteContent.filter((item: Content) => {
     const genreMatch = selectedGenre === 'all' || item.genre === selectedGenre;
-    const platformMatch = selectedPlatform === 'all' || item.platform === selectedPlatform;
+    const platformMatch = selectedPlatform === 'all' || item.service === selectedPlatform;
     return genreMatch && platformMatch;
   });
 
@@ -63,11 +63,11 @@ export default function Favorites() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy text-cream" data-testid="page-favorites">
+    <div className="min-h-screen bg-navy text-cream w-full overflow-x-hidden" data-testid="page-favorites">
       <Header viewMode={viewMode} onViewModeChange={setViewMode} />
       <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
       
-      <main className="px-2 py-4 max-w-screen-2xl mx-auto">
+      <main className="px-2 py-4 w-full max-w-none">
         <section className="mb-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-cream" data-testid="heading-favorites">

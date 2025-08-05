@@ -34,11 +34,11 @@ export default function Search() {
     return null;
   }
 
-  const favoriteIds = favorites.map((fav: any) => fav.contentId);
+  const favoriteIds = (favorites as any[]).map((fav: any) => fav.contentId);
 
   // Filter results by platform and genre
-  const filteredResults = searchResults.filter((item: Content) => {
-    const platformMatch = selectedPlatform === "all" || item.platform === selectedPlatform;
+  const filteredResults = (searchResults as Content[]).filter((item: Content) => {
+    const platformMatch = selectedPlatform === "all" || item.service === selectedPlatform;
     const genreMatch = selectedGenre === "all" || item.genre === selectedGenre;
     return platformMatch && genreMatch;
   });
@@ -71,11 +71,11 @@ export default function Search() {
   };
 
   return (
-    <div className="min-h-screen bg-navy text-cream" data-testid="page-search">
+    <div className="min-h-screen bg-navy text-cream w-full overflow-x-hidden" data-testid="page-search">
       <Header viewMode={viewMode} onViewModeChange={setViewMode} />
       <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
       
-      <main className="px-2 py-4 max-w-screen-2xl mx-auto">
+      <main className="px-2 py-4 w-full max-w-none">
         {/* Search Header */}
         <section className="mb-6">
           <form onSubmit={handleSearch} className="flex items-center space-x-4 mb-4">

@@ -155,7 +155,7 @@ export default function Music() {
   };
 
   return (
-    <div className="min-h-screen bg-navy text-cream">
+    <div className="min-h-screen bg-navy text-cream w-full overflow-x-hidden">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-navy border-b border-navy-lighter">
         <div className="px-6 py-4">
@@ -173,7 +173,7 @@ export default function Music() {
       </div>
 
       {/* Main Content */}
-      <div className="px-6 py-6">
+      <div className="px-2 py-4 w-full max-w-none">
         <div className="space-y-6">
           {/* Connected Services Status */}
           {connectedServices.length > 0 && (
