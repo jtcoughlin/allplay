@@ -204,12 +204,29 @@ export default function Home() {
     }
   };
 
-  // Get headliner content (prioritize Jake Paul vs Tyson, then other live sports)
-  const headlinerContent = typedContent.find((item: Content) => 
-    item.id === 'netflix-paul-tyson'
-  ) || typedContent.find((item: Content) => 
-    item.isLive && item.genre === 'live-sports'
-  ) || topPicks[0];
+  // Get headliner content based on selected genre
+  const getHeadlinerContent = () => {
+    switch (selectedGenre) {
+      case 'sports':
+        // For sports: prioritize Jake Paul vs Tyson, then other live sports
+        return typedContent.find((item: Content) => 
+          item.id === 'netflix-paul-tyson'
+        ) || typedContent.find((item: Content) => 
+          item.isLive && item.genre === 'live-sports'
+        ) || typedContent.find((item: Content) => 
+          item.genre === 'sports'
+        );
+      
+      case 'all':
+      default:
+        // For "all": prioritize The Last Dance
+        return typedContent.find((item: Content) => 
+          item.id === 'espn-5' // The Last Dance
+        ) || topPicks[0];
+    }
+  };
+  
+  const headlinerContent = getHeadlinerContent();
 
   return (
     <div className="min-h-screen bg-navy text-cream" data-testid="page-home">
