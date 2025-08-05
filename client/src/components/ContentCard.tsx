@@ -143,6 +143,7 @@ export function ContentCard({
       spotify: 'bg-green-500',
       youtube: 'bg-red-600',
       'youtube-tv': 'bg-red-600',
+      'espn-plus': 'bg-red-800',
       'paramount-plus': 'bg-blue-800'
     };
     return colors[platform.toLowerCase()] || 'bg-gray-600';
@@ -164,7 +165,13 @@ export function ContentCard({
             src={content.imageUrl}
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
-            onError={() => setImageError(true)}
+            onError={(e) => {
+              console.error(`Image failed to load for ${content.title} (${content.service}):`, content.imageUrl);
+              setImageError(true);
+            }}
+            onLoad={() => {
+              console.log(`Image loaded successfully for ${content.title} (${content.service}):`, content.imageUrl);
+            }}
             data-testid={`img-content-${content.id}`}
           />
         ) : (
@@ -172,11 +179,20 @@ export function ContentCard({
             className={`w-full ${imageSizeClasses[size]} bg-navy-lighter rounded-lg flex items-center justify-center`}
             data-testid={`placeholder-content-${content.id}`}
           >
-            {content.type === 'music' ? (
-              <Music className="w-8 h-8 text-gray-400" />
-            ) : (
-              <Play className="w-8 h-8 text-gray-400" />
-            )}
+            <div className="text-center p-2">
+              {!content.imageUrl && (
+                <div className="text-red-400 text-xs mb-1">No Image URL</div>
+              )}
+              {imageError && (
+                <div className="text-red-400 text-xs mb-1">Image Load Failed</div>
+              )}
+              {content.type === 'music' ? (
+                <Music className="w-8 h-8 text-gray-400 mx-auto" />
+              ) : (
+                <Play className="w-8 h-8 text-gray-400 mx-auto" />
+              )}
+              <div className="text-gray-500 text-xs mt-1">{content.service}</div>
+            </div>
           </div>
         )}
 
