@@ -48,9 +48,9 @@ export function HeadlinerBanner({
         className="absolute inset-0 bg-no-repeat"
         style={{ 
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? '80% auto' :
+          backgroundSize: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? '70% auto' :
                           (imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')) ? 'contain' : 'cover',
-          backgroundPosition: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'center right' : 
+          backgroundPosition: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'right center' : 
                              imageUrl.includes('image_1754368633196') ? 'right center' : 
                              imageUrl.includes('image_1754434659807') ? 'right center' : 'center 30%'
         }}
