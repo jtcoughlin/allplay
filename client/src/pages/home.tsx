@@ -235,6 +235,14 @@ export default function Home() {
           item.genre === 'comedy'
         );
       
+      case 'live-tv':
+        // For live-tv: prioritize ABC World News Tonight
+        return typedContent.find((item: Content) => 
+          item.title === 'ABC World News Tonight'
+        ) || typedContent.find((item: Content) => 
+          item.isLive && item.genre === 'news'
+        ) || liveContent[0];
+      
       case 'all':
       default:
         // For "all": prioritize The Last Dance

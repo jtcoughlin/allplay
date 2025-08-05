@@ -226,6 +226,21 @@ const realContent = [
     duration: 95,
     year: 2020,
     rating: 'R'
+  },
+  // ABC World News Tonight (Live News)
+  {
+    title: 'ABC World News Tonight',
+    description: 'America\'s most-watched evening news program, delivering the day\'s biggest stories with David Muir.',
+    genre: 'news',
+    type: 'show',
+    service: 'youtube-tv',
+    serviceContentId: 'Cy-DXnSXdY0',
+    directUrl: 'https://tv.youtube.com/watch/Cy-DXnSXdY0?vp=0gEEEgIwAQ%3D%3D',
+    imageUrl: '@assets/image_1754436551407.png',
+    duration: 30,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
   }
 ];
 
