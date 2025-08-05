@@ -144,6 +144,7 @@ export function ContentCard({
       youtube: 'bg-red-600',
       'youtube-tv': 'bg-red-600',
       'espn-plus': 'bg-red-800',
+      'nfl-plus': 'bg-green-700',
       'paramount-plus': 'bg-blue-800'
     };
     return colors[platform.toLowerCase()] || 'bg-gray-600';
