@@ -163,7 +163,7 @@ export function ContentCard({
       <div className="relative mb-2">
         {!imageError && content.imageUrl ? (
           <img 
-            src={content.imageUrl.startsWith('/assets/') ? content.imageUrl.replace('/assets/', '/attached_assets/') : content.imageUrl}
+            src={content.imageUrl}
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {

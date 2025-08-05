@@ -205,6 +205,7 @@ export default function Home() {
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
             type={headlinerContent.isLive ? 'live-event' : headlinerContent.type as any}
+            onPlay={() => handlePlay(headlinerContent)}
           />
         )}
 

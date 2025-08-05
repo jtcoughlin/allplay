@@ -10,6 +10,7 @@ interface HeadlinerBannerProps {
   eventDate?: string;
   eventTime?: string;
   type: 'live-event' | 'movie' | 'show';
+  onPlay?: () => void;
 }
 
 export function HeadlinerBanner({ 
@@ -19,7 +20,8 @@ export function HeadlinerBanner({
   platform, 
   eventDate, 
   eventTime, 
-  type 
+  type,
+  onPlay
 }: HeadlinerBannerProps) {
   const getPlatformColor = (platform: string | null | undefined) => {
     if (!platform) return 'bg-blue-primary';
@@ -105,6 +107,7 @@ export function HeadlinerBanner({
             <Button 
               size="lg" 
               className="bg-blue-primary hover:bg-blue-600 text-white font-semibold px-8"
+              onClick={onPlay}
               data-testid="button-play-headliner"
             >
               <Play className="w-5 h-5 mr-2" />
