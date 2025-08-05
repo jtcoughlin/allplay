@@ -9,7 +9,8 @@ import {
   ChevronLeft, 
   ChevronRight,
   Tv,
-  Settings
+  Settings,
+  Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -99,11 +100,15 @@ export function Sidebar({ className }: SidebarProps) {
       </div>
 
       <div className="flex flex-col h-full">
-        {/* Logo/Brand */}
-        <div className="p-4 border-b border-navy-lighter">
+        {/* Logo/Brand - Clickable to toggle sidebar */}
+        <div 
+          className="p-4 border-b border-navy-lighter cursor-pointer hover:bg-navy-lighter transition-colors"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          data-testid="button-brand-toggle"
+        >
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-blue-gradient rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">A</span>
+              <Play className="w-4 h-4 text-white" />
             </div>
             {!isCollapsed && (
               <div>
