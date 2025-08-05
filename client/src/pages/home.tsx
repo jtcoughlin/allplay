@@ -57,6 +57,14 @@ export default function Home() {
   console.log('Total content items:', typedContent.length);
   console.log('Live content items:', liveContent.length);
   console.log('Selected genre:', selectedGenre);
+  if (selectedGenre === 'live-tv') {
+    console.log('Live content details:', liveContent.map(item => ({
+      id: item.id,
+      title: item.title,
+      service: item.service,
+      isLive: item.isLive
+    })));
+  }
 
   // Extract favorite content IDs
   const favoriteIds = typedFavorites.map((fav: any) => fav.contentId);
@@ -311,13 +319,22 @@ export default function Home() {
                   <p className="text-gray-400 text-sm">
                     Found {liveContent.length} live TV channels
                   </p>
+                  {liveContent.length === 0 && (
+                    <div className="bg-red-900/20 border border-red-500 rounded p-4 mt-4">
+                      <p className="text-red-400">Debug: No live content found</p>
+                      <p className="text-gray-400 text-sm">Total content: {typedContent.length}</p>
+                      <p className="text-gray-400 text-sm">isLoadingContent: {isLoadingContent ? 'true' : 'false'}</p>
+                    </div>
+                  )}
                 </div>
-                <ContentRow
-                  title="Live TV"
-                  content={liveContent}
-                  favorites={favoriteIds}
-                  size="large"
-                />
+                {liveContent.length > 0 && (
+                  <ContentRow
+                    title="Live TV"
+                    content={liveContent}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
               </>
             )}
 
