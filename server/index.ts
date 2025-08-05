@@ -6,9 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Serve static files from attached_assets directory
-app.use('/attached_assets', express.static('attached_assets'));
-
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -41,6 +38,18 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
+
+  // Serve static files from attached_assets directory with proper headers
+  // Place this AFTER routes but BEFORE Vite to avoid conflicts
+  app.use('/attached_assets', express.static('attached_assets', {
+    setHeaders: (res, path) => {
+      if (path.endsWith('.png')) {
+        res.setHeader('Content-Type', 'image/png');
+      } else if (path.endsWith('.webp')) {
+        res.setHeader('Content-Type', 'image/webp');
+      }
+    }
+  }));
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
