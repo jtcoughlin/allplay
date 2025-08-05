@@ -168,6 +168,12 @@ export function ContentCard({
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
               console.error(`Image failed to load for ${content.title} (${content.service}):`, content.imageUrl);
+              console.error('Image error event:', e);
+              // Test direct access to the URL with cache busting
+              const testUrl = content.imageUrl + '?t=' + Date.now();
+              fetch(testUrl)
+                .then(response => console.log(`Direct fetch status for ${content.title}:`, response.status, 'URL:', testUrl))
+                .catch(err => console.error(`Direct fetch error for ${content.title}:`, err));
               setImageError(true);
             }}
             onLoad={() => {
