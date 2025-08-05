@@ -236,7 +236,7 @@ const realContent = [
     service: 'youtube-tv',
     serviceContentId: 'Cy-DXnSXdY0',
     directUrl: 'https://tv.youtube.com/watch/Cy-DXnSXdY0?vp=0gEEEgIwAQ%3D%3D',
-    imageUrl: '@assets/image_1754436551407.png',
+    imageUrl: '@assets/image_1754436760814.png',
     duration: 30,
     year: 2024,
     rating: 'TV-G',
