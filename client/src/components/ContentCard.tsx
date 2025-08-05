@@ -312,7 +312,7 @@ export function ContentCard({
           className={
             ['apple-music', 'spotify'].includes(content.service || '') || 
             (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
-              ? "w-full bg-white hover:bg-gray-100 text-black border border-gray-300 font-semibold mt-2 px-1"
+              ? "w-full bg-white hover:bg-gray-100 !text-black border border-gray-300 font-semibold mt-2 px-1"
               : "w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
           }
           disabled={playContent.isPending}
@@ -321,9 +321,13 @@ export function ContentCard({
           <Play className={`w-3 h-3 mr-1 ${
             ['apple-music', 'spotify'].includes(content.service || '') || 
             (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
-              ? 'text-black' : 'text-white'
+              ? '!text-black' : 'text-white'
           }`} />
-          <span className="text-xs truncate">
+          <span className={`text-xs truncate ${
+            ['apple-music', 'spotify'].includes(content.service || '') || 
+            (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
+              ? '!text-black' : 'text-white'
+          }`}>
             {playContent.isPending ? 'Opening...' : 
              content.service === 'apple-music' ? 'Open Apple Music' :
              content.service === 'spotify' ? 'Open Spotify' :
