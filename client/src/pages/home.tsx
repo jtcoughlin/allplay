@@ -227,6 +227,14 @@ export default function Home() {
           item.genre === 'news'
         );
       
+      case 'comedy':
+        // For comedy: prioritize Bill Burr Drop Dead Years
+        return typedContent.find((item: Content) => 
+          item.id === 'hulu-bill-burr-drop-dead'
+        ) || typedContent.find((item: Content) => 
+          item.genre === 'comedy'
+        );
+      
       case 'all':
       default:
         // For "all": prioritize The Last Dance

@@ -48,8 +48,8 @@ export function HeadlinerBanner({
         className="absolute inset-0 bg-no-repeat"
         style={{ 
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196')) ? 'contain' : 'cover',
-          backgroundPosition: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196')) ? 'center center' : 'center 30%'
+          backgroundSize: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')) ? 'contain' : 'cover',
+          backgroundPosition: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196') || imageUrl.includes('image_1754434659807')) ? 'center center' : 'center 30%'
         }}
         onError={() => console.error('HeadlinerBanner background image failed to load:', imageUrl)}
       >
@@ -58,7 +58,10 @@ export function HeadlinerBanner({
       
       {/* Content */}
       <div className="relative z-10 h-full flex items-center px-4 md:px-8">
-        <div className="max-w-2xl">
+        <div className={`max-w-2xl ${
+          imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || 
+          imageUrl.includes('image_1754368633196') ? 'ml-auto mr-8' : ''
+        }`}>
           {/* Event Badge */}
           {type === 'live-event' && (
             <div className="flex items-center gap-2 mb-4">
