@@ -25,6 +25,7 @@ export default function Home() {
   const { data: content = [], isLoading: isLoadingContent } = useQuery({
     queryKey: selectedGenre === 'all' ? ["/api/content"] : ["/api/content", { genre: selectedGenre }],
     retry: false,
+    staleTime: 30000, // Cache for 30 seconds to prevent rapid refetching
   });
 
   // Fetch continue watching
@@ -51,19 +52,37 @@ export default function Home() {
   // Filter content by type for different sections
   const movies = typedContent.filter((item: Content) => item.type === 'movie');
   const shows = typedContent.filter((item: Content) => item.type === 'show' && !['spotify', 'apple-music'].includes(item.service || ''));
-  const liveContent = typedContent.filter((item: Content) => item.isLive || ['youtube-tv', 'espn-plus'].includes(item.service || ''));
+  const liveContent = typedContent.filter((item: Content) => 
+    item.isLive === true || 
+    ['youtube-tv', 'espn-plus'].includes(item.service || '') ||
+    item.type === 'live'
+  );
   
   // Debug logging
-  console.log('Total content items:', typedContent.length);
-  console.log('Live content items:', liveContent.length);
-  console.log('Selected genre:', selectedGenre);
+  console.log('Content Query Result:', { 
+    totalContent: typedContent.length,
+    liveContent: liveContent.length,
+    selectedGenre,
+    isLoadingContent,
+    rawContentLength: content?.length || 0
+  });
+  
   if (selectedGenre === 'live-tv') {
-    console.log('Live content details:', liveContent.map(item => ({
-      id: item.id,
-      title: item.title,
-      service: item.service,
-      isLive: item.isLive
-    })));
+    console.log('Live TV Debug:', {
+      liveContentDetails: liveContent.map(item => ({
+        id: item.id,
+        title: item.title,
+        service: item.service,
+        isLive: item.isLive,
+        type: item.type
+      })),
+      allContentSample: typedContent.slice(0, 5).map(item => ({
+        id: item.id,
+        title: item.title,
+        service: item.service,
+        isLive: item.isLive
+      }))
+    });
   }
 
   // Extract favorite content IDs
@@ -200,7 +219,7 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.imageUrl || undefined}
+            imageUrl={headlinerContent.imageUrl || ""}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
