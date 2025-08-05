@@ -217,6 +217,16 @@ export default function Home() {
           item.genre === 'sports'
         );
       
+      case 'news':
+        // For news: prioritize Presidential Debate, then other live news
+        return typedContent.find((item: Content) => 
+          item.id === 'cnn-presidential-debate'
+        ) || typedContent.find((item: Content) => 
+          item.isLive && item.genre === 'news'
+        ) || typedContent.find((item: Content) => 
+          item.genre === 'news'
+        );
+      
       case 'all':
       default:
         // For "all": prioritize The Last Dance

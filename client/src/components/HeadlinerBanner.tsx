@@ -48,8 +48,8 @@ export function HeadlinerBanner({
         className="absolute inset-0 bg-no-repeat"
         style={{ 
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'contain' : 'cover',
-          backgroundPosition: imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') ? 'center center' : 'center 30%'
+          backgroundSize: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196')) ? 'contain' : 'cover',
+          backgroundPosition: (imageUrl.includes('paul-tyson') || imageUrl.includes('image_1754368126300') || imageUrl.includes('image_1754368633196')) ? 'center center' : 'center 30%'
         }}
         onError={() => console.error('HeadlinerBanner background image failed to load:', imageUrl)}
       >
