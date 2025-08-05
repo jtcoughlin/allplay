@@ -23,9 +23,10 @@ export default function Home() {
 
   // Fetch content based on selected genre
   const { data: content = [], isLoading: isLoadingContent } = useQuery({
-    queryKey: selectedGenre === 'all' ? ["/api/content"] : ["/api/content", { genre: selectedGenre }],
+    queryKey: ["/api/content"],
     retry: false,
-    staleTime: 30000, // Cache for 30 seconds to prevent rapid refetching
+    staleTime: 0, // No caching to ensure fresh data
+    refetchOnMount: true,
   });
 
   // Fetch continue watching
@@ -203,8 +204,10 @@ export default function Home() {
     }
   };
 
-  // Get headliner content (top-rated live event or high-profile content)
+  // Get headliner content (prioritize Jake Paul vs Tyson, then other live sports)
   const headlinerContent = typedContent.find((item: Content) => 
+    item.id === 'netflix-paul-tyson'
+  ) || typedContent.find((item: Content) => 
     item.isLive && item.genre === 'live-sports'
   ) || topPicks[0];
 
