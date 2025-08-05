@@ -228,8 +228,10 @@ export default function Home() {
         );
       
       case 'comedy':
-        // For comedy: prioritize Bill Burr Drop Dead Years
+        // For comedy: prioritize Happy Gilmore 2, then Bill Burr Drop Dead Years
         return typedContent.find((item: Content) => 
+          item.title === 'Happy Gilmore 2'
+        ) || typedContent.find((item: Content) => 
           item.id === 'hulu-bill-burr-drop-dead'
         ) || typedContent.find((item: Content) => 
           item.genre === 'comedy'
@@ -242,6 +244,12 @@ export default function Home() {
         ) || typedContent.find((item: Content) => 
           item.isLive && item.genre === 'news'
         ) || liveContent[0];
+      
+      case 'movies':
+        // For movies: prioritize Happy Gilmore 2
+        return typedContent.find((item: Content) => 
+          item.title === 'Happy Gilmore 2'
+        ) || typedContent.find((item: Content) => item.type === 'movie');
       
       case 'all':
       default:
