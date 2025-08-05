@@ -129,7 +129,7 @@ export function HeadlinerBanner({
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-white/30 text-white hover:bg-white/10 px-6"
+              className="bg-white text-black border-white hover:bg-gray-100 px-6"
               data-testid="button-info-headliner"
             >
               More Info

@@ -309,13 +309,20 @@ export function ContentCard({
             e.stopPropagation();
             playContent.mutate(content.id);
           }}
-          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
+          className={
+            ['apple-music', 'spotify'].includes(content.service || '') || 
+            (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
+              ? "w-full bg-white hover:bg-gray-100 text-black font-semibold mt-2 px-1"
+              : "w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
+          }
           disabled={playContent.isPending}
           data-testid={`button-play-${content.id}`}
         >
           <Play className="w-3 h-3 mr-1" />
           <span className="text-xs truncate">
             {playContent.isPending ? 'Opening...' : 
+             content.service === 'apple-music' ? 'Open Apple Music' :
+             content.service === 'spotify' ? 'Open Spotify' :
              ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') 
                ? `Open in ${content.service === 'amazon-prime' ? 'Prime' : content.service}`
                : 'Play'
