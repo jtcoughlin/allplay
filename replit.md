@@ -3,10 +3,12 @@
 Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience. The application supports three types of service integrations:
 
 ## Recent Changes
-- **August 6, 2025**: Implemented comprehensive data protection system to prevent content loss
-- **Content Recovery**: Restored original ESPN+ ("30 for 30: The Tuck Rule") and YouTube TV ("FOX News") content
-- **Backup System**: Added automated backup/restore capabilities with database-to-seed synchronization
-- **Data Architecture**: Enhanced with multi-layer protection (file backups + Replit SQL rollback)
+- **August 6, 2025**: Major movie expansion across all streaming services with curated categories
+- **Movie Categories**: Organized into prescriptive categories: "Critically Acclaimed", "90%+ on Rotten Tomatoes", "Action & Adventure", "Award Winners", "Comedy Collection"  
+- **Streaming Integration**: Added 21 authentic movies from Netflix, Hulu, Prime, HBO Max, Apple TV+, Paramount+, Disney+
+- **Tab Reordering**: Moved "Live TV" to second position after "All" for prominent placement
+- **Enhanced Content**: Updated TBS and TNT with comprehensive programming (Friends, American Dad, Animal Kingdom, AEW Wrestling)
+- **Data Protection**: Comprehensive backup system prevents content loss with automated sync capabilities
 
 1. **Real OAuth Authentication** (Spotify, YouTube, Apple Music) - Full API integration with secure credential storage
 2. **App Integration/Deep Linking** (Netflix, Amazon Prime, Disney+, etc.) - Links to content that opens in the service's native app using existing device logins

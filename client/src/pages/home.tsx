@@ -64,15 +64,23 @@ export default function Home() {
     'Popular in the US Today': movies.filter((item: Content) => item.category === 'Popular in the US Today'),
     '2025 Biggest Hits': movies.filter((item: Content) => item.category === '2025 Biggest Hits'),
     'Your Next Watch': movies.filter((item: Content) => item.category === 'Your Next Watch'),
-    'Comedies': movies.filter((item: Content) => item.category === 'Comedies' || item.genre === 'comedy'),
-    'Dramas': movies.filter((item: Content) => item.category === 'Dramas' || item.genre === 'drama'),
-    'Netflix': movies.filter((item: Content) => item.service === 'netflix'),
-    'Hulu': movies.filter((item: Content) => item.service === 'hulu'),
-    'Amazon Prime': movies.filter((item: Content) => item.service === 'amazon-prime'),
-    'HBO Max': movies.filter((item: Content) => item.service === 'hbo-max'),
-    'Apple TV+': movies.filter((item: Content) => item.service === 'apple-tv'),
-    'Paramount+': movies.filter((item: Content) => item.service === 'paramount-plus'),
-    'Disney+': movies.filter((item: Content) => item.service === 'disney-plus'),
+    'Critically Acclaimed': movies.filter((item: Content) => 
+      item.category === 'Dramas' || 
+      ['CODA', 'Nomadland', 'Sound of Metal', 'King Richard'].includes(item.title || '')
+    ),
+    '90%+ on Rotten Tomatoes': movies.filter((item: Content) => 
+      ['Glass Onion: A Knives Out Mystery', 'Palm Springs', 'Encanto', 'Luca', 'CODA'].includes(item.title || '')
+    ),
+    'Action & Adventure': movies.filter((item: Content) => 
+      item.genre === 'action' || item.genre === 'sci-fi' || 
+      ['Red Notice', 'The Tomorrow War', 'Dune', 'The Matrix Resurrections', 'Top Gun: Maverick'].includes(item.title || '')
+    ),
+    'Comedy Collection': movies.filter((item: Content) => 
+      item.category === 'Comedies' || item.genre === 'comedy' || item.genre === 'family'
+    ),
+    'Award Winners': movies.filter((item: Content) => 
+      ['CODA', 'Nomadland', 'Sound of Metal', 'King Richard', 'Encanto'].includes(item.title || '')
+    ),
   };
   
   // Debug logging
