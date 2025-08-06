@@ -40,9 +40,29 @@ export function LiveTVGuide({ content, favorites, onToggleFavorite, onPlay }: Li
     'pbs': { name: 'PBS', logo: '📺', number: '8.1' },
     'tbs': { name: 'TBS', logo: '😂', number: '247' },
     'tnt': { name: 'TNT', logo: '🏀', number: '245' },
+    'fs1': { name: 'FS1', logo: '⚽', number: '150' },
+    'fs2': { name: 'FS2', logo: '🏈', number: '618' },
+    'disney': { name: 'DISNEY', logo: '🏰', number: '290' },
+    'nick': { name: 'NICK', logo: '🧽', number: '299' },
+    'trutv': { name: 'truTV', logo: '😆', number: '246' },
+    'amc': { name: 'AMC', logo: '🎬', number: '254' },
+    'bbc': { name: 'BBC', logo: '🇬🇧', number: '135' },
+    'cartoon': { name: 'CARTOON', logo: '🎨', number: '296' },
+    'cmt': { name: 'CMT', logo: '🤠', number: '327' },
+    'comedy': { name: 'COMEDY', logo: '😂', number: '249' },
+    'fx': { name: 'FX', logo: '🎭', number: '248' },
+    'mtv': { name: 'MTV', logo: '📺', number: '331' },
+    'hallmark': { name: 'HALLMARK', logo: '💝', number: '312' },
+    'natgeo': { name: 'NAT GEO', logo: '🌍', number: '276' },
+    'discovery': { name: 'DISCOVERY', logo: '🔍', number: '278' },
   };
 
-  const channels = ['fox', 'nbc', 'abc', 'cbs', 'pbs', 'tbs', 'tnt'];
+  const channels = [
+    'fox', 'nbc', 'abc', 'cbs', 'pbs', 'tbs', 'tnt', 
+    'fs1', 'fs2', 'disney', 'nick', 'trutv', 'amc', 
+    'bbc', 'cartoon', 'cmt', 'comedy', 'fx', 'mtv', 
+    'hallmark', 'natgeo', 'discovery'
+  ];
 
   // Get current time slots (now, +30min, +1hr, +1.5hr)
   const getCurrentTimeSlots = () => {
