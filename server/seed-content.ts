@@ -255,6 +255,119 @@ const realContent = [
     duration: 120,
     year: 2025,
     rating: 'PG-13'
+  },
+  // ESPN+ Sports Content
+  {
+    title: 'Monday Night Football',
+    description: 'The premier primetime NFL game of the week featuring top matchups and expert commentary.',
+    genre: 'sports',
+    type: 'live',
+    service: 'espn-plus',
+    serviceContentId: 'mnf-live',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-mnf',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: 'College Football Playoff',
+    description: 'The biggest games in college football featuring top-ranked teams competing for the national championship.',
+    genre: 'sports',
+    type: 'live',
+    service: 'espn-plus',
+    serviceContentId: 'cfp-2024',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-cfp',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 240,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: 'NBA on ESPN',
+    description: 'Live NBA games featuring the best teams and biggest stars in professional basketball.',
+    genre: 'sports',
+    type: 'live',
+    service: 'espn-plus',
+    serviceContentId: 'nba-live',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-nba',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 150,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: 'UFC Fight Night',
+    description: 'Elite mixed martial arts competition featuring the world\'s best fighters in octagon action.',
+    genre: 'sports',
+    type: 'live',
+    service: 'espn-plus',
+    serviceContentId: 'ufc-fight-night',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-ufc',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-14',
+    isLive: true
+  },
+  {
+    title: 'SportsCenter',
+    description: 'ESPN\'s flagship sports news and highlights program covering all the day\'s biggest sports stories.',
+    genre: 'sports',
+    type: 'show',
+    service: 'espn-plus',
+    serviceContentId: 'sportscenter-daily',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-sc',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 60,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: false
+  },
+  {
+    title: 'College GameDay',
+    description: 'The premier college football pregame show traveling to the biggest games each Saturday.',
+    genre: 'sports',
+    type: 'show',
+    service: 'espn-plus',
+    serviceContentId: 'college-gameday',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-cgd',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: false
+  },
+  {
+    title: 'MLB on ESPN',
+    description: 'Live Major League Baseball games featuring America\'s pastime with expert commentary.',
+    genre: 'sports',
+    type: 'live',
+    service: 'espn-plus',
+    serviceContentId: 'mlb-live',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-mlb',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: '30 for 30',
+    description: 'Award-winning documentary series exploring the biggest stories in sports history.',
+    genre: 'sports',
+    type: 'show',
+    service: 'espn-plus',
+    serviceContentId: '30for30-series',
+    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-30for30',
+    imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
+    duration: 90,
+    year: 2024,
+    rating: 'TV-14',
+    isLive: false
   }
 ];
 
@@ -274,6 +387,8 @@ export async function seedRealContent() {
     console.log(`✅ Seeded ${realContent.length} real content items`);
     console.log('📺 Netflix content:', realContent.filter(c => c.service === 'netflix').length);
     console.log('🎬 Amazon Prime content:', realContent.filter(c => c.service === 'amazon-prime').length);
+    console.log('🏈 ESPN+ content:', realContent.filter(c => c.service === 'espn-plus').length);
+    console.log('📺 YouTube TV content:', realContent.filter(c => c.service === 'youtube-tv').length);
     
   } catch (error) {
     console.error('❌ Error seeding content:', error);
