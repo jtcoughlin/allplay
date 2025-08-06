@@ -271,6 +271,20 @@ const realContent = [
     isLive: true
   },
   {
+    title: 'FOX News',
+    description: 'Live breaking news, political analysis, and coverage of the day\'s most important events from America\'s newsroom.',
+    genre: 'news',
+    type: 'live',
+    service: 'youtube-tv',
+    serviceContentId: 'fox-news-live',
+    directUrl: 'https://tv.youtube.com/watch/fox-news-live',
+    imageUrl: '/attached_assets/image_1754436760814.png',
+    duration: 60,
+    year: 2024,
+    rating: 'TV-PG',
+    isLive: true
+  },
+  {
     title: 'CNN Breaking News',
     description: 'Live breaking news coverage and analysis of the day\'s most important events.',
     genre: 'news',
@@ -471,16 +485,16 @@ const realContent = [
     isLive: true
   },
   {
-    title: '30 for 30',
-    description: 'Award-winning documentary series exploring the biggest stories in sports history.',
+    title: '30 for 30: The Tuck Rule',
+    description: 'The controversial call that changed NFL history. An in-depth look at the infamous 2001 AFC Divisional playoff game between the Patriots and Raiders.',
     genre: 'sports',
     type: 'show',
     service: 'espn-plus',
-    serviceContentId: '30for30-series',
-    directUrl: 'https://www.espn.com/watch/player/_/id/espn-plus-30for30',
+    serviceContentId: 'tuck-rule-30for30',
+    directUrl: 'https://www.espn.com/watch/player/_/id/tuck-rule-30for30',
     imageUrl: 'https://a.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png&w=300&h=200&scale=crop&cquality=80&location=origin&format=jpg',
     duration: 90,
-    year: 2024,
+    year: 2009,
     rating: 'TV-14',
     isLive: false
   }
