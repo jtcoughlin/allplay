@@ -520,7 +520,7 @@ export default function Profile() {
                   <div className="flex items-center space-x-2">
                     <Label className="text-gray-400">Cards</Label>
                     <Switch
-                      checked={preferences.defaultViewMode === 'guide'}
+                      checked={preferences?.defaultViewMode === 'guide'}
                       onCheckedChange={(checked) =>
                         updatePreferences.mutate({ defaultViewMode: checked ? 'guide' : 'cards' })
                       }
@@ -538,7 +538,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Automatically play video previews when hovering</p>
                   </div>
                   <Switch
-                    checked={preferences.autoplayPreviews !== false}
+                    checked={preferences?.autoplayPreviews !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ autoplayPreviews: checked })
                     }
@@ -552,7 +552,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Display mature/adult-rated content</p>
                   </div>
                   <Switch
-                    checked={preferences.showAdultContent !== false}
+                    checked={preferences?.showAdultContent !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ showAdultContent: checked })
                     }
