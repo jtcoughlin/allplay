@@ -227,7 +227,7 @@ const realContent = [
     year: 2020,
     rating: 'R'
   },
-  // ABC World News Tonight (Live News)
+  // YouTube TV Live Content
   {
     title: 'ABC World News Tonight',
     description: 'America\'s most-watched evening news program, delivering the day\'s biggest stories with David Muir.',
@@ -238,6 +238,62 @@ const realContent = [
     directUrl: 'https://tv.youtube.com/watch/Cy-DXnSXdY0?vp=0gEEEgIwAQ%3D%3D',
     imageUrl: '/attached_assets/image_1754436760814.png',
     duration: 30,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: 'Good Morning America',
+    description: 'Start your day with the latest news, weather, and inspiring stories from across America.',
+    genre: 'news',
+    type: 'show',
+    service: 'youtube-tv',
+    serviceContentId: 'gma-live',
+    directUrl: 'https://tv.youtube.com/watch/gma-live',
+    imageUrl: '/attached_assets/image_1754436760814.png',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-G',
+    isLive: true
+  },
+  {
+    title: 'The Tonight Show Starring Jimmy Fallon',
+    description: 'Late-night comedy with celebrity interviews, musical performances, and hilarious sketches.',
+    genre: 'comedy',
+    type: 'show',
+    service: 'youtube-tv',
+    serviceContentId: 'tonight-show-live',
+    directUrl: 'https://tv.youtube.com/watch/tonight-show-live',
+    imageUrl: '/attached_assets/image_1754436760814.png',
+    duration: 60,
+    year: 2024,
+    rating: 'TV-14',
+    isLive: true
+  },
+  {
+    title: 'CNN Breaking News',
+    description: 'Live breaking news coverage and analysis of the day\'s most important events.',
+    genre: 'news',
+    type: 'live',
+    service: 'youtube-tv',
+    serviceContentId: 'cnn-breaking',
+    directUrl: 'https://tv.youtube.com/watch/cnn-breaking',
+    imageUrl: '/attached_assets/image_1754436760814.png',
+    duration: 60,
+    year: 2024,
+    rating: 'TV-PG',
+    isLive: true
+  },
+  {
+    title: 'Sunday Night Football',
+    description: 'The premier Sunday night NFL matchup with expert commentary and analysis.',
+    genre: 'sports',
+    type: 'live',
+    service: 'youtube-tv',
+    serviceContentId: 'snf-live',
+    directUrl: 'https://tv.youtube.com/watch/snf-live',
+    imageUrl: '/attached_assets/image_1754436760814.png',
+    duration: 210,
     year: 2024,
     rating: 'TV-G',
     isLive: true
@@ -256,7 +312,66 @@ const realContent = [
     year: 2025,
     rating: 'PG-13'
   },
-  // ESPN+ Sports Content
+  // Featured Headliner Content
+  {
+    id: 'netflix-paul-tyson',
+    title: 'Jake Paul vs Mike Tyson',
+    description: 'The most anticipated boxing match of the decade. YouTube sensation Jake Paul faces off against heavyweight legend Mike Tyson in an epic showdown.',
+    genre: 'sports',
+    type: 'live',
+    service: 'netflix',
+    serviceContentId: 'paul-tyson-fight',
+    directUrl: 'https://www.netflix.com/title/paul-tyson-fight',
+    imageUrl: '/attached_assets/image_1754368126300.png',
+    duration: 180,
+    year: 2024,
+    rating: 'TV-14',
+    isLive: true
+  },
+  {
+    id: 'cnn-presidential-debate',
+    title: 'Presidential Debate 2024',
+    description: 'Live coverage of the crucial presidential debate that will shape the future of America. Comprehensive analysis and real-time fact-checking.',
+    genre: 'news',
+    type: 'live',
+    service: 'cnn',
+    serviceContentId: 'presidential-debate-2024',
+    directUrl: 'https://www.cnn.com/live/presidential-debate-2024',
+    imageUrl: '/attached_assets/image_1754368633196.png',
+    duration: 120,
+    year: 2024,
+    rating: 'TV-PG',
+    isLive: true
+  },
+  {
+    id: 'hulu-bill-burr-drop-dead',
+    title: 'Bill Burr: Drop Dead Years',
+    description: 'Comedy legend Bill Burr delivers his most personal and hilarious stand-up special yet, tackling marriage, parenting, and the absurdities of modern life.',
+    genre: 'comedy',
+    type: 'show',
+    service: 'hulu',
+    serviceContentId: 'bill-burr-drop-dead-years',
+    directUrl: 'https://www.hulu.com/watch/bill-burr-drop-dead-years',
+    imageUrl: '/attached_assets/image_1754434659807.png',
+    duration: 75,
+    year: 2024,
+    rating: 'TV-MA'
+  },
+  {
+    id: 'espn-5',
+    title: 'The Last Dance',
+    description: 'The definitive documentary series chronicling Michael Jordan and the Chicago Bulls dynasty. An intimate look at the greatest basketball player of all time.',
+    genre: 'sports',
+    type: 'show',
+    service: 'espn-plus',
+    serviceContentId: 'the-last-dance',
+    directUrl: 'https://www.espn.com/watch/player/_/id/the-last-dance',
+    imageUrl: '/attached_assets/image_1754368126300.png',
+    duration: 60,
+    year: 2020,
+    rating: 'TV-14'
+  },
+  // ESPN+ Sports Content  
   {
     title: 'Monday Night Football',
     description: 'The premier primetime NFL game of the week featuring top matchups and expert commentary.',
@@ -389,6 +504,10 @@ export async function seedRealContent() {
     console.log('🎬 Amazon Prime content:', realContent.filter(c => c.service === 'amazon-prime').length);
     console.log('🏈 ESPN+ content:', realContent.filter(c => c.service === 'espn-plus').length);
     console.log('📺 YouTube TV content:', realContent.filter(c => c.service === 'youtube-tv').length);
+    console.log('🎭 Hulu content:', realContent.filter(c => c.service === 'hulu').length);
+    console.log('📰 CNN content:', realContent.filter(c => c.service === 'cnn').length);
+    console.log('🎯 Featured headliner content with specific IDs restored');
+    console.log('🚀 All content now includes specialized presentation features');
     
   } catch (error) {
     console.error('❌ Error seeding content:', error);
