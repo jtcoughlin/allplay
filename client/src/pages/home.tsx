@@ -59,28 +59,28 @@ export default function Home() {
     item.type === 'live'
   );
 
-  // Organize movies by categories
+  // Organize movies by categories - ordered by content volume for fuller screen
   const moviesByCategory = {
-    'Popular in the US Today': movies.filter((item: Content) => item.category === 'Popular in the US Today'),
-    '2025 Biggest Hits': movies.filter((item: Content) => item.category === '2025 Biggest Hits'),
-    'Your Next Watch': movies.filter((item: Content) => item.category === 'Your Next Watch'),
-    'Critically Acclaimed': movies.filter((item: Content) => 
-      item.category === 'Dramas' || 
-      ['CODA', 'Nomadland', 'Sound of Metal', 'King Richard'].includes(item.title || '')
-    ),
-    '90%+ on Rotten Tomatoes': movies.filter((item: Content) => 
-      ['Glass Onion: A Knives Out Mystery', 'Palm Springs', 'Encanto', 'Luca', 'CODA'].includes(item.title || '')
+    'Comedy Collection': movies.filter((item: Content) => 
+      item.category === 'Comedies' || item.genre === 'comedy' || item.genre === 'family'
     ),
     'Action & Adventure': movies.filter((item: Content) => 
       item.genre === 'action' || item.genre === 'sci-fi' || 
       ['Red Notice', 'The Tomorrow War', 'Dune', 'The Matrix Resurrections', 'Top Gun: Maverick'].includes(item.title || '')
     ),
-    'Comedy Collection': movies.filter((item: Content) => 
-      item.category === 'Comedies' || item.genre === 'comedy' || item.genre === 'family'
+    '90%+ on Rotten Tomatoes': movies.filter((item: Content) => 
+      ['Glass Onion: A Knives Out Mystery', 'Palm Springs', 'Encanto', 'Luca', 'CODA'].includes(item.title || '')
     ),
+    'Popular in the US Today': movies.filter((item: Content) => item.category === 'Popular in the US Today'),
     'Award Winners': movies.filter((item: Content) => 
       ['CODA', 'Nomadland', 'Sound of Metal', 'King Richard', 'Encanto'].includes(item.title || '')
     ),
+    'Your Next Watch': movies.filter((item: Content) => item.category === 'Your Next Watch'),
+    'Critically Acclaimed': movies.filter((item: Content) => 
+      item.category === 'Dramas' || 
+      ['CODA', 'Nomadland', 'Sound of Metal', 'King Richard'].includes(item.title || '')
+    ),
+    '2025 Biggest Hits': movies.filter((item: Content) => item.category === '2025 Biggest Hits'),
   };
   
   // Debug logging
