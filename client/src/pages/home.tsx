@@ -262,14 +262,21 @@ export default function Home() {
   
   const headlinerContent = getHeadlinerContent();
 
+  // Force guide view for live TV tab
+  const effectiveViewMode = selectedGenre === 'live-tv' ? 'guide' : viewMode;
+
   return (
     <div className="min-h-screen bg-navy text-cream w-full overflow-x-hidden" data-testid="page-home">
-      <Header viewMode={viewMode} onViewModeChange={setViewMode} />
+      <Header 
+        viewMode={effectiveViewMode} 
+        onViewModeChange={setViewMode}
+        hideViewToggle={selectedGenre === 'live-tv'}
+      />
       <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
       
       <main className="px-2 py-4 w-full max-w-none pb-20">
-        {/* Headliner Banner - Only show in card view */}
-        {viewMode === 'cards' && headlinerContent && (
+        {/* Headliner Banner - Only show in card view, but never in live TV */}
+        {effectiveViewMode === 'cards' && selectedGenre !== 'live-tv' && headlinerContent && (
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
@@ -283,7 +290,7 @@ export default function Home() {
         )}
 
         {/* Guide View or Live TV Guide */}
-        {viewMode === 'guide' ? (
+        {effectiveViewMode === 'guide' ? (
           selectedGenre === 'live-tv' ? (
             <LiveTVGuide
               content={liveContent}

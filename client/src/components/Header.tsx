@@ -13,9 +13,10 @@ import {
 interface HeaderProps {
   viewMode: 'cards' | 'guide';
   onViewModeChange: (mode: 'cards' | 'guide') => void;
+  hideViewToggle?: boolean;
 }
 
-export function Header({ viewMode, onViewModeChange }: HeaderProps) {
+export function Header({ viewMode, onViewModeChange, hideViewToggle = false }: HeaderProps) {
   const [location] = useLocation();
 
   const navItems = [
@@ -60,9 +61,11 @@ export function Header({ viewMode, onViewModeChange }: HeaderProps) {
             </Link>
           ))}
           
-          <div className="h-4 w-px bg-navy-lighter mx-2" />
-          
-          <DropdownMenu>
+          {!hideViewToggle && (
+            <>
+              <div className="h-4 w-px bg-navy-lighter mx-2" />
+              
+              <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -98,6 +101,8 @@ export function Header({ viewMode, onViewModeChange }: HeaderProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+            </>
+          )}
         </nav>
         
         {/* User Profile */}
