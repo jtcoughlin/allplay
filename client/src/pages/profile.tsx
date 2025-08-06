@@ -576,7 +576,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Get notified when new shows or movies are added</p>
                   </div>
                   <Switch
-                    checked={preferences.newContentAlerts !== false}
+                    checked={preferences?.newContentAlerts !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ newContentAlerts: checked })
                     }
@@ -590,7 +590,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Remind me about upcoming live sports and events</p>
                   </div>
                   <Switch
-                    checked={preferences.liveEventReminders !== false}
+                    checked={preferences?.liveEventReminders !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ liveEventReminders: checked })
                     }
@@ -617,7 +617,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Allow Allplay to track your viewing history for recommendations</p>
                   </div>
                   <Switch
-                    checked={preferences.trackWatchHistory !== false}
+                    checked={preferences?.trackWatchHistory !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ trackWatchHistory: checked })
                     }
@@ -631,7 +631,7 @@ export default function Profile() {
                     <p className="text-sm text-gray-400">Share anonymized usage data to improve the platform</p>
                   </div>
                   <Switch
-                    checked={preferences.shareData !== false}
+                    checked={preferences?.shareData !== false}
                     onCheckedChange={(checked) =>
                       updatePreferences.mutate({ shareData: checked })
                     }
