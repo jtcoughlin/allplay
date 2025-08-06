@@ -58,6 +58,22 @@ export default function Home() {
     ['youtube-tv', 'espn-plus'].includes(item.service || '') ||
     item.type === 'live'
   );
+
+  // Organize movies by categories
+  const moviesByCategory = {
+    'Popular in the US Today': movies.filter((item: Content) => item.category === 'Popular in the US Today'),
+    '2025 Biggest Hits': movies.filter((item: Content) => item.category === '2025 Biggest Hits'),
+    'Your Next Watch': movies.filter((item: Content) => item.category === 'Your Next Watch'),
+    'Comedies': movies.filter((item: Content) => item.category === 'Comedies' || item.genre === 'comedy'),
+    'Dramas': movies.filter((item: Content) => item.category === 'Dramas' || item.genre === 'drama'),
+    'Netflix': movies.filter((item: Content) => item.service === 'netflix'),
+    'Hulu': movies.filter((item: Content) => item.service === 'hulu'),
+    'Amazon Prime': movies.filter((item: Content) => item.service === 'amazon-prime'),
+    'HBO Max': movies.filter((item: Content) => item.service === 'hbo-max'),
+    'Apple TV+': movies.filter((item: Content) => item.service === 'apple-tv'),
+    'Paramount+': movies.filter((item: Content) => item.service === 'paramount-plus'),
+    'Disney+': movies.filter((item: Content) => item.service === 'disney-plus'),
+  };
   
   // Debug logging
   console.log('Content Query Result:', { 
@@ -373,14 +389,32 @@ export default function Home() {
               </>
             )}
 
-            {/* Movies Genre */}
+            {/* Movies Genre - Organized by Categories */}
             {selectedGenre === 'movies' && movies.length > 0 && (
-              <ContentRow
-                title="Movies"
-                content={movies}
-                favorites={favoriteIds}
-                size="small"
-              />
+              <>
+                {Object.entries(moviesByCategory).map(([categoryName, categoryMovies]) => {
+                  if (categoryMovies.length === 0) return null;
+                  return (
+                    <ContentRow
+                      key={categoryName}
+                      title={categoryName}
+                      content={categoryMovies}
+                      favorites={favoriteIds}
+                      size="small"
+                    />
+                  );
+                })}
+                
+                {/* Show all movies if no categories have content */}
+                {Object.values(moviesByCategory).every(cat => cat.length === 0) && (
+                  <ContentRow
+                    title="All Movies"
+                    content={movies}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+              </>
             )}
 
             {/* Shows Genre */}

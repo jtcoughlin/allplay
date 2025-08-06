@@ -1,8 +1,8 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-06T04:35:14.038Z
-// Total items: 88
+// Auto-generated seed file - Last updated: 2025-08-06T04:49:49.439Z
+// Total items: 109
 const realContent = [
   {
     "id": "928a1501-97dd-427c-b93b-157d9821a14c",
@@ -20,6 +20,7 @@ const realContent = [
     "album": null,
     "duration": 51,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.219Z",
     "updatedAt": "2025-08-06T03:40:19.219Z"
@@ -40,6 +41,7 @@ const realContent = [
     "album": null,
     "duration": 45,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.326Z",
     "updatedAt": "2025-08-06T03:40:19.326Z"
@@ -60,6 +62,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.430Z",
     "updatedAt": "2025-08-06T03:40:19.430Z"
@@ -80,6 +83,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.533Z",
     "updatedAt": "2025-08-06T03:40:19.533Z"
@@ -100,6 +104,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.639Z",
     "updatedAt": "2025-08-06T03:40:19.639Z"
@@ -120,6 +125,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.744Z",
     "updatedAt": "2025-08-06T03:40:19.744Z"
@@ -140,6 +146,7 @@ const realContent = [
     "album": null,
     "duration": 118,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.847Z",
     "updatedAt": "2025-08-06T03:40:19.847Z"
@@ -160,6 +167,7 @@ const realContent = [
     "album": null,
     "duration": 139,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.951Z",
     "updatedAt": "2025-08-06T03:40:19.951Z"
@@ -180,6 +188,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.054Z",
     "updatedAt": "2025-08-06T03:40:20.054Z"
@@ -200,6 +209,7 @@ const realContent = [
     "album": null,
     "duration": 50,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.158Z",
     "updatedAt": "2025-08-06T03:40:20.158Z"
@@ -220,6 +230,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.261Z",
     "updatedAt": "2025-08-06T03:40:20.261Z"
@@ -240,6 +251,7 @@ const realContent = [
     "album": null,
     "duration": 70,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.364Z",
     "updatedAt": "2025-08-06T03:40:20.364Z"
@@ -260,6 +272,7 @@ const realContent = [
     "album": null,
     "duration": 45,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.467Z",
     "updatedAt": "2025-08-06T03:40:20.467Z"
@@ -280,6 +293,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.572Z",
     "updatedAt": "2025-08-06T03:40:20.572Z"
@@ -300,6 +314,7 @@ const realContent = [
     "album": null,
     "duration": 140,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.676Z",
     "updatedAt": "2025-08-06T03:40:20.676Z"
@@ -320,6 +335,7 @@ const realContent = [
     "album": null,
     "duration": 120,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.779Z",
     "updatedAt": "2025-08-06T03:40:20.779Z"
@@ -340,6 +356,7 @@ const realContent = [
     "album": null,
     "duration": 95,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.883Z",
     "updatedAt": "2025-08-06T03:40:20.883Z"
@@ -360,6 +377,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:20.986Z",
     "updatedAt": "2025-08-06T03:40:20.986Z"
@@ -380,6 +398,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.088Z",
     "updatedAt": "2025-08-06T03:40:21.088Z"
@@ -400,6 +419,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.210Z",
     "updatedAt": "2025-08-06T03:40:21.210Z"
@@ -420,6 +440,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.313Z",
     "updatedAt": "2025-08-06T03:40:21.313Z"
@@ -440,6 +461,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.415Z",
     "updatedAt": "2025-08-06T03:40:21.415Z"
@@ -460,6 +482,7 @@ const realContent = [
     "album": null,
     "duration": 210,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.518Z",
     "updatedAt": "2025-08-06T03:40:21.518Z"
@@ -480,6 +503,7 @@ const realContent = [
     "album": null,
     "duration": 120,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.622Z",
     "updatedAt": "2025-08-06T03:40:21.622Z"
@@ -500,6 +524,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.725Z",
     "updatedAt": "2025-08-06T03:40:21.725Z"
@@ -520,6 +545,7 @@ const realContent = [
     "album": null,
     "duration": 120,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.828Z",
     "updatedAt": "2025-08-06T03:40:21.828Z"
@@ -540,6 +566,7 @@ const realContent = [
     "album": null,
     "duration": 75,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:21.931Z",
     "updatedAt": "2025-08-06T03:40:21.931Z"
@@ -560,6 +587,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.195Z",
     "updatedAt": "2025-08-06T03:40:22.195Z"
@@ -580,6 +608,7 @@ const realContent = [
     "album": null,
     "duration": 240,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.297Z",
     "updatedAt": "2025-08-06T03:40:22.297Z"
@@ -600,6 +629,7 @@ const realContent = [
     "album": null,
     "duration": 150,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.402Z",
     "updatedAt": "2025-08-06T03:40:22.402Z"
@@ -620,6 +650,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.505Z",
     "updatedAt": "2025-08-06T03:40:22.505Z"
@@ -640,6 +671,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.608Z",
     "updatedAt": "2025-08-06T03:40:22.608Z"
@@ -660,6 +692,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.711Z",
     "updatedAt": "2025-08-06T03:40:22.711Z"
@@ -680,6 +713,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.814Z",
     "updatedAt": "2025-08-06T03:40:22.814Z"
@@ -700,6 +734,7 @@ const realContent = [
     "album": null,
     "duration": 90,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.917Z",
     "updatedAt": "2025-08-06T03:40:22.917Z"
@@ -720,6 +755,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.035Z",
     "updatedAt": "2025-08-06T03:40:22.035Z"
@@ -740,6 +776,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -760,6 +797,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -780,6 +818,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -800,6 +839,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -820,6 +860,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -840,6 +881,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -860,6 +902,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -880,6 +923,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -900,6 +944,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -920,6 +965,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -940,6 +986,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -960,6 +1007,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -980,6 +1028,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -1000,6 +1049,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
@@ -1020,6 +1070,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1040,6 +1091,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1060,6 +1112,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1080,6 +1133,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1100,6 +1154,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1120,6 +1175,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1140,6 +1196,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1160,6 +1217,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1180,6 +1238,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1200,6 +1259,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1220,6 +1280,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1240,6 +1301,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1260,6 +1322,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1280,6 +1343,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1300,6 +1364,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1320,6 +1385,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1340,6 +1406,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1360,6 +1427,7 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1380,6 +1448,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1400,6 +1469,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1420,6 +1490,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1440,6 +1511,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1460,6 +1532,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1480,6 +1553,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1500,6 +1574,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1520,6 +1595,7 @@ const realContent = [
     "album": null,
     "duration": 120,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1540,6 +1616,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1560,6 +1637,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1580,6 +1658,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1600,6 +1679,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
@@ -1620,6 +1700,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1640,6 +1721,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1660,6 +1742,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1680,6 +1763,7 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1700,6 +1784,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1720,6 +1805,7 @@ const realContent = [
     "album": null,
     "duration": 120,
     "isLive": true,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1740,6 +1826,7 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
@@ -1760,9 +1847,451 @@ const realContent = [
     "album": null,
     "duration": 30,
     "isLive": false,
+    "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
+  },
+  {
+    "id": "nf-movie-1",
+    "title": "Glass Onion: A Knives Out Mystery",
+    "description": "Detective Benoit Blanc travels to Greece to solve a murder mystery involving a tech billionaire and his eccentric friends.",
+    "type": "movie",
+    "genre": "mystery",
+    "service": "netflix",
+    "serviceContentId": "glass-onion",
+    "directUrl": "https://www.netflix.com/title/81458416",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 139,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "nf-movie-2",
+    "title": "Red Notice",
+    "description": "An FBI profiler must partner with the worlds most wanted art thief to catch an elusive criminal.",
+    "type": "movie",
+    "genre": "action",
+    "service": "netflix",
+    "serviceContentId": "red-notice",
+    "directUrl": "https://www.netflix.com/title/81161626",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 118,
+    "isLive": false,
+    "category": "Your Next Watch",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "nf-movie-3",
+    "title": "The Adam Project",
+    "description": "A time-traveling pilot teams up with his younger self and late father to save the future.",
+    "type": "movie",
+    "genre": "sci-fi",
+    "service": "netflix",
+    "serviceContentId": "the-adam-project",
+    "directUrl": "https://www.netflix.com/title/81309354",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 106,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hulu-movie-1",
+    "title": "Palm Springs",
+    "description": "Two wedding guests find themselves stuck in a time loop at a Palm Springs wedding.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "hulu",
+    "serviceContentId": "palm-springs",
+    "directUrl": "https://www.hulu.com/movie/palm-springs-6b09ee79-2f78-484e-aa9d-5e0735e6a6c8",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2020,
+    "artist": null,
+    "album": null,
+    "duration": 90,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hulu-movie-2",
+    "title": "Nomadland",
+    "description": "A woman embarks on a journey through the American West after losing everything in the recession.",
+    "type": "movie",
+    "genre": "drama",
+    "service": "hulu",
+    "serviceContentId": "nomadland",
+    "directUrl": "https://www.hulu.com/movie/nomadland-7cc5e816-bd4f-4e7d-8ca5-c6f71a5a1d1a",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2020,
+    "artist": null,
+    "album": null,
+    "duration": 107,
+    "isLive": false,
+    "category": "Dramas",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hulu-movie-3",
+    "title": "Run",
+    "description": "A homeschooled teenager begins to suspect her mother is keeping a dark secret from her.",
+    "type": "movie",
+    "genre": "thriller",
+    "service": "hulu",
+    "serviceContentId": "run-2020",
+    "directUrl": "https://www.hulu.com/movie/run-4c8b9c8e-3f2a-4e5d-9b1f-8a7c6d5e4f3g",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2020,
+    "artist": null,
+    "album": null,
+    "duration": 90,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "prime-movie-1",
+    "title": "Coming 2 America",
+    "description": "Prince Akeem discovers he has a long-lost son and returns to America to meet his heir.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "amazon-prime",
+    "serviceContentId": "coming-2-america",
+    "directUrl": "https://www.amazon.com/dp/B08WJG6RKZ",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 110,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "prime-movie-2",
+    "title": "The Tomorrow War",
+    "description": "A family man is drafted to fight in a future war where humanitys fate depends on his ability to confront his past.",
+    "type": "movie",
+    "genre": "sci-fi",
+    "service": "amazon-prime",
+    "serviceContentId": "tomorrow-war",
+    "directUrl": "https://www.amazon.com/dp/B096TJK8F2",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 138,
+    "isLive": false,
+    "category": "2025 Biggest Hits",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "prime-movie-3",
+    "title": "Sound of Metal",
+    "description": "A heavy-metal drummer begins to lose his hearing and must face a future filled with silence.",
+    "type": "movie",
+    "genre": "drama",
+    "service": "amazon-prime",
+    "serviceContentId": "sound-of-metal",
+    "directUrl": "https://www.amazon.com/dp/B08P4Z8Q9K",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2019,
+    "artist": null,
+    "album": null,
+    "duration": 120,
+    "isLive": false,
+    "category": "Dramas",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hbo-movie-1",
+    "title": "Dune",
+    "description": "Paul Atreides leads nomadic tribes in a revolt against the evil Harkonnen family on the desert planet Arrakis.",
+    "type": "movie",
+    "genre": "sci-fi",
+    "service": "hbo-max",
+    "serviceContentId": "dune-2021",
+    "directUrl": "https://play.hbomax.com/movie/urn:hbo:movie:GYbX2vQqutJ68uwEAAABc",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 155,
+    "isLive": false,
+    "category": "2025 Biggest Hits",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hbo-movie-2",
+    "title": "The Matrix Resurrections",
+    "description": "Neo must choose to follow the white rabbit once more in this sequel to the Matrix trilogy.",
+    "type": "movie",
+    "genre": "sci-fi",
+    "service": "hbo-max",
+    "serviceContentId": "matrix-resurrections",
+    "directUrl": "https://play.hbomax.com/movie/urn:hbo:movie:GYc8X2wqu_568uwEAAABd",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 148,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "hbo-movie-3",
+    "title": "King Richard",
+    "description": "The story of how Richard Williams trained his daughters Venus and Williams to become tennis legends.",
+    "type": "movie",
+    "genre": "biography",
+    "service": "hbo-max",
+    "serviceContentId": "king-richard",
+    "directUrl": "https://play.hbomax.com/movie/urn:hbo:movie:GYd9X3xru_678uwEAAABe",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 144,
+    "isLive": false,
+    "category": "Dramas",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "apple-movie-1",
+    "title": "CODA",
+    "description": "A deaf teenager pursues her passion for music while helping her familys struggling fishing business.",
+    "type": "movie",
+    "genre": "drama",
+    "service": "apple-tv",
+    "serviceContentId": "coda",
+    "directUrl": "https://tv.apple.com/movie/coda/umc.cmc.3eh9r5iz32ggdm4ccvw5igiir",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 111,
+    "isLive": false,
+    "category": "Dramas",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "apple-movie-2",
+    "title": "Finch",
+    "description": "A man, a robot, and a dog form an unlikely family in a post-apocalyptic world.",
+    "type": "movie",
+    "genre": "sci-fi",
+    "service": "apple-tv",
+    "serviceContentId": "finch",
+    "directUrl": "https://tv.apple.com/movie/finch/umc.cmc.4eq7d2p6wj2a6f5z4pf2qxd4x",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 115,
+    "isLive": false,
+    "category": "Your Next Watch",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "apple-movie-3",
+    "title": "The Tragedy of Macbeth",
+    "description": "Joel Coens bold adaptation of Shakespeares classic tale of murder, madness, ambition and wrathful cunning.",
+    "type": "movie",
+    "genre": "drama",
+    "service": "apple-tv",
+    "serviceContentId": "macbeth",
+    "directUrl": "https://tv.apple.com/movie/the-tragedy-of-macbeth/umc.cmc.4h7k3x2e8fry8m5s9fg9g5h3w",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 105,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "paramount-movie-1",
+    "title": "Top Gun: Maverick",
+    "description": "After thirty years, Maverick is still pushing the envelope as a top naval aviator, training a new generation of pilots.",
+    "type": "movie",
+    "genre": "action",
+    "service": "paramount-plus",
+    "serviceContentId": "top-gun-maverick",
+    "directUrl": "https://www.paramountplus.com/movies/top-gun-maverick/5vj8X2wqu_568uwEAAABf",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 130,
+    "isLive": false,
+    "category": "2025 Biggest Hits",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "paramount-movie-2",
+    "title": "Scream",
+    "description": "A new Ghostface killer terrorizes the town of Woodsboro, targeting teenagers related to the original murders.",
+    "type": "movie",
+    "genre": "horror",
+    "service": "paramount-plus",
+    "serviceContentId": "scream-2022",
+    "directUrl": "https://www.paramountplus.com/movies/scream/6wk9Y3xsu_679vwFAAABg",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "R",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 114,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "paramount-movie-3",
+    "title": "The Lost City",
+    "description": "A reclusive romance novelist gets caught up in a kidnapping attempt that mirrors her latest book.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "paramount-plus",
+    "serviceContentId": "the-lost-city",
+    "directUrl": "https://www.paramountplus.com/movies/the-lost-city/7xl0Z4ytv_780xwGAAABh",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 112,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "disney-movie-1",
+    "title": "Encanto",
+    "description": "A Colombian teenage girl may be her familys last hope when she discovers that the magic surrounding her family is in danger.",
+    "type": "movie",
+    "genre": "family",
+    "service": "disney-plus",
+    "serviceContentId": "encanto",
+    "directUrl": "https://www.disneyplus.com/movies/encanto/33q7DY1rtHQH",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 102,
+    "isLive": false,
+    "category": "Your Next Watch",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "disney-movie-2",
+    "title": "Turning Red",
+    "description": "A thirteen-year-old girl turns into a giant red panda whenever she gets too excited.",
+    "type": "movie",
+    "genre": "family",
+    "service": "disney-plus",
+    "serviceContentId": "turning-red",
+    "directUrl": "https://www.disneyplus.com/movies/turning-red/4mFHrEHJjGha",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 100,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
+  },
+  {
+    "id": "disney-movie-3",
+    "title": "Luca",
+    "description": "A young boy experiences an unforgettable summer filled with gelato, pasta and endless scooter rides on the Italian Riviera.",
+    "type": "movie",
+    "genre": "family",
+    "service": "disney-plus",
+    "serviceContentId": "luca",
+    "directUrl": "https://www.disneyplus.com/movies/luca/7K1HyQ6Hl48s",
+    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "rating": "PG",
+    "year": 2021,
+    "artist": null,
+    "album": null,
+    "duration": 95,
+    "isLive": false,
+    "category": "Your Next Watch",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-06T04:49:22.858Z"
   }
 ];
 
@@ -1786,6 +2315,10 @@ export async function seedRealContent() {
     console.log('📰 cnn content:', realContent.filter(c => c.service === 'cnn').length);
     console.log('🎭 hulu content:', realContent.filter(c => c.service === 'hulu').length);
     console.log('🏈 espn-plus content:', realContent.filter(c => c.service === 'espn-plus').length);
+    console.log('🎯 hbo-max content:', realContent.filter(c => c.service === 'hbo-max').length);
+    console.log('🎯 apple-tv content:', realContent.filter(c => c.service === 'apple-tv').length);
+    console.log('🎯 paramount-plus content:', realContent.filter(c => c.service === 'paramount-plus').length);
+    console.log('🏰 disney-plus content:', realContent.filter(c => c.service === 'disney-plus').length);
     console.log('🎯 All content synchronized from database');
     console.log('🚀 Seed file auto-updated with current database state');
     

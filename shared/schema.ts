@@ -70,6 +70,7 @@ export const content = pgTable("content", {
   album: text("album"), // for music content
   duration: integer("duration"), // in minutes
   isLive: boolean("is_live").default(false),
+  category: text("category"), // content curation categories like "Popular in US", "2025 Biggest Hits"
   availability: jsonb("availability"), // regions, subscription tiers
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
