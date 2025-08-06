@@ -2,6 +2,12 @@
 
 Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience. The application supports three types of service integrations:
 
+## Recent Changes
+- **August 6, 2025**: Implemented comprehensive data protection system to prevent content loss
+- **Content Recovery**: Restored original ESPN+ ("30 for 30: The Tuck Rule") and YouTube TV ("FOX News") content
+- **Backup System**: Added automated backup/restore capabilities with database-to-seed synchronization
+- **Data Architecture**: Enhanced with multi-layer protection (file backups + Replit SQL rollback)
+
 1. **Real OAuth Authentication** (Spotify, YouTube, Apple Music) - Full API integration with secure credential storage
 2. **App Integration/Deep Linking** (Netflix, Amazon Prime, Disney+, etc.) - Links to content that opens in the service's native app using existing device logins
 3. **Demo Connections** (Other services) - Simulated connections for demonstration purposes
@@ -16,6 +22,7 @@ Key features include service connection management, unified content discovery, c
 - Core value proposition: Single UI for all streaming services - users never leave Allplay to watch content
 - Target experience: Always logged in, seamless switching between all connected services
 - Music integration: Direct integration with native Apple Music and Spotify apps rather than recreating music interfaces
+- Data protection priority: Critical requirement to prevent content loss through comprehensive backup systems
 
 # System Architecture
 
@@ -45,6 +52,14 @@ The application uses PostgreSQL as the primary database, accessed through Drizzl
 - **Session storage**: Secure session management for authentication
 
 Database operations are abstracted through a storage interface, allowing for easy testing and potential future database migrations.
+
+### Data Protection & Backup System
+A comprehensive backup system prevents content loss:
+- **Automated backups**: JSON-based timestamped backups of all content
+- **Database-to-seed synchronization**: Real-time sync between database and seed files
+- **Restore capabilities**: Full restoration from backup files
+- **Multi-layered protection**: File system backups + Replit SQL Database rollback feature
+- **Command-line tools**: Scripts for creating, listing, and restoring backups
 
 ## Authentication and Authorization
 The application implements multiple authentication strategies:
