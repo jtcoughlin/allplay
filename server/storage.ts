@@ -341,18 +341,6 @@ export class DatabaseStorage implements IStorage {
 
   // Legacy preference method for compatibility
   async updateUserPreferences(userId: string, preferences: any): Promise<any> {
-    return {
-      defaultViewMode: 'cards',
-      autoplayPreviews: true,
-      showAdultContent: true,
-      newContentAlerts: true,
-      liveEventReminders: true,
-      trackWatchHistory: true,
-      shareData: false,
-    };
-  }
-
-  async updateUserPreferences(userId: string, preferences: any): Promise<any> {
     // Simulate update - would save to database
     console.log(`Updating preferences for user ${userId}:`, preferences);
     return { userId, ...preferences, updatedAt: new Date() };
