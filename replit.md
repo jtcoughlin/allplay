@@ -23,6 +23,7 @@ Key features include service connection management, unified content discovery, c
 - Target experience: Always logged in, seamless switching between all connected services
 - Music integration: Direct integration with native Apple Music and Spotify apps rather than recreating music interfaces
 - Data protection priority: Critical requirement to prevent content loss through comprehensive backup systems
+- Automated workflow: All backup and sync operations handled automatically during development
 - **Automated data protection**: Agent should automatically implement backup best practices without manual user intervention
 
 # System Architecture
