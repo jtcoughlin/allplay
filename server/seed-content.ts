@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-06T04:04:20.924Z
+// Auto-generated seed file - Last updated: 2025-08-06T04:06:25.834Z
 // Total items: 36
 const realContent = [
   {
@@ -710,9 +710,9 @@ const realContent = [
     "description": "The definitive documentary series chronicling Michael Jordan and the Chicago Bulls dynasty. An intimate look at the greatest basketball player of all time.",
     "type": "show",
     "genre": "sports",
-    "service": "espn-plus",
-    "serviceContentId": "the-last-dance",
-    "directUrl": "https://www.espn.com/watch/player/_/id/the-last-dance",
+    "service": "netflix",
+    "serviceContentId": "81002655",
+    "directUrl": "https://www.netflix.com/watch/81002655?trackId=268410292&tctx=0%2C0%2Ca956c732-a018-4147-bc02-082cc9692996-231243474%2Ca956c732-a018-4147-bc02-082cc9692996-231243474%7C2%2Cunknown%2C%2C%2CtitlesResults%2C%2CVideo%3A80203144%2CdetailsPagePlayButton",
     "imageUrl": "/attached_assets/image_1754452981042.png",
     "rating": "TV-14",
     "year": 2020,
