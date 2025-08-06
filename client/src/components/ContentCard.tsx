@@ -222,28 +222,7 @@ export function ContentCard({
           </div>
         )}
 
-        {/* Service badge */}
-        {content.service && (
-          <Badge 
-            className={`absolute top-2 right-2 ${getPlatformColor(content.service)} text-white text-xs font-bold px-2 py-1`}
-            data-testid={`badge-service-${content.id}`}
-          >
-            {content.service.toUpperCase()}
-          </Badge>
-        )}
-
-        {/* Rating */}
-        {content.rating && (
-          <Badge 
-            className="absolute top-2 left-2 bg-gray-800 text-white text-xs font-bold px-2 py-1"
-            data-testid={`badge-rating-${content.id}`}
-          >
-            <Star className="w-3 h-3 text-yellow-400 mr-1 fill-current" />
-            {content.rating}
-          </Badge>
-        )}
-
-        {/* Live indicator */}
+        {/* Live indicator - only thing that stays at the top */}
         {content.isLive && (
           <Badge 
             className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 animate-pulse"
@@ -281,15 +260,41 @@ export function ContentCard({
           {content.title}
         </h3>
         
-        <p 
-          className="text-xs text-gray-400 truncate leading-tight"
-          data-testid={`text-info-${content.id}`}
-        >
-          {content.type === 'music' && content.artist 
-            ? content.artist
-            : `${content.genre} • ${content.year || 'N/A'}`
-          }
-        </p>
+        <div className="flex flex-wrap items-center gap-1 text-xs text-gray-400">
+          <span data-testid={`text-info-${content.id}`}>
+            {content.type === 'music' && content.artist 
+              ? content.artist
+              : `${content.genre} • ${content.year || 'N/A'}`
+            }
+          </span>
+          
+          {/* Service badge moved to bottom */}
+          {content.service && (
+            <>
+              <span>•</span>
+              <Badge 
+                className={`${getPlatformColor(content.service)} text-white text-xs font-bold px-1 py-0.5`}
+                data-testid={`badge-service-${content.id}`}
+              >
+                {content.service.toUpperCase()}
+              </Badge>
+            </>
+          )}
+          
+          {/* Rating moved to bottom */}
+          {content.rating && (
+            <>
+              <span>•</span>
+              <Badge 
+                className="bg-gray-800 text-white text-xs font-bold px-1 py-0.5 flex items-center gap-1"
+                data-testid={`badge-rating-${content.id}`}
+              >
+                <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
+                {content.rating}
+              </Badge>
+            </>
+          )}
+        </div>
 
         {showProgress && watchHistory && (
           <p 

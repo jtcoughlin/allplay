@@ -255,21 +255,6 @@ const realContent = [
     duration: 120,
     year: 2025,
     rating: 'PG-13'
-  },
-  // ESPN College Football Live
-  {
-    title: 'College Football Live',
-    description: 'Live college football coverage, highlights, and analysis from ESPN. Catch all the action from the biggest games across the nation.',
-    genre: 'sports',
-    type: 'live',
-    service: 'espn-plus',
-    serviceContentId: 'college-football-live',
-    directUrl: 'https://www.espn.com/watch/player/_/id/college-football-live',
-    imageUrl: '/attached_assets/Screenshot 2025-08-04 at 9.49.36 PM_1754446722645.png',
-    duration: 180,
-    year: 2024,
-    rating: 'TV-G',
-    isLive: true
   }
 ];
 
