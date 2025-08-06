@@ -6,6 +6,7 @@ import { generateAuthUrl, exchangeCodeForToken, getUserProfile, generateDeepLink
 import { nanoid } from 'nanoid';
 import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema, insertUserPreferencesSchema } from "@shared/schema";
 import { seedRealContent } from "./seed-content";
+import { BackupManager } from "./backup-manager";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -23,14 +24,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Seed content endpoint
+  // Seed content endpoint with automatic backup
   app.post('/api/seed-content', async (req, res) => {
     try {
+      // Create backup before seeding
+      console.log('🔄 Creating backup before content seeding...');
+      await BackupManager.createContentBackup(`pre-seed-${new Date().toISOString().split('T')[0]}`);
+      
       await seedRealContent();
-      res.json({ message: 'Content seeded successfully' });
+      
+      // Sync to seed file after seeding
+      console.log('🔄 Synchronizing database to seed file...');
+      await BackupManager.syncDatabaseToSeed();
+      
+      res.json({ message: 'Content seeded successfully with automatic backup and sync' });
     } catch (error) {
       console.error('Error seeding content:', error);
       res.status(500).json({ message: 'Failed to seed content' });
+    }
+  });
+
+  // Automated backup endpoints
+  app.post('/api/backup/create', async (req, res) => {
+    try {
+      const { name } = req.body;
+      const backupPath = await BackupManager.createContentBackup(name);
+      await BackupManager.syncDatabaseToSeed();
+      res.json({ 
+        message: 'Backup created and synchronized successfully',
+        backupPath,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error creating backup:', error);
+      res.status(500).json({ message: 'Failed to create backup' });
+    }
+  });
+
+  app.get('/api/backup/list', async (req, res) => {
+    try {
+      const backups = await BackupManager.listBackups();
+      res.json({ backups });
+    } catch (error) {
+      console.error('Error listing backups:', error);
+      res.status(500).json({ message: 'Failed to list backups' });
     }
   });
 
