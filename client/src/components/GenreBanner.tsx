@@ -9,9 +9,9 @@ interface GenreBannerProps {
 export function GenreBanner({ selectedGenre, onGenreChange }: GenreBannerProps) {
   const genres = [
     { key: 'all', label: 'All' },
+    { key: 'live-tv', label: 'Live TV' },
     { key: 'movies', label: 'Movies' },
     { key: 'shows', label: 'Shows' },
-    { key: 'live-tv', label: 'Live TV' },
     { key: 'sports', label: 'Sports' },
     { key: 'documentaries', label: 'Documentaries' },
     { key: 'comedy', label: 'Comedy' },
