@@ -97,11 +97,30 @@ export const watchHistory = pgTable("watch_history", {
   unique("unique_user_content").on(table.userId, table.contentId),
 ]);
 
+// User preferences for personalized recommendations
+export const userPreferences = pgTable("user_preferences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  preferredGenres: text("preferred_genres").array().default([]), // fantasy, sitcom, reality, news, etc.
+  preferredContentTypes: text("preferred_content_types").array().default([]), // movie, show, music, live, sports
+  preferredSports: text("preferred_sports").array().default([]), // nfl, nba, mlb, nhl, soccer, tennis, etc.
+  favoriteTeams: jsonb("favorite_teams").default({}), // {nfl: ["patriots", "cowboys"], nba: ["lakers"]}
+  interests: text("interests").array().default([]), // finance, business, politics, entertainment, etc.
+  contentRatings: text("content_ratings").array().default([]), // G, PG, PG-13, R, etc.
+  preferredLanguages: text("preferred_languages").array().default(["en"]),
+  autoAddLikedContent: boolean("auto_add_liked_content").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  unique("unique_user_preferences").on(table.userId),
+]);
+
 // Define relations
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   serviceConnections: many(serviceConnections),
   favorites: many(favorites),
   watchHistory: many(watchHistory),
+  preferences: one(userPreferences),
 }));
 
 export const serviceConnectionsRelations = relations(serviceConnections, ({ one }) => ({
@@ -138,6 +157,13 @@ export const watchHistoryRelations = relations(watchHistory, ({ one }) => ({
   }),
 }));
 
+export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
+  user: one(users, {
+    fields: [userPreferences.userId],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   email: true,
@@ -168,6 +194,12 @@ export const insertWatchHistorySchema = createInsertSchema(watchHistory).omit({
   lastWatched: true,
 });
 
+export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -179,3 +211,5 @@ export type Favorite = typeof favorites.$inferSelect;
 export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
 export type WatchHistory = typeof watchHistory.$inferSelect;
 export type InsertWatchHistory = z.infer<typeof insertWatchHistorySchema>;
+export type UserPreferences = typeof userPreferences.$inferSelect;
+export type InsertUserPreferences = z.infer<typeof insertUserPreferencesSchema>;

@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { generateAuthUrl, exchangeCodeForToken, getUserProfile, generateDeepLink } from "./oauth";
 import { nanoid } from 'nanoid';
-import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema } from "@shared/schema";
+import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema, insertUserPreferencesSchema } from "@shared/schema";
 import { seedRealContent } from "./seed-content";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -355,28 +355,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User preferences endpoints
-  app.get('/api/user/preferences', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const preferences = await storage.getUserPreferences(userId);
-      res.json(preferences);
-    } catch (error) {
-      console.error("Error fetching user preferences:", error);
-      res.status(500).json({ message: "Failed to fetch preferences" });
-    }
-  });
 
-  app.patch('/api/user/preferences', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const preferences = await storage.updateUserPreferences(userId, req.body);
-      res.json(preferences);
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
-      res.status(500).json({ message: "Failed to update preferences" });
-    }
-  });
 
   // Play content endpoint - simulate direct streaming
   app.post('/api/play/:contentId', isAuthenticated, async (req: any, res) => {
@@ -449,6 +428,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating watch progress:", error);
       res.status(400).json({ message: "Invalid watch progress data" });
+    }
+  });
+
+  // User preferences routes
+  app.get('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.getUserPreferences(userId);
+      res.json(preferences || null);
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      res.status(500).json({ message: "Failed to fetch preferences" });
+    }
+  });
+
+  app.post('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const validatedData = insertUserPreferencesSchema.parse({ ...req.body, userId });
+      const preferences = await storage.upsertUserPreferences(validatedData);
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+      res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+
+  // Get recommended content based on user preferences
+  app.get('/api/user/recommendations', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const recommendations = await storage.getRecommendedContent(userId);
+      res.json(recommendations);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+      res.status(500).json({ message: "Failed to fetch recommendations" });
     }
   });
 

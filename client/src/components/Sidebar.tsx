@@ -65,6 +65,13 @@ export function Sidebar({ className }: SidebarProps) {
       testId: "nav-favorites"
     },
     {
+      title: "My Content",
+      href: "/preferences",
+      icon: Settings,
+      active: location === "/preferences",
+      testId: "nav-preferences"
+    },
+    {
       title: "Profile",
       href: "/profile",
       icon: User,

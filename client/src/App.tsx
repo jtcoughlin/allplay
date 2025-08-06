@@ -9,6 +9,7 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import Search from "@/pages/search";
 import Favorites from "@/pages/favorites";
+import Preferences from "@/pages/preferences";
 import Profile from "@/pages/profile";
 import Music from "@/pages/music";
 import NotFound from "@/pages/not-found";
@@ -33,6 +34,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/search" component={Search} />
           <Route path="/favorites" component={Favorites} />
+          <Route path="/preferences" component={Preferences} />
           <Route path="/profile" component={Profile} />
           <Route path="/music" component={Music} />
           <Route component={NotFound} />

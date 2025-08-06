@@ -4,6 +4,7 @@ import {
   content,
   favorites,
   watchHistory,
+  userPreferences,
   type User,
   type UpsertUser,
   type ServiceConnection,
@@ -14,6 +15,8 @@ import {
   type InsertFavorite,
   type WatchHistory,
   type InsertWatchHistory,
+  type UserPreferences,
+  type InsertUserPreferences,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, ilike, or } from "drizzle-orm";
@@ -48,9 +51,10 @@ export interface IStorage {
   connectService(userId: string, service: string): Promise<ServiceConnection>;
   disconnectService(userId: string, service: string): Promise<void>;
   
-  // Preferences operations
-  getUserPreferences(userId: string): Promise<any>;
-  updateUserPreferences(userId: string, preferences: any): Promise<any>;
+  // User preferences operations
+  getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
+  upsertUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences>;
+  getRecommendedContent(userId: string): Promise<Content[]>;
   
   // Enhanced favorites operations
   toggleFavorite(userId: string, contentId: string): Promise<any>;
@@ -284,9 +288,59 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(content).where(eq(content.service, service));
   }
 
-  // Preferences operations
-  async getUserPreferences(userId: string): Promise<any> {
-    // Simulate preferences - would fetch from database
+  // User preferences operations
+  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    const [prefs] = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId));
+    return prefs;
+  }
+
+  async upsertUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences> {
+    const [prefs] = await db
+      .insert(userPreferences)
+      .values(preferences)
+      .onConflictDoUpdate({
+        target: userPreferences.userId,
+        set: {
+          ...preferences,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return prefs;
+  }
+
+  async getRecommendedContent(userId: string): Promise<Content[]> {
+    const prefs = await this.getUserPreferences(userId);
+    
+    if (!prefs) {
+      // Return general popular content if no preferences set
+      return await db.select().from(content).limit(20);
+    }
+
+    // Build query based on user preferences
+    const conditions = [];
+    
+    if (prefs.preferredGenres && prefs.preferredGenres.length > 0) {
+      const genreConditions = prefs.preferredGenres.map(genre => eq(content.genre, genre));
+      conditions.push(or(...genreConditions));
+    }
+    
+    if (prefs.preferredContentTypes && prefs.preferredContentTypes.length > 0) {
+      const typeConditions = prefs.preferredContentTypes.map(type => eq(content.type, type));
+      conditions.push(or(...typeConditions));
+    }
+
+    const baseQuery = db.select().from(content);
+    
+    if (conditions.length > 0) {
+      return await baseQuery.where(or(...conditions)).limit(50);
+    }
+    
+    return await baseQuery.limit(20);
+  }
+
+  // Legacy preference method for compatibility
+  async updateUserPreferences(userId: string, preferences: any): Promise<any> {
     return {
       defaultViewMode: 'cards',
       autoplayPreviews: true,
