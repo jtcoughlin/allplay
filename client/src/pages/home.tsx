@@ -59,6 +59,31 @@ export default function Home() {
     item.type === 'live'
   );
 
+  // Organize TV shows by categories - ordered by content volume for fuller screen
+  const showsByCategory = {
+    'Streaming Hits': shows.filter((item: Content) => 
+      ['The Bear', 'Stranger Things', 'Wednesday', 'The Boys', 'Ozark', 'House of Cards'].includes(item.title || '')
+    ),
+    'Comedy & Sitcoms': shows.filter((item: Content) => 
+      item.genre === 'comedy' || ['Friends', 'American Dad!', 'Family Guy', 'The Misery Index'].includes(item.title || '')
+    ),
+    'Crime & Drama': shows.filter((item: Content) => 
+      item.genre === 'drama' || item.genre === 'crime' || ['Animal Kingdom', 'Law & Order', 'The Closer'].includes(item.title || '')
+    ),
+    'Action & Thriller': shows.filter((item: Content) => 
+      item.genre === 'action' || item.genre === 'thriller' || ['The Boys', 'Animal Kingdom'].includes(item.title || '')
+    ),
+    'Award Winners': shows.filter((item: Content) => 
+      ['The Bear', 'Ozark', 'House of Cards'].includes(item.title || '')
+    ),
+    'Trending Now': shows.filter((item: Content) => 
+      item.category === 'Popular in the US Today' || ['Wednesday', 'Stranger Things', 'The Bear'].includes(item.title || '')
+    ),
+    'Binge-Worthy': shows.filter((item: Content) => 
+      item.category === 'Your Next Watch' || ['Ozark', 'House of Cards', 'The Boys'].includes(item.title || '')
+    ),
+  };
+
   // Organize movies by categories - ordered by content volume for fuller screen
   const moviesByCategory = {
     'Comedy Collection': movies.filter((item: Content) => 
@@ -425,14 +450,32 @@ export default function Home() {
               </>
             )}
 
-            {/* Shows Genre */}
+            {/* Shows Genre - Organized by Categories */}
             {selectedGenre === 'shows' && shows.length > 0 && (
-              <ContentRow
-                title="TV Shows"
-                content={shows}
-                favorites={favoriteIds}
-                size="small"
-              />
+              <>
+                {Object.entries(showsByCategory).map(([categoryName, categoryShows]) => {
+                  if (categoryShows.length === 0) return null;
+                  return (
+                    <ContentRow
+                      key={categoryName}
+                      title={categoryName}
+                      content={categoryShows}
+                      favorites={favoriteIds}
+                      size="small"
+                    />
+                  );
+                })}
+                
+                {/* Show all shows if no categories have content */}
+                {Object.values(showsByCategory).every(cat => cat.length === 0) && (
+                  <ContentRow
+                    title="All TV Shows"
+                    content={shows}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+              </>
             )}
 
             {/* Live TV Genre */}
