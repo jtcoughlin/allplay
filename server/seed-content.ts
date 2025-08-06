@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-06T03:48:22.267Z
+// Auto-generated seed file - Last updated: 2025-08-06T04:04:20.924Z
 // Total items: 36
 const realContent = [
   {
@@ -545,26 +545,6 @@ const realContent = [
     "updatedAt": "2025-08-06T03:40:21.931Z"
   },
   {
-    "id": "espn-5",
-    "title": "The Last Dance",
-    "description": "The definitive documentary series chronicling Michael Jordan and the Chicago Bulls dynasty. An intimate look at the greatest basketball player of all time.",
-    "type": "show",
-    "genre": "sports",
-    "service": "espn-plus",
-    "serviceContentId": "the-last-dance",
-    "directUrl": "https://www.espn.com/watch/player/_/id/the-last-dance",
-    "imageUrl": "/attached_assets/image_1754368126300.png",
-    "rating": "TV-14",
-    "year": 2020,
-    "artist": null,
-    "album": null,
-    "duration": 60,
-    "isLive": false,
-    "availability": null,
-    "createdAt": "2025-08-06T03:40:22.035Z",
-    "updatedAt": "2025-08-06T03:40:22.035Z"
-  },
-  {
     "id": "f1870477-9c63-4af6-8df9-3b536d80f765",
     "title": "Monday Night Football",
     "description": "The premier primetime NFL game of the week featuring top matchups and expert commentary.",
@@ -723,6 +703,26 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.917Z",
     "updatedAt": "2025-08-06T03:40:22.917Z"
+  },
+  {
+    "id": "espn-5",
+    "title": "The Last Dance",
+    "description": "The definitive documentary series chronicling Michael Jordan and the Chicago Bulls dynasty. An intimate look at the greatest basketball player of all time.",
+    "type": "show",
+    "genre": "sports",
+    "service": "espn-plus",
+    "serviceContentId": "the-last-dance",
+    "directUrl": "https://www.espn.com/watch/player/_/id/the-last-dance",
+    "imageUrl": "/attached_assets/image_1754452981042.png",
+    "rating": "TV-14",
+    "year": 2020,
+    "artist": null,
+    "album": null,
+    "duration": 60,
+    "isLive": false,
+    "availability": null,
+    "createdAt": "2025-08-06T03:40:22.035Z",
+    "updatedAt": "2025-08-06T03:40:22.035Z"
   }
 ];
 
