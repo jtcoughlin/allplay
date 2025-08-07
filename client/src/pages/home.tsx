@@ -306,11 +306,19 @@ export default function Home() {
           item.title === 'Yellowstone'
         ) || typedContent.find((item: Content) => item.type === 'show');
       
+      case 'documentaries':
+        // For documentaries: prioritize The Last Dance
+        return typedContent.find((item: Content) => 
+          item.id === 'espn-5' // The Last Dance
+        ) || typedContent.find((item: Content) => 
+          item.genre === 'documentary'
+        ) || topPicks[0];
+      
       case 'all':
       default:
-        // For "all": prioritize House of the Dragon
+        // For "all": prioritize The Last Dance as fallback since House of the Dragon doesn't exist
         return typedContent.find((item: Content) => 
-          item.title === 'House of the Dragon'
+          item.id === 'espn-5' // The Last Dance
         ) || topPicks[0];
     }
   };
@@ -337,7 +345,6 @@ export default function Home() {
             description={headlinerContent.description || "Experience premium entertainment"}
             imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : 
                      headlinerContent.title === 'Top Gun: Maverick' ? 'https://image.tmdb.org/t/p/original/kBSSbN1sOiJtXjAGVZXxHJR9Kox.jpg' : 
-                     headlinerContent.title === 'House of the Dragon' ? 'https://image.tmdb.org/t/p/original/etj8E2o0Bud0HkONVQPjyCkIvpv.jpg' : 
                      headlinerContent.imageUrl || ""}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
