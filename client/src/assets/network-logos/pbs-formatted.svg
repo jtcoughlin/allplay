@@ -1,0 +1,14 @@
+<svg viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="450" fill="#1f5f99"/>
+  
+  <!-- PBS P-Head Design -->
+  <g transform="translate(150,200) scale(1.5)">
+    <rect x="-40" y="-40" width="80" height="60" rx="8" fill="white"/>
+    <rect x="-35" y="-35" width="70" height="50" rx="6" fill="#1f5f99"/>
+    <text x="0" y="5" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="bold">P</text>
+  </g>
+  
+  <!-- PBS Text -->
+  <text x="150" y="320" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="50" font-weight="bold">PBS</text>
+  <text x="150" y="360" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16">PUBLIC TELEVISION</text>
+</svg>
