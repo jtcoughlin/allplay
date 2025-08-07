@@ -8,6 +8,7 @@ import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema, in
 import { seedRealContent } from "./seed-content";
 import { BackupManager } from "./backup-manager";
 import { ImageAssignmentService } from "./imageAssignmentService";
+import { liveTVSync } from "./liveTVSync";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -562,6 +563,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching recommendations:", error);
       res.status(500).json({ message: "Failed to fetch recommendations" });
+    }
+  });
+
+  // Live TV data routes
+  app.post('/api/live-tv/sync', async (req, res) => {
+    try {
+      await liveTVSync.forceSync();
+      res.json({ message: 'Live TV data synchronized successfully' });
+    } catch (error) {
+      console.error('Error syncing live TV data:', error);
+      res.status(500).json({ message: 'Failed to sync live TV data' });
+    }
+  });
+
+  app.get('/api/live-tv/channels', async (req, res) => {
+    try {
+      const channels = liveTVSync.getSupportedChannels();
+      res.json({ channels });
+    } catch (error) {
+      console.error('Error fetching supported channels:', error);
+      res.status(500).json({ message: 'Failed to fetch channels' });
+    }
+  });
+
+  app.get('/api/live-tv/currently-airing', async (req, res) => {
+    try {
+      const programs = await liveTVSync.getCurrentlyAiringPrograms();
+      res.json(programs);
+    } catch (error) {
+      console.error('Error fetching currently airing programs:', error);
+      res.status(500).json({ message: 'Failed to fetch currently airing programs' });
+    }
+  });
+
+  app.get('/api/live-tv/channel/:channelId/guide', async (req, res) => {
+    try {
+      const { channelId } = req.params;
+      const hours = parseInt(req.query.hours as string) || 6;
+      const guide = await liveTVSync.getChannelProgramGuide(channelId, hours);
+      res.json(guide);
+    } catch (error) {
+      console.error('Error fetching channel guide:', error);
+      res.status(500).json({ message: 'Failed to fetch channel guide' });
+    }
+  });
+
+  app.post('/api/live-tv/sync-channels', async (req, res) => {
+    try {
+      const { channels } = req.body;
+      if (!Array.isArray(channels)) {
+        return res.status(400).json({ message: 'Channels must be an array' });
+      }
+      await liveTVSync.syncSpecificChannels(channels);
+      res.json({ 
+        message: `Successfully synced ${channels.length} channels`,
+        channels 
+      });
+    } catch (error) {
+      console.error('Error syncing specific channels:', error);
+      res.status(500).json({ message: 'Failed to sync channels' });
     }
   });
 

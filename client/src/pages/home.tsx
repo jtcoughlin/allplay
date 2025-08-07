@@ -6,7 +6,7 @@ import { ContentRow } from "@/components/ContentRow";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { HeadlinerBanner } from "@/components/HeadlinerBanner";
 import { GuideView } from "@/components/GuideView";
-import { LiveTVGuide } from "@/components/LiveTVGuide";
+import { EnhancedLiveTVGuide } from "@/components/EnhancedLiveTVGuide";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -357,7 +357,7 @@ export default function Home() {
         {/* Guide View or Live TV Guide */}
         {effectiveViewMode === 'guide' ? (
           selectedGenre === 'live-tv' ? (
-            <LiveTVGuide
+            <EnhancedLiveTVGuide
               content={liveContent}
               favorites={favoriteIds}
               onToggleFavorite={handleToggleFavorite}

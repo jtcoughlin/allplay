@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { liveTVSync } from "./liveTVSync";
 
 const app = express();
 app.use(express.json());
@@ -38,6 +39,10 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
+  
+  // Initialize Live TV data sync
+  console.log('🚀 Starting Live TV data sync service...');
+  await liveTVSync.startAutoSync(30); // Sync every 30 minutes
 
   // Serve static files from attached_assets directory with proper headers
   // Place this AFTER routes but BEFORE Vite to avoid conflicts
