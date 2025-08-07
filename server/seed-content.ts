@@ -1,8 +1,8 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-07T03:47:31.739Z
-// Total items: 118
+// Auto-generated seed file - Last updated: 2025-08-07T03:53:17.494Z
+// Total items: 119
 const realContent = [
   {
     "id": "espn-5",
@@ -87,6 +87,27 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
+  },
+  {
+    "id": "youtube-tv-nfl-redzone",
+    "title": "NFL RedZone",
+    "description": "Commercial-free NFL action with Scott Hanson covering live look-ins and highlights from every game.",
+    "type": "show",
+    "genre": "Sports",
+    "service": "youtube-tv",
+    "serviceContentId": "nfl-redzone-channel",
+    "directUrl": null,
+    "imageUrl": "/src/assets/sports-posters/nfl-redzone-official.svg",
+    "rating": null,
+    "year": null,
+    "artist": null,
+    "album": null,
+    "duration": null,
+    "isLive": false,
+    "category": "Sports",
+    "availability": null,
+    "createdAt": "2025-08-07T03:53:14.664Z",
+    "updatedAt": "2025-08-07T03:53:14.664Z"
   },
   {
     "id": "ytv-fs2-2",
@@ -2021,27 +2042,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-fs1-1",
-    "title": "NFL on Fox",
-    "description": "Live NFL games and comprehensive coverage with expert analysis and highlights.",
-    "type": "show",
-    "genre": "sports",
-    "service": "youtube-tv",
-    "serviceContentId": "fs1-nfl-live",
-    "directUrl": "https://tv.youtube.com/watch/fs1-nfl-live?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/sports-posters/nfl-fox.svg",
-    "rating": "TV-G",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 180,
-    "isLive": true,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
     "id": "ytv-fs1-2",
     "title": "Skip and Shannon: Undisputed",
     "description": "Sports debate show featuring Skip Bayless and Shannon Sharpe discussing the hottest topics in sports.",
@@ -2084,15 +2084,15 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-tnt-1",
-    "title": "NBA on TNT",
-    "description": "Live NBA games and highlights with expert analysis from Charles Barkley, Shaquille ONeal, and the Inside the NBA crew.",
+    "id": "ytv-fs1-1",
+    "title": "NFL on Fox",
+    "description": "Live NFL games and comprehensive coverage with expert analysis and highlights.",
     "type": "show",
     "genre": "sports",
     "service": "youtube-tv",
-    "serviceContentId": "nba-tnt",
-    "directUrl": "https://tv.youtube.com/watch/nba-tnt?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/sports-posters/nba-on-tnt.svg",
+    "serviceContentId": "fs1-nfl-live",
+    "directUrl": "https://tv.youtube.com/watch/fs1-nfl-live?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "/src/assets/sports-posters/fox-nfl-sunday.svg",
     "rating": "TV-G",
     "year": 2024,
     "artist": null,
@@ -2101,8 +2101,8 @@ const realContent = [
     "isLive": true,
     "category": null,
     "availability": null,
-    "createdAt": "2025-08-06T04:16:25.363Z",
-    "updatedAt": "2025-08-06T04:16:25.363Z"
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
     "id": "ytv-tnt-2",
@@ -2120,6 +2120,27 @@ const realContent = [
     "album": null,
     "duration": 60,
     "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:16:25.363Z",
+    "updatedAt": "2025-08-06T04:16:25.363Z"
+  },
+  {
+    "id": "ytv-tnt-1",
+    "title": "NBA on TNT",
+    "description": "Live NBA games and highlights with expert analysis from Charles Barkley, Shaquille ONeal, and the Inside the NBA crew.",
+    "type": "show",
+    "genre": "sports",
+    "service": "youtube-tv",
+    "serviceContentId": "nba-tnt",
+    "directUrl": "https://tv.youtube.com/watch/nba-tnt?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "/src/assets/sports-posters/inside-nba-tnt.svg",
+    "rating": "TV-G",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 180,
+    "isLive": true,
     "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
