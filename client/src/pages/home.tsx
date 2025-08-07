@@ -308,9 +308,9 @@ export default function Home() {
       
       case 'all':
       default:
-        // For "all": prioritize The Last Dance
+        // For "all": prioritize House of the Dragon
         return typedContent.find((item: Content) => 
-          item.id === 'espn-5' // The Last Dance
+          item.title === 'House of the Dragon'
         ) || topPicks[0];
     }
   };
@@ -337,6 +337,7 @@ export default function Home() {
             description={headlinerContent.description || "Experience premium entertainment"}
             imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : 
                      headlinerContent.title === 'Top Gun: Maverick' ? 'https://image.tmdb.org/t/p/original/kBSSbN1sOiJtXjAGVZXxHJR9Kox.jpg' : 
+                     headlinerContent.title === 'House of the Dragon' ? 'https://image.tmdb.org/t/p/original/etj8E2o0Bud0HkONVQPjyCkIvpv.jpg' : 
                      headlinerContent.imageUrl || ""}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}

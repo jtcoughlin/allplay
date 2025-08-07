@@ -55,7 +55,7 @@ export function HeadlinerBanner({
                              imageUrl.includes('image_1754434659807') ? 'right center' :
                              imageUrl.includes('image_1754436760814') ? 'right center' :
                              imageUrl.includes('image_1754437006943') ? 'right center' :
-                             imageUrl.includes('kY0h95L73t7a6ev6Rv0aHSCtN7y') ? 'center 40%' : 'center 30%'
+                             imageUrl.includes('kY0h95L73t7a6ev6Rv0aHSCtN7y') ? 'center 60%' : 'center 30%'
         }}
         onError={(e) => {
           console.error('HeadlinerBanner background image failed to load:', imageUrl);
