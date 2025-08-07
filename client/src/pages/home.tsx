@@ -295,9 +295,9 @@ export default function Home() {
         ) || liveContent[0];
       
       case 'movies':
-        // For movies: prioritize Happy Gilmore 2
+        // For movies: prioritize Top Gun: Maverick
         return typedContent.find((item: Content) => 
-          item.title === 'Happy Gilmore 2'
+          item.title === 'Top Gun: Maverick'
         ) || typedContent.find((item: Content) => item.type === 'movie');
       
       case 'shows':
@@ -335,7 +335,9 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : headlinerContent.imageUrl || ""}
+            imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : 
+                     headlinerContent.title === 'Top Gun: Maverick' ? 'https://image.tmdb.org/t/p/original/kBSSbN1sOiJtXjAGVZXxHJR9Kox.jpg' : 
+                     headlinerContent.imageUrl || ""}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
