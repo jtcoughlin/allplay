@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-07T03:42:57.328Z
+// Auto-generated seed file - Last updated: 2025-08-07T03:47:31.739Z
 // Total items: 118
 const realContent = [
   {
@@ -76,7 +76,7 @@ const realContent = [
     "service": "youtube-tv",
     "serviceContentId": "fs2-mlb-live",
     "directUrl": "https://tv.youtube.com/watch/fs2-mlb-live?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/network-logos/fox-official.svg",
+    "imageUrl": "/src/assets/sports-posters/mlb-fox.svg",
     "rating": "TV-G",
     "year": 2024,
     "artist": null,
@@ -572,6 +572,27 @@ const realContent = [
     "updatedAt": "2025-08-06T03:40:22.917Z"
   },
   {
+    "id": "ytv-tnt-6",
+    "title": "NBA Tip-Off",
+    "description": "Pre-game analysis and highlights before live NBA games on TNT.",
+    "type": "show",
+    "genre": "sports",
+    "service": "youtube-tv",
+    "serviceContentId": "tnt-nba-tipoff",
+    "directUrl": "https://tv.youtube.com/watch/tnt-nba-tipoff?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "/src/assets/sports-posters/nba-on-tnt.svg",
+    "rating": "TV-G",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 30,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:35:04.805Z",
+    "updatedAt": "2025-08-06T04:35:04.805Z"
+  },
+  {
     "id": "ytv-tnt-5",
     "title": "Law & Order",
     "description": "Classic crime procedural following police investigations and courtroom drama.",
@@ -733,27 +754,6 @@ const realContent = [
     "artist": null,
     "album": null,
     "duration": 60,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:35:04.805Z",
-    "updatedAt": "2025-08-06T04:35:04.805Z"
-  },
-  {
-    "id": "ytv-tnt-6",
-    "title": "NBA Tip-Off",
-    "description": "Pre-game analysis and highlights before live NBA games on TNT.",
-    "type": "show",
-    "genre": "sports",
-    "service": "youtube-tv",
-    "serviceContentId": "tnt-nba-tipoff",
-    "directUrl": "https://tv.youtube.com/watch/tnt-nba-tipoff?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/category-icons/sports-icon.svg",
-    "rating": "TV-G",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 30,
     "isLive": false,
     "category": null,
     "availability": null,
@@ -2021,15 +2021,15 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-tnt-1",
-    "title": "NBA on TNT",
-    "description": "Live NBA games and highlights with expert analysis from Charles Barkley, Shaquille ONeal, and the Inside the NBA crew.",
+    "id": "ytv-fs1-1",
+    "title": "NFL on Fox",
+    "description": "Live NFL games and comprehensive coverage with expert analysis and highlights.",
     "type": "show",
     "genre": "sports",
     "service": "youtube-tv",
-    "serviceContentId": "nba-tnt",
-    "directUrl": "https://tv.youtube.com/watch/nba-tnt?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/category-icons/sports-icon.svg",
+    "serviceContentId": "fs1-nfl-live",
+    "directUrl": "https://tv.youtube.com/watch/fs1-nfl-live?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "/src/assets/sports-posters/nfl-fox.svg",
     "rating": "TV-G",
     "year": 2024,
     "artist": null,
@@ -2038,8 +2038,8 @@ const realContent = [
     "isLive": true,
     "category": null,
     "availability": null,
-    "createdAt": "2025-08-06T04:16:25.363Z",
-    "updatedAt": "2025-08-06T04:16:25.363Z"
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
     "id": "ytv-fs1-2",
@@ -2084,6 +2084,27 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
+    "id": "ytv-tnt-1",
+    "title": "NBA on TNT",
+    "description": "Live NBA games and highlights with expert analysis from Charles Barkley, Shaquille ONeal, and the Inside the NBA crew.",
+    "type": "show",
+    "genre": "sports",
+    "service": "youtube-tv",
+    "serviceContentId": "nba-tnt",
+    "directUrl": "https://tv.youtube.com/watch/nba-tnt?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "/src/assets/sports-posters/nba-on-tnt.svg",
+    "rating": "TV-G",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 180,
+    "isLive": true,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:16:25.363Z",
+    "updatedAt": "2025-08-06T04:16:25.363Z"
+  },
+  {
     "id": "ytv-tnt-2",
     "title": "The Closer",
     "description": "Crime drama following Deputy Chief Brenda Leigh Johnson as she solves Los Angeles most challenging cases.",
@@ -2103,27 +2124,6 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
     "updatedAt": "2025-08-06T04:16:25.363Z"
-  },
-  {
-    "id": "ytv-fs1-1",
-    "title": "NFL on Fox",
-    "description": "Live NFL games and comprehensive coverage with expert analysis and highlights.",
-    "type": "show",
-    "genre": "sports",
-    "service": "youtube-tv",
-    "serviceContentId": "fs1-nfl-live",
-    "directUrl": "https://tv.youtube.com/watch/fs1-nfl-live?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/network-logos/fox-official.svg",
-    "rating": "TV-G",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 180,
-    "isLive": true,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
     "id": "nf-show-3",

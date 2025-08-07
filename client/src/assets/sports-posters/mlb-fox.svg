@@ -1,0 +1,31 @@
+<svg viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="baseballGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#003f7f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d5aa7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="300" height="450" fill="url(#baseballGradient)"/>
+  
+  <!-- Baseball Diamond -->
+  <polygon points="150,120 220,180 150,240 80,180" fill="#8b4513" stroke="white" stroke-width="3"/>
+  <polygon points="150,140 200,180 150,220 100,180" fill="#228b22" stroke="white" stroke-width="2"/>
+  
+  <!-- Baseball -->
+  <circle cx="150" cy="180" r="35" fill="white" stroke="#000" stroke-width="2"/>
+  <path d="M120,165 Q135,175 120,195 Q135,185 150,195 Q165,185 180,195 Q165,175 180,165" stroke="red" stroke-width="2" fill="none"/>
+  <path d="M120,195 Q135,185 120,165 Q135,175 150,165 Q165,175 180,165 Q165,185 180,195" stroke="red" stroke-width="2" fill="none"/>
+  
+  <!-- MLB Logo -->
+  <text x="150" y="320" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="40" font-weight="bold">MLB</text>
+  <text x="150" y="350" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20">ON</text>
+  
+  <!-- FOX Logo -->
+  <rect x="100" y="365" width="100" height="40" fill="white" rx="5"/>
+  <text x="150" y="390" text-anchor="middle" fill="#003f7f" font-family="Arial, sans-serif" font-size="28" font-weight="bold">FOX</text>
+  
+  <!-- Live Games Banner -->
+  <rect x="20" y="410" width="260" height="30" fill="rgba(0,0,0,0.8)"/>
+  <text x="150" y="430" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">LIVE GAMES & HIGHLIGHTS</text>
+</svg>
