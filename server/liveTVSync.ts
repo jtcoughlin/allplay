@@ -103,7 +103,7 @@ export class LiveTVSyncService {
           artist: null,
           album: null,
           duration: program.duration,
-          isLive: program.isLive,
+          isLive: true, // All programs from live TV sync are live
           category: this.categorizeByGenre(program.genre),
           availability: null
         } as Content;
@@ -179,8 +179,79 @@ export class LiveTVSyncService {
   }
 
   async getCurrentlyAiringPrograms(): Promise<LiveProgram[]> {
-    const allPrograms = await this.tvMazeService.getAllCurrentLivePrograms();
-    return allPrograms.filter(program => program.isLive);
+    try {
+      // Get live TV content from database
+      const liveContent = await storage.getAllContent();
+      const liveTVContent = liveContent.filter(content => 
+        content.service === 'youtube-tv' && content.isLive === true
+      );
+
+      // Convert Content objects to LiveProgram objects
+      const livePrograms: LiveProgram[] = liveTVContent.map(content => {
+        // Parse program times from description or use current time
+        const now = new Date();
+        const startTime = now.toISOString();
+        const endTime = new Date(now.getTime() + (content.duration || 60) * 60 * 1000).toISOString();
+        
+        // Extract channel from serviceContentId
+        const channel = content.serviceContentId?.split('-')[0] || 'unknown';
+        
+        return {
+          id: content.id,
+          title: content.title,
+          showTitle: content.title.split(':')[0] || content.title,
+          episodeTitle: content.title.includes(':') ? content.title.split(':').slice(1).join(':').trim() : undefined,
+          description: content.description || undefined,
+          startTime,
+          endTime,
+          duration: content.duration || 60,
+          channel,
+          network: this.channelToNetwork(channel),
+          genre: [content.genre],
+          rating: content.rating ? parseFloat(content.rating) : undefined,
+          imageUrl: content.imageUrl || undefined,
+          isLive: true,
+          originalData: content // Add the missing property
+        };
+      });
+
+      return livePrograms;
+    } catch (error) {
+      console.error('Error getting currently airing programs from database:', error);
+      
+      // Fallback to TVMaze API
+      const allPrograms = await this.tvMazeService.getAllCurrentLivePrograms();
+      return allPrograms.filter(program => program.isLive);
+    }
+  }
+
+  private channelToNetwork(channel: string): string {
+    const channelToNetworkMap: Record<string, string> = {
+      'cnn': 'CNN',
+      'fox': 'FOX',
+      'nbc': 'NBC',
+      'abc': 'ABC',
+      'cbs': 'CBS',
+      'pbs': 'PBS',
+      'espn': 'ESPN',
+      'fs1': 'FS1',
+      'tbs': 'TBS',
+      'tnt': 'TNT',
+      'amc': 'AMC',
+      'fx': 'FX',
+      'disney': 'Disney Channel',
+      'nick': 'Nickelodeon',
+      'cartoon': 'Cartoon Network',
+      'comedy': 'Comedy Central',
+      'mtv': 'MTV',
+      'cmt': 'CMT',
+      'hallmark': 'Hallmark Channel',
+      'natgeo': 'National Geographic',
+      'discovery': 'Discovery Channel',
+      'bbc': 'BBC America'
+    };
+    
+    return channelToNetworkMap[channel] || channel.toUpperCase();
   }
 
   getSupportedChannels(): string[] {
