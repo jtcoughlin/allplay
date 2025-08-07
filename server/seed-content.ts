@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-07T02:53:04.911Z
+// Auto-generated seed file - Last updated: 2025-08-07T03:00:48.998Z
 // Total items: 118
 const realContent = [
   {
@@ -24,6 +24,27 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.035Z",
     "updatedAt": "2025-08-07T02:52:52.976Z"
+  },
+  {
+    "id": "ytv-disney-1",
+    "title": "The Owl House",
+    "description": "Animated series following Luz, a teenage girl who stumbles into a magical world.",
+    "type": "show",
+    "genre": "animation",
+    "service": "youtube-tv",
+    "serviceContentId": "disney-owl-house",
+    "directUrl": "https://tv.youtube.com/watch/disney-owl-house?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/fyPAvJIbRSZXZ2idOWT7wPJmBPY.jpg",
+    "rating": "TV-Y7",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 30,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-07T03:00:09.739Z"
   },
   {
     "id": "14206808-f594-4251-ba68-f2a3e27cf545",
@@ -509,27 +530,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-tbs-3",
-    "title": "Friends",
-    "description": "Classic sitcom about six friends navigating life and love in New York City.",
-    "type": "show",
-    "genre": "comedy",
-    "service": "youtube-tv",
-    "serviceContentId": "tbs-friends",
-    "directUrl": "https://tv.youtube.com/watch/tbs-friends?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-14",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 30,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:35:04.805Z",
-    "updatedAt": "2025-08-06T04:35:04.805Z"
-  },
-  {
     "id": "ytv-tbs-4",
     "title": "American Dad!",
     "description": "Animated sitcom about a conservative CIA agent and his unconventional family.",
@@ -635,27 +635,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:35:04.805Z"
   },
   {
-    "id": "ytv-tnt-5",
-    "title": "Law & Order",
-    "description": "Classic crime procedural following police investigations and courtroom drama.",
-    "type": "show",
-    "genre": "drama",
-    "service": "youtube-tv",
-    "serviceContentId": "tnt-law-order",
-    "directUrl": "https://tv.youtube.com/watch/tnt-law-order?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-14",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 60,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:35:04.805Z",
-    "updatedAt": "2025-08-06T04:35:04.805Z"
-  },
-  {
     "id": "ytv-tnt-6",
     "title": "NBA Tip-Off",
     "description": "Pre-game analysis and highlights before live NBA games on TNT.",
@@ -675,6 +654,48 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T04:35:04.805Z",
     "updatedAt": "2025-08-06T04:35:04.805Z"
+  },
+  {
+    "id": "ytv-tnt-5",
+    "title": "Law & Order",
+    "description": "Classic crime procedural following police investigations and courtroom drama.",
+    "type": "show",
+    "genre": "drama",
+    "service": "youtube-tv",
+    "serviceContentId": "tnt-law-order",
+    "directUrl": "https://tv.youtube.com/watch/tnt-law-order?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/n2NxrkG3KpZ6FwALqi5uiZF8zXC.jpg",
+    "rating": "TV-14",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 60,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:35:04.805Z",
+    "updatedAt": "2025-08-07T03:00:06.711Z"
+  },
+  {
+    "id": "ytv-tbs-3",
+    "title": "Friends",
+    "description": "Classic sitcom about six friends navigating life and love in New York City.",
+    "type": "show",
+    "genre": "comedy",
+    "service": "youtube-tv",
+    "serviceContentId": "tbs-friends",
+    "directUrl": "https://tv.youtube.com/watch/tbs-friends?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/5rX8bngVFjDK0414JnDYZIVIP1A.jpg",
+    "rating": "TV-14",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 30,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:35:04.805Z",
+    "updatedAt": "2025-08-07T03:00:07.522Z"
   },
   {
     "id": "nf-movie-1",
@@ -1210,7 +1231,7 @@ const realContent = [
     "service": "youtube-tv",
     "serviceContentId": "conan-tbs",
     "directUrl": "https://tv.youtube.com/watch/conan-tbs?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/x0Rt2LBQ1nuRq51lKyvETERU5zs.jpg",
     "rating": "TV-14",
     "year": 2024,
     "artist": null,
@@ -1220,7 +1241,7 @@ const realContent = [
     "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:16:25.363Z",
-    "updatedAt": "2025-08-06T04:16:25.363Z"
+    "updatedAt": "2025-08-07T03:00:23.234Z"
   },
   {
     "id": "hulu-bill-burr-drop-dead",
@@ -1475,27 +1496,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:16:25.363Z"
   },
   {
-    "id": "ytv-pbs-2",
-    "title": "Nature",
-    "description": "Stunning wildlife documentaries showcasing the natural worlds most incredible animals and ecosystems.",
-    "type": "show",
-    "genre": "documentary",
-    "service": "youtube-tv",
-    "serviceContentId": "nature-pbs",
-    "directUrl": "https://tv.youtube.com/watch/nature-pbs?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-G",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 60,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:16:25.363Z",
-    "updatedAt": "2025-08-06T04:16:25.363Z"
-  },
-  {
     "id": "6b144140-11ec-4403-a8f7-620401698f7a",
     "title": "Fleabag",
     "description": "A dry-witted woman known only as Fleabag navigates life and love in London while trying to cope with tragedy.",
@@ -1620,6 +1620,27 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.744Z",
     "updatedAt": "2025-08-07T02:52:56.629Z"
+  },
+  {
+    "id": "ytv-pbs-2",
+    "title": "Nature",
+    "description": "Stunning wildlife documentaries showcasing the natural worlds most incredible animals and ecosystems.",
+    "type": "show",
+    "genre": "documentary",
+    "service": "youtube-tv",
+    "serviceContentId": "nature-pbs",
+    "directUrl": "https://tv.youtube.com/watch/nature-pbs?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/zYjTfivQUy4NGdrzqJVzVHke5sW.jpg",
+    "rating": "TV-G",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 60,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:16:25.363Z",
+    "updatedAt": "2025-08-07T03:00:22.450Z"
   },
   {
     "id": "ytv-tbs-2",
@@ -1769,48 +1790,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-disney-1",
-    "title": "The Owl House",
-    "description": "Animated series following Luz, a teenage girl who stumbles into a magical world.",
-    "type": "show",
-    "genre": "animation",
-    "service": "youtube-tv",
-    "serviceContentId": "disney-owl-house",
-    "directUrl": "https://tv.youtube.com/watch/disney-owl-house?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-Y7",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 30,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
-    "id": "ytv-disney-2",
-    "title": "Bluey",
-    "description": "Australian animated series about a Blue Heeler puppy and her family living everyday adventures.",
-    "type": "show",
-    "genre": "animation",
-    "service": "youtube-tv",
-    "serviceContentId": "disney-bluey",
-    "directUrl": "https://tv.youtube.com/watch/disney-bluey?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-Y",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 30,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
     "id": "ytv-nick-1",
     "title": "SpongeBob SquarePants",
     "description": "The adventures of SpongeBob and his friends in the underwater city of Bikini Bottom.",
@@ -1895,27 +1874,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
-    "id": "ytv-amc-1",
-    "title": "The Walking Dead",
-    "description": "Post-apocalyptic horror series following survivors in a zombie-infested world.",
-    "type": "show",
-    "genre": "drama",
-    "service": "youtube-tv",
-    "serviceContentId": "amc-walking-dead",
-    "directUrl": "https://tv.youtube.com/watch/amc-walking-dead?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-MA",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 60,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
     "id": "ytv-amc-2",
     "title": "Better Call Saul",
     "description": "The transformation of small-time lawyer Jimmy McGill into criminal lawyer Saul Goodman.",
@@ -1947,27 +1905,6 @@ const realContent = [
     "directUrl": "https://tv.youtube.com/watch/bbc-planet-earth?vp=0gEEEgIwAQ%3D%3D",
     "imageUrl": "/attached_assets/image_1754436760814.png",
     "rating": "TV-G",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 60,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
-    "id": "ytv-bbc-2",
-    "title": "Doctor Who",
-    "description": "Time-traveling adventures of the Doctor, an alien Time Lord exploring the universe.",
-    "type": "show",
-    "genre": "sci-fi",
-    "service": "youtube-tv",
-    "serviceContentId": "bbc-doctor-who",
-    "directUrl": "https://tv.youtube.com/watch/bbc-doctor-who?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/attached_assets/image_1754436760814.png",
-    "rating": "TV-PG",
     "year": 2024,
     "artist": null,
     "album": null,
@@ -2124,6 +2061,69 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
     "updatedAt": "2025-08-06T04:27:34.524Z"
+  },
+  {
+    "id": "ytv-bbc-2",
+    "title": "Doctor Who",
+    "description": "Time-traveling adventures of the Doctor, an alien Time Lord exploring the universe.",
+    "type": "show",
+    "genre": "sci-fi",
+    "service": "youtube-tv",
+    "serviceContentId": "bbc-doctor-who",
+    "directUrl": "https://tv.youtube.com/watch/bbc-doctor-who?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/2JP6NSmBwxg75uTcIHiv5R8PpPi.jpg",
+    "rating": "TV-PG",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 60,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-07T03:00:15.846Z"
+  },
+  {
+    "id": "ytv-amc-1",
+    "title": "The Walking Dead",
+    "description": "Post-apocalyptic horror series following survivors in a zombie-infested world.",
+    "type": "show",
+    "genre": "drama",
+    "service": "youtube-tv",
+    "serviceContentId": "amc-walking-dead",
+    "directUrl": "https://tv.youtube.com/watch/amc-walking-dead?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/ywbacot78IuNhGW4uVZPxxxVTkm.jpg",
+    "rating": "TV-MA",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 60,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-07T03:00:16.993Z"
+  },
+  {
+    "id": "ytv-disney-2",
+    "title": "Bluey",
+    "description": "Australian animated series about a Blue Heeler puppy and her family living everyday adventures.",
+    "type": "show",
+    "genre": "animation",
+    "service": "youtube-tv",
+    "serviceContentId": "disney-bluey",
+    "directUrl": "https://tv.youtube.com/watch/disney-bluey?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/xqHt3vc3iKnnp2yuMP2Y4RAZF1Q.jpg",
+    "rating": "TV-Y",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 30,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-07T03:00:20.245Z"
   },
   {
     "id": "ytv-fx-2",
@@ -2499,8 +2499,8 @@ export async function seedRealContent() {
     
     console.log(`✅ Seeded ${realContent.length} real content items`);
         console.log('📺 netflix content:', realContent.filter(c => c.service === 'netflix').length);
-    console.log('🎬 amazon-prime content:', realContent.filter(c => c.service === 'amazon-prime').length);
     console.log('📺 youtube-tv content:', realContent.filter(c => c.service === 'youtube-tv').length);
+    console.log('🎬 amazon-prime content:', realContent.filter(c => c.service === 'amazon-prime').length);
     console.log('📰 cnn content:', realContent.filter(c => c.service === 'cnn').length);
     console.log('🏈 espn-plus content:', realContent.filter(c => c.service === 'espn-plus').length);
     console.log('🎭 hulu content:', realContent.filter(c => c.service === 'hulu').length);
