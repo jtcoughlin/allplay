@@ -5,9 +5,10 @@ Allplay is a revolutionary TV homescreen application that replaces traditional s
 ## Recent Changes
 - **August 7, 2025**: Implemented TMDB API integration for automatic authentic poster assignment
 - **Smart Deep Linking**: Automatic poster pulling from streaming services via TMDB database matching
+- **Comprehensive Poster Coverage**: 34/55 YouTube TV shows now have authentic TMDB artwork
 - **TV Show Organization**: Categorized shows into 7 curated categories ordered by content density
 - **Movie Categories**: Organized into prescriptive categories: "Critically Acclaimed", "90%+ on Rotten Tomatoes", "Action & Adventure", "Award Winners", "Comedy Collection"  
-- **Streaming Integration**: Added 21 authentic movies from Netflix, Hulu, Prime, HBO Max, Apple TV+, Paramount+, Disney+
+- **Streaming Integration**: Added 27 authentic movies from Netflix, Hulu, Prime, HBO Max, Apple TV+, Paramount+, Disney+
 - **Tab Reordering**: Moved "Live TV" to second position after "All" for prominent placement
 - **Enhanced Content**: Updated TBS and TNT with comprehensive programming (Friends, American Dad, Animal Kingdom, AEW Wrestling)
 - **Data Protection**: Comprehensive backup system prevents content loss with automated sync capabilities
