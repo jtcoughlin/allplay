@@ -1,5 +1,6 @@
 import { TMDBService } from './tmdbService';
 import { storage } from './storage';
+import { youtubeTVMappings, nonPosterShows } from './youtubeTVMappings';
 import type { Content } from '../shared/schema';
 
 export class ImageAssignmentService {
@@ -29,8 +30,21 @@ export class ImageAssignmentService {
       // Update each show with TMDB poster artwork
       for (const show of showsFromServices) {
         try {
+          // Skip shows that definitely don't have posters
+          if (nonPosterShows.has(show.title || '')) {
+            console.log(`⏭️ Skipping "${show.title}" (news/sports/music content)`);
+            continue;
+          }
+
+          // Use manual mapping for YouTube TV shows if available
+          let searchTitle = show.title || '';
+          if (show.service === 'youtube-tv' && youtubeTVMappings[searchTitle]) {
+            searchTitle = youtubeTVMappings[searchTitle];
+            console.log(`🎯 Using mapping: "${show.title}" → "${searchTitle}"`);
+          }
+
           const posterUrl = await this.tmdbService.searchTVShow(
-            show.title || '', 
+            searchTitle, 
             show.year || undefined
           ).then(result => result?.poster_path ? this.tmdbService.getPosterUrl(result.poster_path) : null);
 

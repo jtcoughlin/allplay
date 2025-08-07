@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-07T03:00:48.780Z",
+  "timestamp": "2025-08-07T03:05:35.987Z",
   "totalItems": 118,
   "contentByService": {
     "netflix": [
@@ -381,7 +381,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:27:34.524Z",
-        "updatedAt": "2025-08-07T03:00:09.739Z"
+        "updatedAt": "2025-08-07T03:04:27.776Z"
       },
       {
         "id": "ad76a114-1e95-458b-8a24-ded493ad6561",
@@ -675,7 +675,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:35:04.805Z",
-        "updatedAt": "2025-08-07T03:00:06.711Z"
+        "updatedAt": "2025-08-07T03:04:24.906Z"
       },
       {
         "id": "ytv-tbs-3",
@@ -696,7 +696,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:35:04.805Z",
-        "updatedAt": "2025-08-07T03:00:07.522Z"
+        "updatedAt": "2025-08-07T03:04:25.348Z"
       },
       {
         "id": "ytv-tbs-1",
@@ -717,7 +717,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:16:25.363Z",
-        "updatedAt": "2025-08-07T03:00:23.234Z"
+        "updatedAt": "2025-08-07T03:04:39.581Z"
       },
       {
         "id": "ytv-fox-1",
@@ -927,7 +927,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:16:25.363Z",
-        "updatedAt": "2025-08-07T03:00:22.450Z"
+        "updatedAt": "2025-08-07T03:04:42.640Z"
       },
       {
         "id": "ytv-tbs-2",
@@ -1368,7 +1368,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:27:34.524Z",
-        "updatedAt": "2025-08-07T03:00:15.846Z"
+        "updatedAt": "2025-08-07T03:04:32.523Z"
       },
       {
         "id": "ytv-amc-1",
@@ -1389,7 +1389,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:27:34.524Z",
-        "updatedAt": "2025-08-07T03:00:16.993Z"
+        "updatedAt": "2025-08-07T03:04:32.088Z"
       },
       {
         "id": "ytv-disney-2",
@@ -1410,7 +1410,7 @@
         "category": null,
         "availability": null,
         "createdAt": "2025-08-06T04:27:34.524Z",
-        "updatedAt": "2025-08-07T03:00:20.245Z"
+        "updatedAt": "2025-08-07T03:04:31.653Z"
       },
       {
         "id": "ytv-fx-2",
@@ -2542,7 +2542,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:27:34.524Z",
-      "updatedAt": "2025-08-07T03:00:09.739Z"
+      "updatedAt": "2025-08-07T03:04:27.776Z"
     },
     {
       "id": "14206808-f594-4251-ba68-f2a3e27cf545",
@@ -3172,7 +3172,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:35:04.805Z",
-      "updatedAt": "2025-08-07T03:00:06.711Z"
+      "updatedAt": "2025-08-07T03:04:24.906Z"
     },
     {
       "id": "ytv-tbs-3",
@@ -3193,7 +3193,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:35:04.805Z",
-      "updatedAt": "2025-08-07T03:00:07.522Z"
+      "updatedAt": "2025-08-07T03:04:25.348Z"
     },
     {
       "id": "nf-movie-1",
@@ -3739,7 +3739,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:16:25.363Z",
-      "updatedAt": "2025-08-07T03:00:23.234Z"
+      "updatedAt": "2025-08-07T03:04:39.581Z"
     },
     {
       "id": "hulu-bill-burr-drop-dead",
@@ -4138,7 +4138,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:16:25.363Z",
-      "updatedAt": "2025-08-07T03:00:22.450Z"
+      "updatedAt": "2025-08-07T03:04:42.640Z"
     },
     {
       "id": "ytv-tbs-2",
@@ -4579,7 +4579,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:27:34.524Z",
-      "updatedAt": "2025-08-07T03:00:15.846Z"
+      "updatedAt": "2025-08-07T03:04:32.523Z"
     },
     {
       "id": "ytv-amc-1",
@@ -4600,7 +4600,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:27:34.524Z",
-      "updatedAt": "2025-08-07T03:00:16.993Z"
+      "updatedAt": "2025-08-07T03:04:32.088Z"
     },
     {
       "id": "ytv-disney-2",
@@ -4621,7 +4621,7 @@
       "category": null,
       "availability": null,
       "createdAt": "2025-08-06T04:27:34.524Z",
-      "updatedAt": "2025-08-07T03:00:20.245Z"
+      "updatedAt": "2025-08-07T03:04:31.653Z"
     },
     {
       "id": "ytv-fx-2",

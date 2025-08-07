@@ -35,6 +35,49 @@ export class TMDBService {
    */
   async searchTVShow(title: string, year?: number): Promise<TMDBMovieResult | null> {
     try {
+      // Clean the title for better matching
+      let cleanTitle = title
+        .replace(/^The\s+/i, '') // Remove "The" prefix for better matching
+        .replace(/[:\-–—]/g, ' ') // Replace colons and dashes with spaces
+        .replace(/\s+/g, ' ') // Normalize whitespace
+        .trim();
+
+      // Try exact title first
+      let result = await this.searchTVShowByTitle(title, year);
+      
+      // If no result, try cleaned title
+      if (!result && cleanTitle !== title) {
+        result = await this.searchTVShowByTitle(cleanTitle, year);
+      }
+      
+      // For shows with common patterns, try specific variations
+      if (!result) {
+        if (title.includes('American Dad')) {
+          result = await this.searchTVShowByTitle('American Dad!', year);
+        } else if (title.includes('Big Bang Theory')) {
+          result = await this.searchTVShowByTitle('The Big Bang Theory', year);
+        } else if (title.includes('South Park')) {
+          result = await this.searchTVShowByTitle('South Park', year);
+        } else if (title.includes('Family Guy')) {
+          result = await this.searchTVShowByTitle('Family Guy', year);
+        } else if (title.includes('Better Call Saul')) {
+          result = await this.searchTVShowByTitle('Better Call Saul', year);
+        } else if (title.includes('American Horror Story')) {
+          result = await this.searchTVShowByTitle('American Horror Story', year);
+        } else if (title.includes('Atlanta')) {
+          result = await this.searchTVShowByTitle('Atlanta', year);
+        }
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Error searching TMDB TV:', error);
+      return null;
+    }
+  }
+
+  private async searchTVShowByTitle(title: string, year?: number): Promise<TMDBMovieResult | null> {
+    try {
       const searchTitle = encodeURIComponent(title);
       let url = `${this.baseUrl}/search/tv?api_key=${this.apiKey}&query=${searchTitle}`;
       
@@ -57,7 +100,7 @@ export class TMDBService {
 
       return null;
     } catch (error) {
-      console.error('Error searching TMDB TV:', error);
+      console.error('Error in searchTVShowByTitle:', error);
       return null;
     }
   }
