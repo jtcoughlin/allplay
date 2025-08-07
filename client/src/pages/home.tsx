@@ -300,6 +300,12 @@ export default function Home() {
           item.title === 'Happy Gilmore 2'
         ) || typedContent.find((item: Content) => item.type === 'movie');
       
+      case 'shows':
+        // For shows: prioritize Yellowstone
+        return typedContent.find((item: Content) => 
+          item.title === 'Yellowstone'
+        ) || typedContent.find((item: Content) => item.type === 'show');
+      
       case 'all':
       default:
         // For "all": prioritize The Last Dance
