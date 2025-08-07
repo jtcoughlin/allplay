@@ -31,6 +31,38 @@ export class TMDBService {
   }
 
   /**
+   * Search for a TV show by title and optionally year
+   */
+  async searchTVShow(title: string, year?: number): Promise<TMDBMovieResult | null> {
+    try {
+      const searchTitle = encodeURIComponent(title);
+      let url = `${this.baseUrl}/search/tv?api_key=${this.apiKey}&query=${searchTitle}`;
+      
+      if (year) {
+        url += `&first_air_date_year=${year}`;
+      }
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error(`TMDB API error: ${response.status} ${response.statusText}`);
+        return null;
+      }
+
+      const data = await response.json() as TMDBSearchResponse;
+      
+      if (data.results && data.results.length > 0) {
+        // Return the first (most relevant) result
+        return data.results[0];
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error searching TMDB TV:', error);
+      return null;
+    }
+  }
+
+  /**
    * Search for a movie by title and optionally year
    */
   async searchMovie(title: string, year?: number): Promise<TMDBMovieResult | null> {

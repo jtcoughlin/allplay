@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-07T02:46:59.503Z
+// Auto-generated seed file - Last updated: 2025-08-07T02:50:24.014Z
 // Total items: 118
 const realContent = [
   {
@@ -89,25 +89,25 @@ const realContent = [
     "updatedAt": "2025-08-06T03:40:20.054Z"
   },
   {
-    "id": "f3dbf649-8fc5-4c41-ab7b-d664fa1ba7f0",
-    "title": "Red Notice",
-    "description": "An FBI profiler pursuing the world's most wanted art thief becomes his reluctant partner in crime to catch an elusive crook who's always one step ahead.",
+    "id": "14206808-f594-4251-ba68-f2a3e27cf545",
+    "title": "The Tomorrow War",
+    "description": "A family man is drafted to fight in a future war where the fate of humanity relies on his ability to confront the past.",
     "type": "movie",
-    "genre": "action",
-    "service": "netflix",
-    "serviceContentId": "81161626",
-    "directUrl": "https://www.netflix.com/title/81161626",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BYWZjMjMzZTYtOWFhOS00MDFmLTg2Y2QtMWY0NjAyZTU0YzUzXkEyXkFqcGdeQXVyODM2ODEzMDA@._V1_FMjpg_UX1000_.jpg",
+    "genre": "sci-fi",
+    "service": "amazon-prime",
+    "serviceContentId": "B096L2ZDX9",
+    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b096l2zdx9",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4CFO5hkGRFDCVU.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
     "album": null,
-    "duration": 118,
+    "duration": 140,
     "isLive": false,
     "category": "Action & Adventure",
     "availability": null,
-    "createdAt": "2025-08-06T03:40:19.847Z",
-    "updatedAt": "2025-08-06T03:40:19.847Z"
+    "createdAt": "2025-08-06T03:40:20.676Z",
+    "updatedAt": "2025-08-07T02:49:30.310Z"
   },
   {
     "id": "9d5907f1-329b-4f48-96eb-4314b6fa7def",
@@ -118,7 +118,7 @@ const realContent = [
     "service": "netflix",
     "serviceContentId": "81458416",
     "directUrl": "https://www.netflix.com/watch/81458416",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",
     "rating": "PG-13",
     "year": 2022,
     "artist": null,
@@ -128,28 +128,28 @@ const realContent = [
     "category": "90%+ on Rotten Tomatoes",
     "availability": null,
     "createdAt": "2025-08-06T03:40:19.951Z",
-    "updatedAt": "2025-08-06T03:40:19.951Z"
+    "updatedAt": "2025-08-07T02:49:30.745Z"
   },
   {
-    "id": "14206808-f594-4251-ba68-f2a3e27cf545",
-    "title": "The Tomorrow War",
-    "description": "A family man is drafted to fight in a future war where the fate of humanity relies on his ability to confront the past.",
+    "id": "f3dbf649-8fc5-4c41-ab7b-d664fa1ba7f0",
+    "title": "Red Notice",
+    "description": "An FBI profiler pursuing the world's most wanted art thief becomes his reluctant partner in crime to catch an elusive crook who's always one step ahead.",
     "type": "movie",
-    "genre": "sci-fi",
-    "service": "amazon-prime",
-    "serviceContentId": "B096L2ZDX9",
-    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b096l2zdx9",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjFjMzY5YTctMmY2MC00NzJhLWJkZGMtY2UzNjNkOTAzYjE4XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg",
+    "genre": "action",
+    "service": "netflix",
+    "serviceContentId": "81161626",
+    "directUrl": "https://www.netflix.com/title/81161626",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/lAXONuqg41NwUMuzMiFvicDET9Y.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
     "album": null,
-    "duration": 140,
+    "duration": 118,
     "isLive": false,
     "category": "Action & Adventure",
     "availability": null,
-    "createdAt": "2025-08-06T03:40:20.676Z",
-    "updatedAt": "2025-08-06T03:40:20.676Z"
+    "createdAt": "2025-08-06T03:40:19.847Z",
+    "updatedAt": "2025-08-07T02:49:31.181Z"
   },
   {
     "id": "ad76a114-1e95-458b-8a24-ded493ad6561",
@@ -299,6 +299,27 @@ const realContent = [
     "updatedAt": "2025-08-06T03:40:21.828Z"
   },
   {
+    "id": "dcc9ec54-f288-4979-b25b-d1b637251d93",
+    "title": "Sound of Metal",
+    "description": "A heavy-metal drummer's life is thrown into freefall when he begins to lose his hearing.",
+    "type": "movie",
+    "genre": "drama",
+    "service": "amazon-prime",
+    "serviceContentId": "B08P7Q7FZR",
+    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b08p7q7fzr",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/3178oOJKKPDeQ2legWQvMPpllv.jpg",
+    "rating": "R",
+    "year": 2019,
+    "artist": null,
+    "album": null,
+    "duration": 120,
+    "isLive": false,
+    "category": "Critically Acclaimed",
+    "availability": null,
+    "createdAt": "2025-08-06T03:40:20.779Z",
+    "updatedAt": "2025-08-07T02:49:29.875Z"
+  },
+  {
     "id": "932330a6-2d97-407a-949f-6009e5330911",
     "title": "The Tonight Show Starring Jimmy Fallon",
     "description": "Late-night comedy with celebrity interviews, musical performances, and hilarious sketches.",
@@ -423,27 +444,6 @@ const realContent = [
     "availability": null,
     "createdAt": "2025-08-06T03:40:22.814Z",
     "updatedAt": "2025-08-06T03:40:22.814Z"
-  },
-  {
-    "id": "dcc9ec54-f288-4979-b25b-d1b637251d93",
-    "title": "Sound of Metal",
-    "description": "A heavy-metal drummer's life is thrown into freefall when he begins to lose his hearing.",
-    "type": "movie",
-    "genre": "drama",
-    "service": "amazon-prime",
-    "serviceContentId": "B08P7Q7FZR",
-    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b08p7q7fzr",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNjcyYjg0M2ItMzMyZS00NmM1LTlhZDMtN2MxN2RhNWY4YTkwXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_FMjpg_UX1000_.jpg",
-    "rating": "R",
-    "year": 2019,
-    "artist": null,
-    "album": null,
-    "duration": 120,
-    "isLive": false,
-    "category": "Critically Acclaimed",
-    "availability": null,
-    "createdAt": "2025-08-06T03:40:20.779Z",
-    "updatedAt": "2025-08-06T03:40:20.779Z"
   },
   {
     "id": "8c72fb09-075a-4d8e-9baf-28b3074af5a6",
@@ -656,48 +656,6 @@ const realContent = [
     "updatedAt": "2025-08-06T04:35:04.805Z"
   },
   {
-    "id": "b3c041d6-d900-4d68-8027-336af86a7e77",
-    "title": "Borat Subsequent Moviefilm",
-    "description": "Borat returns to America to deliver a prodigious bribe to American regime for benefit of once-glorious nation of Kazakhstan.",
-    "type": "movie",
-    "genre": "comedy",
-    "service": "amazon-prime",
-    "serviceContentId": "B08MD4QZ9K",
-    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b08md4qz9k",
-    "imageUrl": "https://image.tmdb.org/t/p/w500/eduqODhEITMm4KTlFdYdXa5IOtR.jpg",
-    "rating": "R",
-    "year": 2020,
-    "artist": null,
-    "album": null,
-    "duration": 95,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T03:40:20.883Z",
-    "updatedAt": "2025-08-06T03:40:20.883Z"
-  },
-  {
-    "id": "0506d34d-a55d-4344-9daa-2589bbc26812",
-    "title": "Happy Gilmore 2",
-    "description": "Happy Gilmore returns to the golf course for another hilarious round of unconventional golfing and hockey-style antics.",
-    "type": "movie",
-    "genre": "comedy",
-    "service": "netflix",
-    "serviceContentId": "happy-gilmore-2",
-    "directUrl": "https://www.netflix.com/title/happy-gilmore-2",
-    "imageUrl": "/attached_assets/image_1754437006943.png",
-    "rating": "PG-13",
-    "year": 2025,
-    "artist": null,
-    "album": null,
-    "duration": 120,
-    "isLive": false,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T03:40:21.622Z",
-    "updatedAt": "2025-08-06T03:40:21.622Z"
-  },
-  {
     "id": "nf-movie-1",
     "title": "Glass Onion: A Knives Out Mystery",
     "description": "Detective Benoit Blanc travels to Greece to solve a murder mystery involving a tech billionaire and his eccentric friends.",
@@ -706,7 +664,7 @@ const realContent = [
     "service": "netflix",
     "serviceContentId": "glass-onion",
     "directUrl": "https://www.netflix.com/title/81458416",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",
     "rating": "PG-13",
     "year": 2022,
     "artist": null,
@@ -716,7 +674,7 @@ const realContent = [
     "category": "90%+ on Rotten Tomatoes",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:22.805Z"
   },
   {
     "id": "nf-movie-2",
@@ -727,7 +685,7 @@ const realContent = [
     "service": "netflix",
     "serviceContentId": "red-notice",
     "directUrl": "https://www.netflix.com/title/81161626",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BYWZjMjMzZTYtOWFhOS00MDFmLTg2Y2QtMWY0NjAyZTU0YzUzXkEyXkFqcGdeQXVyODM2ODEzMDA@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/lAXONuqg41NwUMuzMiFvicDET9Y.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
@@ -737,7 +695,7 @@ const realContent = [
     "category": "Action & Adventure",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:23.250Z"
   },
   {
     "id": "nf-movie-3",
@@ -748,7 +706,7 @@ const realContent = [
     "service": "netflix",
     "serviceContentId": "the-adam-project",
     "directUrl": "https://www.netflix.com/title/81309354",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BOGQ2YTM4YmUtM2RiNS00OGI4LWFkOWQtODBjZjNmOGM3ZTJmXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/wFjboE0aFZNbVOF05fzrka9Fqyx.jpg",
     "rating": "PG-13",
     "year": 2022,
     "artist": null,
@@ -758,7 +716,49 @@ const realContent = [
     "category": "Comedies",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:23.692Z"
+  },
+  {
+    "id": "0506d34d-a55d-4344-9daa-2589bbc26812",
+    "title": "Happy Gilmore 2",
+    "description": "Happy Gilmore returns to the golf course for another hilarious round of unconventional golfing and hockey-style antics.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "netflix",
+    "serviceContentId": "happy-gilmore-2",
+    "directUrl": "https://www.netflix.com/title/happy-gilmore-2",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/ynT06XivgBDkg7AtbDbX1dJeBGY.jpg",
+    "rating": "PG-13",
+    "year": 2025,
+    "artist": null,
+    "album": null,
+    "duration": 120,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T03:40:21.622Z",
+    "updatedAt": "2025-08-07T02:49:29.001Z"
+  },
+  {
+    "id": "b3c041d6-d900-4d68-8027-336af86a7e77",
+    "title": "Borat Subsequent Moviefilm",
+    "description": "Borat returns to America to deliver a prodigious bribe to American regime for benefit of once-glorious nation of Kazakhstan.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "amazon-prime",
+    "serviceContentId": "B08MD4QZ9K",
+    "directUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.b08md4qz9k",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/3L1Ml5RWjFVfVq3rQENvgFymT0U.jpg",
+    "rating": "R",
+    "year": 2020,
+    "artist": null,
+    "album": null,
+    "duration": 95,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T03:40:20.883Z",
+    "updatedAt": "2025-08-07T02:49:29.440Z"
   },
   {
     "id": "hulu-movie-1",
@@ -895,7 +895,7 @@ const realContent = [
     "service": "amazon-prime",
     "serviceContentId": "coming-2-america",
     "directUrl": "https://www.amazon.com/dp/B08WJG6RKZ",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BZmE5NzEzNjYtNGZiZC00MjJjLWE4MzctOWY0YjJiODYwNzBiXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/nWBPLkqNApY5pgrJFMiI9joSI30.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
@@ -905,7 +905,7 @@ const realContent = [
     "category": "Comedies",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:24.139Z"
   },
   {
     "id": "prime-movie-2",
@@ -916,7 +916,7 @@ const realContent = [
     "service": "amazon-prime",
     "serviceContentId": "tomorrow-war",
     "directUrl": "https://www.amazon.com/dp/B096TJK8F2",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjFjMzY5YTctMmY2MC00NzJhLWJkZGMtY2UzNjNkOTAzYjE4XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4CFO5hkGRFDCVU.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
@@ -926,7 +926,7 @@ const realContent = [
     "category": "Action & Adventure",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:24.581Z"
   },
   {
     "id": "prime-movie-3",
@@ -937,7 +937,7 @@ const realContent = [
     "service": "amazon-prime",
     "serviceContentId": "sound-of-metal",
     "directUrl": "https://www.amazon.com/dp/B08P4Z8Q9K",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNjcyYjg0M2ItMzMyZS00NmM1LTlhZDMtN2MxN2RhNWY4YTkwXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/3178oOJKKPDeQ2legWQvMPpllv.jpg",
     "rating": "R",
     "year": 2019,
     "artist": null,
@@ -947,7 +947,7 @@ const realContent = [
     "category": "Critically Acclaimed",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:25.024Z"
   },
   {
     "id": "apple-movie-1",
@@ -958,7 +958,7 @@ const realContent = [
     "service": "apple-tv",
     "serviceContentId": "coda",
     "directUrl": "https://tv.apple.com/movie/coda/umc.cmc.3eh9r5iz32ggdm4ccvw5igiir",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BYWQxMWVkYjEtN2M5ZC00OGZmLTllNzYtMzM1ZmZjYzQ3ZGNkXkEyXkFqcGdeQXVyMTI2MzY1MjM1._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/BzVjmm8l23rPsijLiNLUzuQtyd.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
@@ -968,7 +968,7 @@ const realContent = [
     "category": "Critically Acclaimed",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:25.467Z"
   },
   {
     "id": "apple-movie-2",
@@ -979,7 +979,7 @@ const realContent = [
     "service": "apple-tv",
     "serviceContentId": "finch",
     "directUrl": "https://tv.apple.com/movie/finch/umc.cmc.4eq7d2p6wj2a6f5z4pf2qxd4x",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjI0ODk0MjU3N15BMl5BanBnXkFtZTgwNzM0MzE1MzE@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/jKuDyqx7jrjiR9cDzB5pxzhJAdv.jpg",
     "rating": "PG-13",
     "year": 2021,
     "artist": null,
@@ -989,7 +989,7 @@ const realContent = [
     "category": "Your Next Watch",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:25.909Z"
   },
   {
     "id": "apple-movie-3",
@@ -1000,7 +1000,7 @@ const realContent = [
     "service": "apple-tv",
     "serviceContentId": "macbeth",
     "directUrl": "https://tv.apple.com/movie/the-tragedy-of-macbeth/umc.cmc.4h7k3x2e8fry8m5s9fg9g5h3w",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTQzYWQ3NTgtMzRhYy00NDcyLWFjOTktNGE1YTYzNzkwNzBhXkEyXkFqcGdeQXVyMjM4NTM5NDY@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/tDNJEhcLbX3jIk3BMCur9pCdaVD.jpg",
     "rating": "R",
     "year": 2021,
     "artist": null,
@@ -1010,70 +1010,7 @@ const realContent = [
     "category": "Popular in the US Today",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
-  },
-  {
-    "id": "paramount-movie-1",
-    "title": "Top Gun: Maverick",
-    "description": "After thirty years, Maverick is still pushing the envelope as a top naval aviator, training a new generation of pilots.",
-    "type": "movie",
-    "genre": "action",
-    "service": "paramount-plus",
-    "serviceContentId": "top-gun-maverick",
-    "directUrl": "https://www.paramountplus.com/movies/top-gun-maverick/5vj8X2wqu_568uwEAAABf",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BZWYzOGEwNTgtNWU3NS00ZTQ0LWJkODUtMmVhMjIwMjA1ZmQwXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UX1000_.jpg",
-    "rating": "PG-13",
-    "year": 2022,
-    "artist": null,
-    "album": null,
-    "duration": 130,
-    "isLive": false,
-    "category": "Action & Adventure",
-    "availability": null,
-    "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
-  },
-  {
-    "id": "paramount-movie-2",
-    "title": "Scream",
-    "description": "A new Ghostface killer terrorizes the town of Woodsboro, targeting teenagers related to the original murders.",
-    "type": "movie",
-    "genre": "horror",
-    "service": "paramount-plus",
-    "serviceContentId": "scream-2022",
-    "directUrl": "https://www.paramountplus.com/movies/scream/6wk9Y3xsu_679vwFAAABg",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BYzk2YWU4ODItOGY0Ni00OWIwLTgyNzAtMzI4MGE1NzRjOTk1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_FMjpg_UX1000_.jpg",
-    "rating": "R",
-    "year": 2022,
-    "artist": null,
-    "album": null,
-    "duration": 114,
-    "isLive": false,
-    "category": "Popular in the US Today",
-    "availability": null,
-    "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
-  },
-  {
-    "id": "paramount-movie-3",
-    "title": "The Lost City",
-    "description": "A reclusive romance novelist gets caught up in a kidnapping attempt that mirrors her latest book.",
-    "type": "movie",
-    "genre": "comedy",
-    "service": "paramount-plus",
-    "serviceContentId": "the-lost-city",
-    "directUrl": "https://www.paramountplus.com/movies/the-lost-city/7xl0Z4ytv_780xwGAAABh",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjExOTY3NzMxN15BMl5BanBnXkFtZTgwNzE4ODI0NjM@._V1_FMjpg_UX1000_.jpg",
-    "rating": "PG-13",
-    "year": 2022,
-    "artist": null,
-    "album": null,
-    "duration": 112,
-    "isLive": false,
-    "category": "Comedies",
-    "availability": null,
-    "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:26.350Z"
   },
   {
     "id": "disney-movie-1",
@@ -1084,7 +1021,7 @@ const realContent = [
     "service": "disney-plus",
     "serviceContentId": "encanto",
     "directUrl": "https://www.disneyplus.com/movies/encanto/33q7DY1rtHQH",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNjE5NzA4ZDctOTJkZi00NzM0LTkwOTYtMDI4MmNkMzIxODhkXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/4j0PNHkMr5ax3IA8tjtxcmPU3QT.jpg",
     "rating": "PG",
     "year": 2021,
     "artist": null,
@@ -1094,7 +1031,70 @@ const realContent = [
     "category": "90%+ on Rotten Tomatoes",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:22.363Z"
+  },
+  {
+    "id": "paramount-movie-1",
+    "title": "Top Gun: Maverick",
+    "description": "After thirty years, Maverick is still pushing the envelope as a top naval aviator, training a new generation of pilots.",
+    "type": "movie",
+    "genre": "action",
+    "service": "paramount-plus",
+    "serviceContentId": "top-gun-maverick",
+    "directUrl": "https://www.paramountplus.com/movies/top-gun-maverick/5vj8X2wqu_568uwEAAABf",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 130,
+    "isLive": false,
+    "category": "Action & Adventure",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-07T02:49:26.796Z"
+  },
+  {
+    "id": "paramount-movie-2",
+    "title": "Scream",
+    "description": "A new Ghostface killer terrorizes the town of Woodsboro, targeting teenagers related to the original murders.",
+    "type": "movie",
+    "genre": "horror",
+    "service": "paramount-plus",
+    "serviceContentId": "scream-2022",
+    "directUrl": "https://www.paramountplus.com/movies/scream/6wk9Y3xsu_679vwFAAABg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/1m3W6cpgwuIyjtg5nSnPx7yFkXW.jpg",
+    "rating": "R",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 114,
+    "isLive": false,
+    "category": "Popular in the US Today",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-07T02:49:27.240Z"
+  },
+  {
+    "id": "paramount-movie-3",
+    "title": "The Lost City",
+    "description": "A reclusive romance novelist gets caught up in a kidnapping attempt that mirrors her latest book.",
+    "type": "movie",
+    "genre": "comedy",
+    "service": "paramount-plus",
+    "serviceContentId": "the-lost-city",
+    "directUrl": "https://www.paramountplus.com/movies/the-lost-city/7xl0Z4ytv_780xwGAAABh",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/rnheO8cFvCYcmZsDrBoabJbKLFE.jpg",
+    "rating": "PG-13",
+    "year": 2022,
+    "artist": null,
+    "album": null,
+    "duration": 112,
+    "isLive": false,
+    "category": "Comedies",
+    "availability": null,
+    "createdAt": "2025-08-06T04:49:22.858Z",
+    "updatedAt": "2025-08-07T02:49:27.682Z"
   },
   {
     "id": "disney-movie-2",
@@ -1105,7 +1105,7 @@ const realContent = [
     "service": "disney-plus",
     "serviceContentId": "turning-red",
     "directUrl": "https://www.disneyplus.com/movies/turning-red/4mFHrEHJjGha",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BNTBjNjAzNzEtY2Y4ZS00MTE4LWE3NzMtNjY0YmZkNzYxMGJhXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/qsdjk9oAKSQMWs0Vt5Pyfh6O4GZ.jpg",
     "rating": "PG",
     "year": 2022,
     "artist": null,
@@ -1115,7 +1115,7 @@ const realContent = [
     "category": "Comedies",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:28.123Z"
   },
   {
     "id": "disney-movie-3",
@@ -1126,7 +1126,7 @@ const realContent = [
     "service": "disney-plus",
     "serviceContentId": "luca",
     "directUrl": "https://www.disneyplus.com/movies/luca/7K1HyQ6Hl48s",
-    "imageUrl": "https://m.media-amazon.com/images/M/MV5BZTQyNTU0MDktYTFkYi00ZjNhLWE2ODctMzBkM2U1ZTk3YTMzXkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_FMjpg_UX1000_.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/9x4i9uKGXt8IiiIF5Ey0DIoY738.jpg",
     "rating": "PG",
     "year": 2021,
     "artist": null,
@@ -1136,7 +1136,7 @@ const realContent = [
     "category": "90%+ on Rotten Tomatoes",
     "availability": null,
     "createdAt": "2025-08-06T04:49:22.858Z",
-    "updatedAt": "2025-08-06T04:49:22.858Z"
+    "updatedAt": "2025-08-07T02:49:28.562Z"
   },
   {
     "id": "933389b6-646e-4128-9de4-fd88c232f0f3",
@@ -2506,8 +2506,8 @@ export async function seedRealContent() {
     console.log('🎭 hulu content:', realContent.filter(c => c.service === 'hulu').length);
     console.log('🎯 hbo-max content:', realContent.filter(c => c.service === 'hbo-max').length);
     console.log('🎯 apple-tv content:', realContent.filter(c => c.service === 'apple-tv').length);
-    console.log('🎯 paramount-plus content:', realContent.filter(c => c.service === 'paramount-plus').length);
     console.log('🏰 disney-plus content:', realContent.filter(c => c.service === 'disney-plus').length);
+    console.log('🎯 paramount-plus content:', realContent.filter(c => c.service === 'paramount-plus').length);
     console.log('🎯 All content synchronized from database');
     console.log('🚀 Seed file auto-updated with current database state');
     

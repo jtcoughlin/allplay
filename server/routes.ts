@@ -75,6 +75,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // TMDB TV Show Poster Update endpoint
+  app.post('/api/update-show-posters', async (req, res) => {
+    try {
+      const { services } = req.body;
+      const validServices = services || ['netflix', 'amazon-prime', 'hulu', 'hbo-max', 'apple-tv', 'disney-plus', 'paramount-plus'];
+      
+      console.log(`📺 Starting TMDB TV show poster update for: ${validServices.join(', ')}`);
+      
+      // Create backup before updating
+      await BackupManager.createContentBackup(`pre-tmdb-shows-update-${new Date().toISOString().split('T')[0]}`);
+      
+      const imageService = new ImageAssignmentService();
+      await imageService.updateShowPostersForServices(validServices);
+      
+      // Sync to seed file after updating
+      await BackupManager.syncDatabaseToSeed();
+      
+      res.json({ 
+        message: `Successfully updated TV show posters for ${validServices.join(', ')} using TMDB API`,
+        services: validServices
+      });
+    } catch (error) {
+      console.error('Error updating movie posters:', error);
+      res.status(500).json({ 
+        message: 'Failed to update movie posters',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Automated backup endpoints
   app.post('/api/backup/create', async (req, res) => {
     try {
