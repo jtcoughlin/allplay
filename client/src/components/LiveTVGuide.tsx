@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { NetworkLogos, type NetworkLogoKey } from "./NetworkLogos";
 import type { Content } from "@shared/schema";
 
 interface LiveTVGuideProps {
@@ -32,48 +33,68 @@ export function LiveTVGuide({ content, favorites, onToggleFavorite, onPlay }: Li
   }, {} as Record<string, Content[]>);
 
   // Define channel order and display info
-  const channelInfo: Record<string, { name: string; logo: string; number: string }> = {
-    'fox': { name: 'FOX', logo: '🦊', number: '2.1' },
-    'nbc': { name: 'NBC', logo: '🦚', number: '4.1' },
-    'abc': { name: 'ABC', logo: '🔤', number: '7.1' },
-    'cbs': { name: 'CBS', logo: '👁️', number: '2.1' },
-    'pbs': { name: 'PBS', logo: '📺', number: '8.1' },
-    'tbs': { name: 'TBS', logo: '😂', number: '247' },
-    'tnt': { name: 'TNT', logo: '🏀', number: '245' },
-    'fs1': { name: 'FS1', logo: '⚽', number: '150' },
-    'fs2': { name: 'FS2', logo: '🏈', number: '618' },
-    'disney': { name: 'DISNEY', logo: '🏰', number: '290' },
-    'nick': { name: 'NICK', logo: '🧽', number: '299' },
-    'trutv': { name: 'truTV', logo: '😆', number: '246' },
-    'amc': { name: 'AMC', logo: '🎬', number: '254' },
-    'bbc': { name: 'BBC', logo: '🇬🇧', number: '135' },
-    'cartoon': { name: 'CARTOON', logo: '🎨', number: '296' },
-    'cmt': { name: 'CMT', logo: '🤠', number: '327' },
-    'comedy': { name: 'COMEDY', logo: '😂', number: '249' },
-    'fx': { name: 'FX', logo: '🎭', number: '248' },
-    'mtv': { name: 'MTV', logo: '📺', number: '331' },
-    'hallmark': { name: 'HALLMARK', logo: '💝', number: '312' },
-    'natgeo': { name: 'NAT GEO', logo: '🌍', number: '276' },
-    'discovery': { name: 'DISCOVERY', logo: '🔍', number: '278' },
+  const channelInfo: Record<string, { name: string; logoKey: NetworkLogoKey; number: string }> = {
+    'fox': { name: 'FOX', logoKey: 'FOX', number: '2.1' },
+    'nbc': { name: 'NBC', logoKey: 'NBC', number: '4.1' },
+    'abc': { name: 'ABC', logoKey: 'ABC', number: '7.1' },
+    'cbs': { name: 'CBS', logoKey: 'CBS', number: '2.1' },
+    'pbs': { name: 'PBS', logoKey: 'PBS', number: '8.1' },
+    'tbs': { name: 'TBS', logoKey: 'TBS', number: '247' },
+    'tnt': { name: 'TNT', logoKey: 'TNT', number: '245' },
+    'fs1': { name: 'FS1', logoKey: 'FS1', number: '150' },
+    'fs2': { name: 'FS2', logoKey: 'FS2', number: '618' },
+    'disney': { name: 'DISNEY', logoKey: 'DISNEY', number: '290' },
+    'nick': { name: 'NICK', logoKey: 'NICK', number: '299' },
+    'trutv': { name: 'truTV', logoKey: 'TRUTV', number: '246' },
+    'amc': { name: 'AMC', logoKey: 'AMC', number: '254' },
+    'bbc': { name: 'BBC', logoKey: 'BBC', number: '135' },
+    'cartoon': { name: 'CARTOON', logoKey: 'CARTOON', number: '296' },
+    'cmt': { name: 'CMT', logoKey: 'CMT', number: '327' },
+    'comedy': { name: 'COMEDY', logoKey: 'COMEDY', number: '249' },
+    'fx': { name: 'FX', logoKey: 'FX', number: '248' },
+    'mtv': { name: 'MTV', logoKey: 'MTV', number: '331' },
+    'hallmark': { name: 'HALLMARK', logoKey: 'HALLMARK', number: '312' },
+    'natgeo': { name: 'NAT GEO', logoKey: 'NATGEO', number: '276' },
+    'discovery': { name: 'DISCOVERY', logoKey: 'DISCOVERY', number: '278' },
+    'cnn': { name: 'CNN', logoKey: 'CNN', number: '202' },
+    'espn': { name: 'ESPN', logoKey: 'ESPN', number: '206' },
   };
 
   const channels = [
-    'fox', 'nbc', 'abc', 'cbs', 'pbs', 'tbs', 'tnt', 
-    'fs1', 'fs2', 'disney', 'nick', 'trutv', 'amc', 
-    'bbc', 'cartoon', 'cmt', 'comedy', 'fx', 'mtv', 
-    'hallmark', 'natgeo', 'discovery'
+    'fox', 'nbc', 'abc', 'cbs', 'pbs', 'cnn', 'espn',
+    'tbs', 'tnt', 'fs1', 'fs2', 'disney', 'nick', 
+    'trutv', 'amc', 'bbc', 'cartoon', 'cmt', 'comedy', 
+    'fx', 'mtv', 'hallmark', 'natgeo', 'discovery'
   ];
 
-  // Get current time slots (now, +30min, +1hr, +1.5hr)
+  // Get current time slots aligned to :00 and :30 minute marks
   const getCurrentTimeSlots = () => {
     const now = new Date();
+    const currentMinute = now.getMinutes();
+    const currentSecond = now.getSeconds();
+    
+    // Calculate progress through current 30-minute window
+    const progressInCurrentSlot = currentMinute < 30 
+      ? (currentMinute + currentSecond / 60) / 30 
+      : ((currentMinute - 30) + currentSecond / 60) / 30;
+    
+    // Find the current :00 or :30 time
+    const currentSlotStart = new Date(now);
+    if (currentMinute < 30) {
+      currentSlotStart.setMinutes(0, 0, 0);
+    } else {
+      currentSlotStart.setMinutes(30, 0, 0);
+    }
+    
     const slots = [];
     for (let i = 0; i < 4; i++) {
-      const time = new Date(now.getTime() + (i * 30 * 60 * 1000));
+      const slotTime = new Date(currentSlotStart.getTime() + (i * 30 * 60 * 1000));
       slots.push({
-        time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        hour: time.getHours(),
-        minute: time.getMinutes()
+        time: slotTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        hour: slotTime.getHours(),
+        minute: slotTime.getMinutes(),
+        isCurrentSlot: i === 0,
+        progressPercent: i === 0 ? progressInCurrentSlot * 100 : 0
       });
     }
     return slots;
@@ -144,65 +165,85 @@ export function LiveTVGuide({ content, favorites, onToggleFavorite, onPlay }: Li
                 <div key={channel} className="grid grid-cols-[120px_repeat(4,1fr)] border-b border-white/10 last:border-b-0 hover:bg-white/5 transition-colors">
                   {/* Channel Info */}
                   <div className="p-3 flex items-center space-x-3 bg-black/20">
-                    <div className="flex flex-col items-center">
-                      <span className="text-2xl">{channelData.logo}</span>
+                    <div className="flex flex-col items-center space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-white/60 text-xs font-medium">{channelData.number}</span>
+                        {NetworkLogos[channelData.logoKey]()}
+                      </div>
                       <span className="text-white text-xs font-medium">{channelData.name}</span>
-                      <span className="text-white/60 text-xs">{channelData.number}</span>
                     </div>
                   </div>
 
                   {/* Program Time Slots */}
                   {timeSlots.map((slot, slotIndex) => {
                     const program = getProgramForSlot(channel, slotIndex);
-                    const isCurrentSlot = slotIndex === 0; // First slot is "current"
+                    const isCurrentSlot = slot.isCurrentSlot;
+                    const progressPercent = slot.progressPercent;
                     
                     return (
                       <div
                         key={slotIndex}
-                        className={`p-2 border-l border-white/10 first:border-l-0 cursor-pointer transition-all hover:bg-white/10 ${
+                        className={`relative border-l border-white/10 first:border-l-0 cursor-pointer transition-all hover:bg-white/10 ${
                           isCurrentSlot ? 'bg-blue-600/20 border-l-2 border-l-blue-500' : ''
                         }`}
                         onClick={() => program && handleProgramClick(program, channel)}
                         data-testid={`program-slot-${channel}-${slotIndex}`}
+                        style={{
+                          // Adjust width based on remaining time for current slot
+                          width: isCurrentSlot ? `${100 - progressPercent}%` : '100%',
+                          minWidth: isCurrentSlot ? '30%' : '100%'
+                        }}
                       >
-                        {program ? (
-                          <div className="space-y-1">
-                            <div className="flex items-center justify-between">
-                              <h4 className="text-white text-sm font-medium truncate pr-1">
-                                {program.title}
-                              </h4>
-                              {program.isLive && isCurrentSlot && (
-                                <div className="flex items-center space-x-1">
-                                  <Circle className="w-2 h-2 fill-red-500 text-red-500 animate-pulse" />
+                        <div className="p-2 h-full">
+                          {program ? (
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-white text-sm font-medium truncate pr-1">
+                                  {program.title}
+                                </h4>
+                                {program.isLive && isCurrentSlot && (
+                                  <div className="flex items-center space-x-1">
+                                    <Circle className="w-2 h-2 fill-red-500 text-red-500 animate-pulse" />
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <p className="text-white/70 text-xs line-clamp-2 leading-tight">
+                                {program.description?.slice(0, 60)}...
+                              </p>
+                              
+                              <div className="flex items-center justify-between mt-2">
+                                <div className="flex items-center space-x-2">
+                                  {program.genre && (
+                                    <Badge 
+                                      variant="secondary" 
+                                      className="text-xs bg-white/10 text-white/80 border-0 px-1 py-0"
+                                    >
+                                      {program.genre}
+                                    </Badge>
+                                  )}
+                                  {program.rating && (
+                                    <span className="text-white/60 text-xs">{program.rating}</span>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              {/* Progress bar for current slot */}
+                              {isCurrentSlot && (
+                                <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                                  <div 
+                                    className="h-full bg-blue-500 transition-all duration-1000"
+                                    style={{ width: `${progressPercent}%` }}
+                                  />
                                 </div>
                               )}
                             </div>
-                            
-                            <p className="text-white/70 text-xs line-clamp-2 leading-tight">
-                              {program.description?.slice(0, 80)}...
-                            </p>
-                            
-                            <div className="flex items-center justify-between mt-2">
-                              <div className="flex items-center space-x-2">
-                                {program.genre && (
-                                  <Badge 
-                                    variant="secondary" 
-                                    className="text-xs bg-white/10 text-white/80 border-0 px-1 py-0"
-                                  >
-                                    {program.genre}
-                                  </Badge>
-                                )}
-                                {program.rating && (
-                                  <span className="text-white/60 text-xs">{program.rating}</span>
-                                )}
-                              </div>
+                          ) : (
+                            <div className="h-full flex items-center justify-center">
+                              <span className="text-white/40 text-xs">No Program</span>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="h-full flex items-center justify-center">
-                            <span className="text-white/40 text-xs">No Program</span>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     );
                   })}
@@ -245,8 +286,8 @@ export function LiveTVGuide({ content, favorites, onToggleFavorite, onPlay }: Li
               </div>
               
               <div className="flex items-center space-x-4 text-sm text-white/70">
-                <span className="flex items-center space-x-1">
-                  <span className="text-lg">{channelInfo[selectedChannel]?.logo}</span>
+                <span className="flex items-center space-x-2">
+                  {channelInfo[selectedChannel] && NetworkLogos[channelInfo[selectedChannel].logoKey]()}
                   <span>{channelInfo[selectedChannel]?.name}</span>
                 </span>
                 {selectedContent.rating && <span>{selectedContent.rating}</span>}
