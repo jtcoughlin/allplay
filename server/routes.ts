@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import { insertContentSchema, insertFavoriteSchema, insertWatchHistorySchema, insertUserPreferencesSchema } from "@shared/schema";
 import { seedRealContent } from "./seed-content";
 import { BackupManager } from "./backup-manager";
+import { ImageAssignmentService } from "./imageAssignmentService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -41,6 +42,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error seeding content:', error);
       res.status(500).json({ message: 'Failed to seed content' });
+    }
+  });
+
+  // TMDB Movie Poster Update endpoint
+  app.post('/api/update-movie-posters', async (req, res) => {
+    try {
+      const { services } = req.body;
+      const validServices = services || ['hulu', 'hbo-max'];
+      
+      console.log(`🎬 Starting TMDB poster update for: ${validServices.join(', ')}`);
+      
+      // Create backup before updating
+      await BackupManager.createContentBackup(`pre-tmdb-update-${new Date().toISOString().split('T')[0]}`);
+      
+      const imageService = new ImageAssignmentService();
+      await imageService.updateMoviePostersForServices(validServices);
+      
+      // Sync to seed file after updating
+      await BackupManager.syncDatabaseToSeed();
+      
+      res.json({ 
+        message: `Successfully updated movie posters for ${validServices.join(', ')} using TMDB API`,
+        services: validServices
+      });
+    } catch (error) {
+      console.error('Error updating movie posters:', error);
+      res.status(500).json({ 
+        message: 'Failed to update movie posters',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 

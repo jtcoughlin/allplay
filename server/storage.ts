@@ -33,6 +33,7 @@ export interface IStorage {
   searchContent(query: string): Promise<Content[]>;
   getContentById(id: string): Promise<Content | undefined>;
   createContent(content: InsertContent): Promise<Content>;
+  createOrUpdateContent(content: Content): Promise<Content>;
   
   // Favorites operations
   getUserFavorites(userId: string): Promise<(Favorite & { content: Content })[]>;
@@ -120,6 +121,35 @@ export class DatabaseStorage implements IStorage {
       .values(contentData)
       .returning();
     return newContent;
+  }
+
+  async createOrUpdateContent(contentData: Content): Promise<Content> {
+    const [updatedContent] = await db
+      .insert(content)
+      .values(contentData)
+      .onConflictDoUpdate({
+        target: content.id,
+        set: {
+          title: contentData.title,
+          description: contentData.description,
+          imageUrl: contentData.imageUrl,
+          type: contentData.type,
+          genre: contentData.genre,
+          service: contentData.service,
+          serviceContentId: contentData.serviceContentId,
+          directUrl: contentData.directUrl,
+          rating: contentData.rating,
+          year: contentData.year,
+          duration: contentData.duration,
+          isLive: contentData.isLive,
+          category: contentData.category,
+          artist: contentData.artist,
+          album: contentData.album,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return updatedContent;
   }
 
   // Favorites operations
