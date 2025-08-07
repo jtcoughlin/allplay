@@ -1,7 +1,7 @@
 import { db } from './db';
 import { content } from '@shared/schema';
 
-// Auto-generated seed file - Last updated: 2025-08-07T03:40:17.844Z
+// Auto-generated seed file - Last updated: 2025-08-07T03:42:57.328Z
 // Total items: 118
 const realContent = [
   {
@@ -2000,6 +2000,27 @@ const realContent = [
     "updatedAt": "2025-08-06T04:27:34.524Z"
   },
   {
+    "id": "ytv-comedy-2",
+    "title": "The Daily Show",
+    "description": "Satirical news program offering humorous takes on current events and politics.",
+    "type": "show",
+    "genre": "comedy",
+    "service": "youtube-tv",
+    "serviceContentId": "comedy-daily-show",
+    "directUrl": "https://tv.youtube.com/watch/comedy-daily-show?vp=0gEEEgIwAQ%3D%3D",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+    "rating": "TV-14",
+    "year": 2024,
+    "artist": null,
+    "album": null,
+    "duration": 30,
+    "isLive": false,
+    "category": null,
+    "availability": null,
+    "createdAt": "2025-08-06T04:27:34.524Z",
+    "updatedAt": "2025-08-06T04:27:34.524Z"
+  },
+  {
     "id": "ytv-tnt-1",
     "title": "NBA on TNT",
     "description": "Live NBA games and highlights with expert analysis from Charles Barkley, Shaquille ONeal, and the Inside the NBA crew.",
@@ -2057,27 +2078,6 @@ const realContent = [
     "album": null,
     "duration": 180,
     "isLive": true,
-    "category": null,
-    "availability": null,
-    "createdAt": "2025-08-06T04:27:34.524Z",
-    "updatedAt": "2025-08-06T04:27:34.524Z"
-  },
-  {
-    "id": "ytv-comedy-2",
-    "title": "The Daily Show",
-    "description": "Satirical news program offering humorous takes on current events and politics.",
-    "type": "show",
-    "genre": "comedy",
-    "service": "youtube-tv",
-    "serviceContentId": "comedy-daily-show",
-    "directUrl": "https://tv.youtube.com/watch/comedy-daily-show?vp=0gEEEgIwAQ%3D%3D",
-    "imageUrl": "/src/assets/category-icons/tv-icon.svg",
-    "rating": "TV-14",
-    "year": 2024,
-    "artist": null,
-    "album": null,
-    "duration": 30,
-    "isLive": false,
     "category": null,
     "availability": null,
     "createdAt": "2025-08-06T04:27:34.524Z",
