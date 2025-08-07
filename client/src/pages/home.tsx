@@ -335,7 +335,7 @@ export default function Home() {
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
-            imageUrl={headlinerContent.imageUrl || ""}
+            imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : headlinerContent.imageUrl || ""}
             platform={headlinerContent.service || "allplay"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
