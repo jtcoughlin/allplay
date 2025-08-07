@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="12" width="24" height="16" rx="2" fill="#424242"/>
+  <rect x="10" y="14" width="20" height="12" fill="white"/>
+  <circle cx="14" cy="32" r="1" fill="#424242"/>
+  <circle cx="26" cy="32" r="1" fill="#424242"/>
+  <text x="55" y="26" fill="#424242" font-family="Arial, sans-serif" font-size="14" font-weight="bold">LIVE TV</text>
+</svg>
