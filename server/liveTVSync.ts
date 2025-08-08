@@ -263,23 +263,9 @@ export class LiveTVSyncService {
 
       // Convert Content objects to LiveProgram objects
       const livePrograms: LiveProgram[] = liveTVContent.map(content => {
-        // Generate realistic program times based on TV scheduling (typically :00 and :30)
+        // Use current time for live programs - they are happening now
         const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinutes = now.getMinutes();
-        
-        // Round to nearest 30-minute slot
-        let startMinutes = currentMinutes < 15 ? 0 : currentMinutes < 45 ? 30 : 0;
-        let startHour = currentHour;
-        
-        // If we rounded up to next hour
-        if (startMinutes === 0 && currentMinutes >= 45) {
-          startHour = (startHour + 1) % 24;
-        }
-        
-        // Create start time at the rounded time
-        const startTime = new Date();
-        startTime.setHours(startHour, startMinutes, 0, 0);
+        const startTime = new Date(now.getTime() - (15 * 60 * 1000)); // Started 15 minutes ago
         
         // End time is start time plus duration
         const endTime = new Date(startTime.getTime() + (content.duration || 60) * 60 * 1000);
@@ -303,11 +289,11 @@ export class LiveTVSyncService {
           genre: [content.genre],
           isLive: true,
           episodeTitle: content.title.includes(':') ? content.title.split(':').slice(1).join(':').trim() : undefined,
-          description: content.description,
+          description: content.description || undefined,
           rating: undefined,
           season: undefined,
           episode: undefined,
-          imageUrl: content.imageUrl,
+          imageUrl: content.imageUrl || undefined,
           originalData: {} as any
         };
         

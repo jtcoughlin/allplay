@@ -406,10 +406,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Deep link content route
-  app.post('/api/play-external/:contentId', isAuthenticated, async (req: any, res) => {
+  app.post('/api/play-external/:contentId', async (req, res) => {
     try {
       const { contentId } = req.params;
-      const userId = req.user.claims.sub;
+      const userId = 'anonymous'; // Allow anonymous access for live TV deep linking
       
       // Get content details from database
       const contentDetails = await storage.getContentById(contentId);
@@ -420,13 +420,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate deep links for the service using content's service_content_id and direct URL
       const { appUrl, webUrl } = generateDeepLink(contentDetails.service, 'play', contentDetails.serviceContentId, contentDetails.directUrl || undefined);
       
-      // Log the play attempt
-      await storage.updateWatchProgress({
-        userId,
-        contentId,
-        progress: 0,
-        isCompleted: false
-      });
+      // Skip watch progress logging for anonymous users (live TV)
+      if (userId !== 'anonymous') {
+        await storage.updateWatchProgress({
+          userId,
+          contentId,
+          progress: 0,
+          isCompleted: false
+        });
+      }
       
       res.json({ 
         appUrl, 
