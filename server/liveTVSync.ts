@@ -115,7 +115,7 @@ export class LiveTVSyncService {
           title: program.episodeTitle ? `${program.showTitle}: ${program.episodeTitle}` : program.showTitle,
           description: program.description || `${program.showTitle} on ${program.network}`,
           type: 'show',
-          genre: program.genre.length > 0 ? program.genre[0].toLowerCase() : 'general',
+          genre: program.genre.length > 0 ? program.genre[0] : 'general',
           service: 'youtube-tv',
           serviceContentId,
           directUrl,
