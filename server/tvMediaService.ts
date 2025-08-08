@@ -136,6 +136,42 @@ export class TVMediaService {
   }
 
   /**
+   * Map TV Media genre codes to full genre names
+   */
+  private mapGenreCode(genreCode: string): string {
+    const genreMap: Record<string, string> = {
+      'a': 'Adventure',
+      'b': 'Biography', 
+      'c': 'Comedy',
+      'd': 'Drama',
+      'e': 'Educational',
+      'f': 'Family',
+      'g': 'Game Show',
+      'h': 'Horror',
+      'i': 'International',
+      'j': 'Japanese',
+      'k': 'Kids',
+      'l': 'Live',
+      'm': 'Movie',
+      'n': 'News',
+      'o': 'Sports',
+      'p': 'Public Affairs',
+      'q': 'Documentary',
+      'r': 'Reality',
+      's': 'Sitcom',
+      't': 'Talk Show',
+      'u': 'Music',
+      'v': 'Variety',
+      'w': 'Western',
+      'x': 'Special',
+      'y': 'News Magazine',
+      'z': 'Other'
+    };
+    
+    return genreMap[genreCode.toLowerCase()] || 'General';
+  }
+
+  /**
    * Convert TV Media programs to our LiveProgram format
    */
   convertToLivePrograms(programs: TVMediaProgram[]): LiveProgram[] {
@@ -143,6 +179,9 @@ export class TVMediaService {
       // Calculate end time from start time and duration
       const startTime = new Date(program.listDateTime);
       const endTime = new Date(startTime.getTime() + (program.duration * 60 * 1000));
+      
+      // Convert genre code to full genre name
+      const fullGenre = this.mapGenreCode(program.showTypeID || 'z');
       
       return {
         id: `tvmedia-${program.showID}`,
@@ -155,7 +194,7 @@ export class TVMediaService {
         duration: program.duration,
         channel: program.channelNumber.toString(),
         network: program.callsign,
-        genre: program.showTypeID ? [program.showTypeID] : [],
+        genre: [fullGenre],
         rating: program.starRating || undefined,
         season: null,
         episode: null,
