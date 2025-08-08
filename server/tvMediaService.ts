@@ -181,10 +181,11 @@ export class TVMediaService {
         lineup.lineupName.toLowerCase().includes('youtube tv')
       );
       
-      // If YouTube TV not found, look for it by provider name or ID
+      // If YouTube TV not found, look for it by provider name or ID  
       if (!youtubetvLineup) {
         youtubetvLineup = lineups.find(lineup => 
-          lineup.lineupID === '139014' || // Known YouTube TV LA lineup ID
+          lineup.lineupID === '139014' || // Known YouTube TV LA lineup ID 
+          lineup.lineupID === '139095' || // YouTube TV Dallas lineup ID (alternative)
           (lineup.providerName.toLowerCase().includes('youtube') && lineup.lineupType === 'VMVPD')
         );
       }

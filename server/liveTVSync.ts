@@ -51,7 +51,7 @@ export class LiveTVSyncService {
       if (process.env.TV_MEDIA_API_KEY) {
         try {
           console.log('📺 Using TV Media API for live programming data');
-          livePrograms = await tvMediaService.getYouTubeTVPrograms('90210', 6); // Default postal code, 6 hours
+          livePrograms = await tvMediaService.getYouTubeTVPrograms('90210', 6); // LA postal code, 6 hours
           console.log(`📋 Found ${livePrograms.length} programs from TV Media API`);
         } catch (error) {
           console.error('❌ TV Media API failed, falling back to TVMaze:', error);
