@@ -270,9 +270,16 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     <span className="text-white/60 text-sm">
                                       {formatProgramTime(currentProgram.startTime, currentProgram.endTime)}
                                     </span>
-                                    {currentProgram.genre.length > 0 && (
+                                    {currentProgram.genre && currentProgram.genre.length > 0 && (
                                       <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
                                         {currentProgram.genre[0]}
+                                      </Badge>
+                                    )}
+                                    {/* Debug: Show genre data temporarily */}
+                                    {console.log('Genre debug:', currentProgram.title, currentProgram.genre)}
+                                    {currentProgram.genre && currentProgram.genre.length === 0 && (
+                                      <Badge variant="outline" className="text-red-500 border-red-300 text-xs">
+                                        NO GENRE
                                       </Badge>
                                     )}
                                   </div>
@@ -311,6 +318,11 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     <span className="text-white/60 text-sm">
                                       {formatProgramTime(nextProgram.startTime, nextProgram.endTime)}
                                     </span>
+                                    {nextProgram.genre && nextProgram.genre.length > 0 && (
+                                      <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
+                                        {nextProgram.genre[0]}
+                                      </Badge>
+                                    )}
                                   </div>
                                   <h4 className="text-white font-medium group-hover:text-blue-400 transition-colors">
                                     {nextProgram.title}
