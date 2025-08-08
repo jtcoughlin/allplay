@@ -333,13 +333,7 @@ export function ContentCard({
             (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
               ? '!text-black' : 'text-white'
           }`}>
-            {playContent.isPending ? 'Opening...' : 
-             content.service === 'apple-music' ? 'Open Apple Music' :
-             content.service === 'spotify' ? 'Open Spotify' :
-             ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') 
-               ? `Open in ${content.service === 'amazon-prime' ? 'Prime' : content.service}`
-               : 'Play'
-            }
+            {playContent.isPending ? 'Opening...' : 'Play'}
           </span>
         </Button>
       </div>
