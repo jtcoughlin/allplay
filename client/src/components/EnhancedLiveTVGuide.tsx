@@ -218,7 +218,7 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                     >
                       <div className="flex">
                         {/* Channel Info */}
-                        <div className="w-32 p-4 flex flex-col items-center space-y-2 bg-black/20 border-r border-white/10">
+                        <div className="w-28 p-2 flex flex-col items-center space-y-1 bg-black/20 border-r border-white/10">
                           <div className="flex items-center space-x-2">
                             <span className="text-white/60 text-xs font-medium">{channelData.number}</span>
                             {NetworkLogos[channelData.logoKey]()}
@@ -227,19 +227,19 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                         </div>
 
                         {/* Current Program */}
-                        <div className="flex-1 p-4">
+                        <div className="flex-1 p-3">
                           {currentProgram ? (
                             <div 
                               className="cursor-pointer group"
                               onClick={() => handleProgramClick(currentProgram, channel)}
                               data-testid={`current-program-${channel}`}
                             >
-                              <div className="flex items-start space-x-3">
+                              <div className="flex items-start space-x-2">
                                 {currentProgram.imageUrl && (
                                   <img 
                                     src={currentProgram.imageUrl} 
                                     alt={currentProgram.title}
-                                    className="w-16 h-24 object-cover rounded"
+                                    className="w-12 h-16 object-cover rounded"
                                   />
                                 )}
                                 <div className="flex-1 min-w-0">
@@ -251,6 +251,11 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     <span className="text-white/60 text-sm">
                                       {formatProgramTime(currentProgram.startTime, currentProgram.endTime)}
                                     </span>
+                                    {currentProgram.genre.length > 0 && (
+                                      <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
+                                        {currentProgram.genre[0]}
+                                      </Badge>
+                                    )}
                                   </div>
                                   <h4 className="text-white font-medium group-hover:text-blue-400 transition-colors">
                                     {currentProgram.episodeTitle ? (
@@ -262,22 +267,17 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     )}
                                   </h4>
                                   {currentProgram.description && (
-                                    <p className="text-white/60 text-sm mt-1 overflow-hidden">
+                                    <p className="text-white/60 text-xs mt-1 overflow-hidden line-clamp-2">
                                       {currentProgram.description}
                                     </p>
                                   )}
-                                  <div className="flex items-center space-x-2 mt-2">
-                                    {currentProgram.genre.length > 0 && (
-                                      <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
-                                        {currentProgram.genre[0]}
-                                      </Badge>
-                                    )}
-                                    {currentProgram.season && currentProgram.episode && (
+                                  {currentProgram.season && currentProgram.episode && (
+                                    <div className="flex items-center space-x-2 mt-2">
                                       <span className="text-white/40 text-xs">
                                         S{currentProgram.season}E{currentProgram.episode}
                                       </span>
-                                    )}
-                                  </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
