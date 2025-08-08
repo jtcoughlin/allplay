@@ -9,6 +9,7 @@ import { seedRealContent } from "./seed-content";
 import { BackupManager } from "./backup-manager";
 import { ImageAssignmentService } from "./imageAssignmentService";
 import { liveTVSync } from "./liveTVSync";
+import tvMediaRoutes from "./routes/tvMedia.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -625,6 +626,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Failed to sync channels' });
     }
   });
+
+  // TV Media API routes
+  app.use('/api/tv-media', tvMediaRoutes);
 
   const httpServer = createServer(app);
   return httpServer;

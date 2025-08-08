@@ -1,4 +1,5 @@
 import { TVMazeService, LiveProgram } from './tvMazeService.js';
+import { tvMediaService } from './tvMediaService.js';
 import { storage } from './storage.js';
 import { getYouTubeTVChannelUrl } from './youtubeTVChannelMappings.js';
 import type { Content } from '../shared/schema.js';
@@ -44,11 +45,27 @@ export class LiveTVSyncService {
     try {
       console.log('📺 Starting Live TV data sync...');
       
-      // Get current live programs from TVMaze
-      const livePrograms = await this.tvMazeService.getAllCurrentLivePrograms();
-      console.log(`📋 Found ${livePrograms.length} live programs`);
-
-      // Convert to our Content format and update database
+      let livePrograms: LiveProgram[] = [];
+      
+      // Try TV Media API first (if API key is available)
+      if (process.env.TV_MEDIA_API_KEY) {
+        try {
+          console.log('📺 Using TV Media API for live programming data');
+          livePrograms = await tvMediaService.getYouTubeTVPrograms('90210', 6); // Default postal code, 6 hours
+          console.log(`📋 Found ${livePrograms.length} programs from TV Media API`);
+        } catch (error) {
+          console.error('❌ TV Media API failed, falling back to TVMaze:', error);
+          // Fall back to TVMaze if TV Media API fails
+          livePrograms = await this.tvMazeService.getAllCurrentLivePrograms();
+          console.log(`📋 Found ${livePrograms.length} programs from TVMaze (fallback)`);
+        }
+      } else {
+        // Use TVMaze as default when no TV Media API key
+        console.log('📺 Using TVMaze API (no TV Media API key found)');
+        livePrograms = await this.tvMazeService.getAllCurrentLivePrograms();
+        console.log(`📋 Found ${livePrograms.length} programs from TVMaze`);
+      }
+      
       const updatedCount = await this.updateContentFromPrograms(livePrograms);
       
       console.log(`✅ Live TV sync complete: ${updatedCount} programs updated`);
