@@ -314,7 +314,7 @@ export function ContentCard({
             e.stopPropagation();
             playContent.mutate(content.id);
           }}
-          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
+          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1 border border-white/20 hover:border-white/30"
           disabled={playContent.isPending}
           data-testid={`button-play-${content.id}`}
         >
