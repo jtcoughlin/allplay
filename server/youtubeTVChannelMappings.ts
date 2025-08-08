@@ -17,7 +17,7 @@ export const youtubeTVChannels: Record<string, ChannelMapping> = {
   },
   'cbs': {
     channelId: 'cbs', 
-    webUrl: 'https://tv.youtube.com/watch/CBS',
+    webUrl: 'https://tv.youtube.com/watch/2OGfFsEyTU8?vpp=0gcJCRUA3bTjb5HI&vp=0gEEEgIwAQ%3D%3D',
     appUrl: 'youtubetv://browse/channel/cbs',
     displayName: 'CBS'
   },

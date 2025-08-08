@@ -102,12 +102,11 @@ export class LiveTVSyncService {
     
     for (const program of programs) {
       try {
-        // Generate YouTube TV deep link data with channel-specific URLs
+        // Generate YouTube TV deep link data with program-specific URLs
         const { serviceContentId } = this.tvMazeService.generateYouTubeTVDeepLink(program);
         
-        // Get channel-specific YouTube TV URL for better deep linking
-        const channelUrlMapping = getYouTubeTVChannelUrl(program.channel);
-        const directUrl = channelUrlMapping?.webUrl || `https://tv.youtube.com/browse/${program.channel}`;
+        // Generate program-specific YouTube TV watch URL
+        const directUrl = this.generateYouTubeTVWatchUrl(program);
         
         // Create Content object
         const content = {
@@ -145,6 +144,37 @@ export class LiveTVSyncService {
     }
     
     return updatedCount;
+  }
+
+  /**
+   * Generate YouTube TV smart deep link URL
+   */
+  private generateYouTubeTVWatchUrl(program: LiveProgram): string {
+    // Map common TV Media callsigns to better YouTube TV deep links
+    const channelUrlMap: Record<string, string> = {
+      // Major broadcast networks (LA area callsigns)
+      'KCBS': 'https://tv.youtube.com/browse/UCupvZG-5ko_eiXAupbDfxWw', // CBS Los Angeles
+      'KNBC': 'https://tv.youtube.com/browse/UC_BdeUJNYBgW1HQIM3Kf55w', // NBC Los Angeles
+      'KABC': 'https://tv.youtube.com/browse/UCBVYpFo_6yvuL_frIkHOl8w', // ABC Los Angeles
+      'KTTV': 'https://tv.youtube.com/browse/UCwgGWj1I7rlbk7Fhz-tBULw', // FOX Los Angeles
+      'KCET': 'https://tv.youtube.com/browse/UC8rQkaIZaPqKhQb8YrgmGKQ', // PBS SoCal
+      
+      // Cable networks
+      'CNN': 'https://tv.youtube.com/browse/UCwWhs_6x42TyRM4Wstoq8HA',
+      'ESPN': 'https://tv.youtube.com/browse/UCiWLfSweyRNmLpgEHekhoAg', 
+      'TNT': 'https://tv.youtube.com/browse/UCjdQVFVGd-OGl3alT9ZIAYA',
+      'TBS': 'https://tv.youtube.com/browse/UCKgJES6nq9lIxjKgTiZHDLw',
+    };
+
+    // Try network-specific URL first
+    const networkUrl = channelUrlMap[program.network];
+    if (networkUrl) {
+      return networkUrl;
+    }
+
+    // Fallback to main YouTube TV live guide with search hint
+    const encodedTitle = encodeURIComponent(program.showTitle || program.title);
+    return `https://tv.youtube.com/browse/live-tv?q=${encodedTitle}`;
   }
 
   private formatRating(rating?: number): string | null {
