@@ -231,7 +231,7 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                           <div className="flex items-center space-x-2">
                             <span className="text-white/60 text-xs font-medium">{displayInfo.number}</span>
                             {channelData ? (
-                              <NetworkLogos networkKey={channelData.logoKey} className="h-4" />
+                              NetworkLogos[channelData.logoKey]()
                             ) : (
                               <Tv className="h-4 w-4 text-gray-400" />
                             )}
