@@ -213,6 +213,13 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                   const currentProgram = channelPrograms.find((p: LiveProgram) => isProgramCurrentlyAiring(p));
                   const nextProgram = channelPrograms.find((p: LiveProgram) => new Date(p.startTime) > new Date());
 
+                  // For channels without specific logo mappings, create generic display info
+                  const displayInfo = channelData || {
+                    name: channel.toUpperCase(),
+                    logoKey: 'GENERIC' as NetworkLogoKey,
+                    number: channelPrograms[0]?.channel || 'N/A'
+                  };
+
                   return (
                     <div 
                       key={channel} 
@@ -222,10 +229,14 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                         {/* Channel Info */}
                         <div className="w-28 p-2 flex flex-col items-center space-y-1 bg-black/20 border-r border-white/10">
                           <div className="flex items-center space-x-2">
-                            <span className="text-white/60 text-xs font-medium">{channelData.number}</span>
-                            {NetworkLogos[channelData.logoKey]()}
+                            <span className="text-white/60 text-xs font-medium">{displayInfo.number}</span>
+                            {channelData ? (
+                              <NetworkLogos networkKey={channelData.logoKey} className="h-4" />
+                            ) : (
+                              <Tv className="h-4 w-4 text-gray-400" />
+                            )}
                           </div>
-                          <span className="text-white text-xs font-medium">{channelData.name}</span>
+                          <span className="text-white text-xs font-medium">{displayInfo.name}</span>
                         </div>
 
                         {/* Current Program */}
