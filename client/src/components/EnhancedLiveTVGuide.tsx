@@ -154,7 +154,7 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
   }
 
   return (
-    <div className="space-y-4 h-full" data-testid="enhanced-live-tv-guide">
+    <div className="flex flex-col h-full space-y-4" data-testid="enhanced-live-tv-guide">
       {/* Live TV Header */}
       <div className="flex items-center justify-between px-4 py-2 bg-black/40 rounded-lg">
         <div className="flex items-center space-x-3">
@@ -202,8 +202,8 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
       ) : availableChannels.length > 0 ? (
         <>
           {/* Live Programs Grid */}
-          <div className="bg-black/20 rounded-lg overflow-hidden">
-            <ScrollArea className="h-[600px]">
+          <div className="bg-black/20 rounded-lg overflow-hidden flex-1">
+            <ScrollArea className="h-full">
               <div className="space-y-0">
                 {availableChannels.map((channel) => {
                   const channelData = channelInfo[channel];
@@ -218,7 +218,7 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                     >
                       <div className="flex">
                         {/* Channel Info */}
-                        <div className="w-32 p-4 flex flex-col items-center space-y-2 bg-black/20 border-r border-white/10">
+                        <div className="w-28 p-2 flex flex-col items-center space-y-1 bg-black/20 border-r border-white/10">
                           <div className="flex items-center space-x-2">
                             <span className="text-white/60 text-xs font-medium">{channelData.number}</span>
                             {NetworkLogos[channelData.logoKey]()}
@@ -227,19 +227,19 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                         </div>
 
                         {/* Current Program */}
-                        <div className="flex-1 p-4">
+                        <div className="flex-1 p-3">
                           {currentProgram ? (
                             <div 
                               className="cursor-pointer group"
                               onClick={() => handleProgramClick(currentProgram, channel)}
                               data-testid={`current-program-${channel}`}
                             >
-                              <div className="flex items-start space-x-3">
+                              <div className="flex items-start space-x-2">
                                 {currentProgram.imageUrl && (
                                   <img 
                                     src={currentProgram.imageUrl} 
                                     alt={currentProgram.title}
-                                    className="w-16 h-24 object-cover rounded"
+                                    className="w-12 h-16 object-cover rounded"
                                   />
                                 )}
                                 <div className="flex-1 min-w-0">
@@ -262,7 +262,7 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     )}
                                   </h4>
                                   {currentProgram.description && (
-                                    <p className="text-white/60 text-sm mt-1 overflow-hidden">
+                                    <p className="text-white/60 text-xs mt-1 overflow-hidden line-clamp-2">
                                       {currentProgram.description}
                                     </p>
                                   )}
