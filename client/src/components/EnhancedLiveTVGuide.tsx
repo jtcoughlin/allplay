@@ -50,17 +50,17 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
     'espn': { name: 'ESPN', logoKey: 'ESPN', number: '206' },
   };
 
-  // Group live programs by channel - use network (callsign) for grouping since that's what we have channel info for
+  // Group live programs by channel - show ALL authentic programs, not just those with channel info
   const programsByChannel = livePrograms.reduce((acc: Record<string, LiveProgram[]>, program: LiveProgram) => {
-    // Map network callsigns to our channel info keys
+    // Use network as the channel key, but display ALL programs from authentic API
     const channelKey = program.network.toLowerCase();
     if (!acc[channelKey]) acc[channelKey] = [];
     acc[channelKey].push(program);
     return acc;
   }, {} as Record<string, LiveProgram[]>);
 
-  // Get available channels from the live data that we have channel info for
-  const availableChannels = Object.keys(programsByChannel).filter(channel => channelInfo[channel]);
+  // Show ALL available channels from authentic data, not just mapped ones
+  const availableChannels = Object.keys(programsByChannel);
 
   const getCurrentTime = () => {
     return new Date().toLocaleTimeString('en-US', { 
