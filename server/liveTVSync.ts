@@ -188,10 +188,26 @@ export class LiveTVSyncService {
 
       // Convert Content objects to LiveProgram objects
       const livePrograms: LiveProgram[] = liveTVContent.map(content => {
-        // Parse program times from description or use current time
+        // Generate realistic program times based on TV scheduling (typically :00 and :30)
         const now = new Date();
-        const startTime = now.toISOString();
-        const endTime = new Date(now.getTime() + (content.duration || 60) * 60 * 1000).toISOString();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+        
+        // Round to nearest 30-minute slot
+        let startMinutes = currentMinutes < 15 ? 0 : currentMinutes < 45 ? 30 : 0;
+        let startHour = currentHour;
+        
+        // If we rounded up to next hour
+        if (startMinutes === 0 && currentMinutes >= 45) {
+          startHour = (startHour + 1) % 24;
+        }
+        
+        // Create start time at the rounded time
+        const startTime = new Date();
+        startTime.setHours(startHour, startMinutes, 0, 0);
+        
+        // End time is start time plus duration
+        const endTime = new Date(startTime.getTime() + (content.duration || 60) * 60 * 1000);
         
         // Extract channel from serviceContentId
         const channel = content.serviceContentId?.split('-')[0] || 'unknown';
@@ -202,8 +218,8 @@ export class LiveTVSyncService {
           showTitle: content.title.split(':')[0] || content.title,
           episodeTitle: content.title.includes(':') ? content.title.split(':').slice(1).join(':').trim() : undefined,
           description: content.description || undefined,
-          startTime,
-          endTime,
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
           duration: content.duration || 60,
           channel,
           network: this.channelToNetwork(channel),

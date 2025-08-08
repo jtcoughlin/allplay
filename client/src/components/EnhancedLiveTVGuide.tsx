@@ -251,6 +251,11 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                     <span className="text-white/60 text-sm">
                                       {formatProgramTime(currentProgram.startTime, currentProgram.endTime)}
                                     </span>
+                                    {currentProgram.genre.length > 0 && (
+                                      <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
+                                        {currentProgram.genre[0]}
+                                      </Badge>
+                                    )}
                                   </div>
                                   <h4 className="text-white font-medium group-hover:text-blue-400 transition-colors">
                                     {currentProgram.episodeTitle ? (
@@ -266,18 +271,13 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                       {currentProgram.description}
                                     </p>
                                   )}
-                                  <div className="flex items-center space-x-2 mt-2">
-                                    {currentProgram.genre.length > 0 && (
-                                      <Badge variant="outline" className="text-white/60 border-white/20 text-xs">
-                                        {currentProgram.genre[0]}
-                                      </Badge>
-                                    )}
-                                    {currentProgram.season && currentProgram.episode && (
+                                  {currentProgram.season && currentProgram.episode && (
+                                    <div className="flex items-center space-x-2 mt-2">
                                       <span className="text-white/40 text-xs">
                                         S{currentProgram.season}E{currentProgram.episode}
                                       </span>
-                                    )}
-                                  </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
