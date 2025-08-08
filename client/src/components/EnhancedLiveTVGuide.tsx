@@ -275,13 +275,6 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
                                         {currentProgram.genre[0]}
                                       </Badge>
                                     )}
-                                    {/* Debug: Show genre data temporarily */}
-                                    {console.log('Genre debug:', currentProgram.title, currentProgram.genre)}
-                                    {currentProgram.genre && currentProgram.genre.length === 0 && (
-                                      <Badge variant="outline" className="text-red-500 border-red-300 text-xs">
-                                        NO GENRE
-                                      </Badge>
-                                    )}
                                   </div>
                                   <h4 className="text-white font-medium group-hover:text-blue-400 transition-colors">
                                     {currentProgram.episodeTitle ? (

@@ -10,6 +10,7 @@ Allplay is a revolutionary TV homescreen application that replaces traditional s
 - **API Rate Management**: Implemented proper error handling for commercial API usage limits with graceful fallback
 - **Authentic Programming**: Live TV guide now displays real YouTube TV schedules matching subscriber experience
 - **Channel Organization**: Programs organized by channel number for proper TV guide ordering (2, 4, 7, etc.)
+- **Genre Classification**: Full genre names displayed (Movie, Talk Show, News Magazine, Drama) replacing single-letter codes
 - **August 7, 2025**: Implemented TMDB API integration for automatic authentic poster assignment
 - **Smart Deep Linking**: Automatic poster pulling from streaming services via TMDB database matching
 - **Comprehensive Poster Coverage**: 34/55 YouTube TV shows now have authentic TMDB artwork
