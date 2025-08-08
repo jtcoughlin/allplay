@@ -1,42 +1,51 @@
 import { LiveProgram } from './tvMazeService.js';
 
 interface TVMediaLineup {
-  LineupID: string;
-  LineupName: string;
-  Location: string;
-  Country: string;
-  PostalCode: string;
-  Type: string;
+  lineupID: string;
+  lineupName: string;
+  lineupType: string;
+  providerID: string;
+  providerName: string;
+  serviceArea: string;
+  country: string;
+  status: string;
 }
 
 interface TVMediaChannel {
-  ChannelID: string;
-  ChannelNumber: string;
-  ChannelName: string;
-  CallSign: string;
-  LogoURL: string;
+  number: string;
+  channelNumber: number;
+  subChannelNumber: number;
+  stationID: number;
+  callsign: string;
+  logoFilename: string;
 }
 
 interface TVMediaProgram {
-  ProgramID: string;
-  Title: string;
-  EpisodeTitle?: string;
-  Description?: string;
-  Genre: string[];
-  StartTime: string;
-  EndTime: string;
-  Duration: number;
-  Rating?: string;
-  Season?: number;
-  Episode?: number;
-  ChannelID: string;
-  ChannelNumber: string;
-  ImageURL?: string;
+  number: string;
+  channelNumber: number;
+  subChannelNumber: number;
+  stationID: number;
+  callsign: string;
+  logoFilename: string;
+  listDateTime: string;
+  duration: number;
+  showID: number;
+  seriesID?: number;
+  showName: string;
+  episodeTitle?: string;
+  repeat: boolean;
+  new: boolean;
+  live: boolean;
+  hd: boolean;
+  showTypeID: string;
+  starRating: number;
+  description?: string;
+  showPicture?: string;
 }
 
 export class TVMediaService {
   private apiKey: string;
-  private baseUrl = 'https://api.tvmedia.ca';
+  private baseUrl = 'http://api.tvmedia.ca/tv/v4';
 
   constructor() {
     this.apiKey = process.env.TV_MEDIA_API_KEY || '';
@@ -47,13 +56,16 @@ export class TVMediaService {
 
   private async makeRequest<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
     const url = new URL(`${this.baseUrl}${endpoint}`);
+    
+    // Add API key as query parameter (TV Media API style)
+    url.searchParams.append('api_key', this.apiKey);
+    
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
 
     const response = await fetch(url.toString(), {
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
     });
@@ -70,7 +82,7 @@ export class TVMediaService {
    */
   async getLineupsByPostalCode(postalCode: string): Promise<TVMediaLineup[]> {
     try {
-      return await this.makeRequest<TVMediaLineup[]>(`/lineups/postal/${postalCode}`);
+      return await this.makeRequest<TVMediaLineup[]>(`/lineups`, { postalCode });
     } catch (error) {
       console.error('Error fetching lineups:', error);
       return [];
@@ -90,17 +102,33 @@ export class TVMediaService {
   }
 
   /**
-   * Get current and upcoming programs for a lineup
+   * Get current and upcoming programs for a lineup (using correct API format)
    */
-  async getProgramsForLineup(lineupId: string, hours: number = 6): Promise<TVMediaProgram[]> {
+  async getProgramsForLineup(lineupId: string, hours: number = 3): Promise<TVMediaProgram[]> {
     try {
-      const startTime = new Date().toISOString();
-      const endTime = new Date(Date.now() + (hours * 60 * 60 * 1000)).toISOString();
+      // Use the correct timezone parameter and detail level for better performance
+      const params = {
+        timezone: 'America/New_York',
+        detail: 'brief'
+      };
       
-      return await this.makeRequest<TVMediaProgram[]>(`/lineups/${lineupId}/listings`, {
-        start: startTime,
-        end: endTime,
+      const allPrograms = await this.makeRequest<TVMediaProgram[]>(`/lineups/${lineupId}/listings`, params);
+      
+      // Filter to only current and next few hours locally to reduce data transfer
+      const now = new Date();
+      const futureLimit = new Date(now.getTime() + (hours * 60 * 60 * 1000));
+      
+      const filteredPrograms = allPrograms.filter(program => {
+        const programStart = new Date(program.listDateTime);
+        const programEnd = new Date(programStart.getTime() + (program.duration * 60 * 1000));
+        
+        // Include programs that are currently on or starting within our time window
+        return programEnd > now && programStart <= futureLimit;
       });
+      
+      console.log(`📺 Filtered ${filteredPrograms.length} relevant programs from ${allPrograms.length} total`);
+      return filteredPrograms;
+      
     } catch (error) {
       console.error('Error fetching programs:', error);
       return [];
@@ -111,24 +139,30 @@ export class TVMediaService {
    * Convert TV Media programs to our LiveProgram format
    */
   convertToLivePrograms(programs: TVMediaProgram[]): LiveProgram[] {
-    return programs.map(program => ({
-      id: `tvmedia-${program.ProgramID}`,
-      showTitle: program.Title,
-      episodeTitle: program.EpisodeTitle || null,
-      title: program.EpisodeTitle ? `${program.Title}: ${program.EpisodeTitle}` : program.Title,
-      description: program.Description || null,
-      startTime: program.StartTime,
-      endTime: program.EndTime,
-      duration: program.Duration,
-      channel: program.ChannelNumber,
-      network: program.ChannelID,
-      genre: program.Genre || [],
-      rating: program.Rating ? parseFloat(program.Rating) : undefined,
-      season: program.Season || null,
-      episode: program.Episode || null,
-      imageUrl: program.ImageURL || null,
-      isLive: true,
-    }));
+    return programs.map(program => {
+      // Calculate end time from start time and duration
+      const startTime = new Date(program.listDateTime);
+      const endTime = new Date(startTime.getTime() + (program.duration * 60 * 1000));
+      
+      return {
+        id: `tvmedia-${program.showID}`,
+        showTitle: program.showName,
+        episodeTitle: program.episodeTitle || null,
+        title: program.episodeTitle ? `${program.showName}: ${program.episodeTitle}` : program.showName,
+        description: program.description || null,
+        startTime: program.listDateTime,
+        endTime: endTime.toISOString().slice(0, 19).replace('T', ' '),
+        duration: program.duration,
+        channel: program.channelNumber.toString(),
+        network: program.callsign,
+        genre: program.showTypeID ? [program.showTypeID] : [],
+        rating: program.starRating || undefined,
+        season: null,
+        episode: null,
+        imageUrl: program.showPicture ? `https://tvmedia.ca/images/${program.showPicture}` : null,
+        isLive: program.live,
+      };
+    });
   }
 
   /**
@@ -141,12 +175,19 @@ export class TVMediaService {
       // Get available lineups for the postal code
       const lineups = await this.getLineupsByPostalCode(postalCode);
       
-      // Find YouTube TV lineup (may be named differently in API)
-      const youtubetvLineup = lineups.find(lineup => 
-        lineup.LineupName.toLowerCase().includes('youtube') ||
-        lineup.Type.toLowerCase().includes('iptv') ||
-        lineup.LineupName.toLowerCase().includes('streaming')
+      // Find YouTube TV lineup specifically
+      let youtubetvLineup = lineups.find(lineup => 
+        lineup.providerName.toLowerCase().includes('youtube tv') ||
+        lineup.lineupName.toLowerCase().includes('youtube tv')
       );
+      
+      // If YouTube TV not found, look for it by provider name or ID
+      if (!youtubetvLineup) {
+        youtubetvLineup = lineups.find(lineup => 
+          lineup.lineupID === '139014' || // Known YouTube TV LA lineup ID
+          (lineup.providerName.toLowerCase().includes('youtube') && lineup.lineupType === 'VMVPD')
+        );
+      }
 
       if (!youtubetvLineup) {
         console.log('📺 No YouTube TV lineup found, using first available lineup');
@@ -155,16 +196,16 @@ export class TVMediaService {
         }
         // Use first available lineup as fallback
         const fallbackLineup = lineups[0];
-        console.log(`📺 Using fallback lineup: ${fallbackLineup.LineupName}`);
+        console.log(`📺 Using fallback lineup: ${fallbackLineup.lineupName}`);
         
-        const programs = await this.getProgramsForLineup(fallbackLineup.LineupID, hours);
+        const programs = await this.getProgramsForLineup(fallbackLineup.lineupID, hours);
         return this.convertToLivePrograms(programs);
       }
 
-      console.log(`📺 Found lineup: ${youtubetvLineup.LineupName}`);
+      console.log(`📺 Found lineup: ${youtubetvLineup.lineupName}`);
       
       // Get programs for the YouTube TV lineup
-      const programs = await this.getProgramsForLineup(youtubetvLineup.LineupID, hours);
+      const programs = await this.getProgramsForLineup(youtubetvLineup.lineupID, hours);
       
       console.log(`📋 Retrieved ${programs.length} programs from TV Media API`);
       
