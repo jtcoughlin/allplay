@@ -314,25 +314,12 @@ export function ContentCard({
             e.stopPropagation();
             playContent.mutate(content.id);
           }}
-          className={
-            ['apple-music', 'spotify'].includes(content.service || '') || 
-            (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
-              ? "w-full bg-white hover:bg-gray-100 !text-black border border-gray-300 font-semibold mt-2 px-1"
-              : "w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
-          }
+          className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1"
           disabled={playContent.isPending}
           data-testid={`button-play-${content.id}`}
         >
-          <Play className={`w-3 h-3 mr-1 ${
-            ['apple-music', 'spotify'].includes(content.service || '') || 
-            (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
-              ? '!text-black' : 'text-white'
-          }`} />
-          <span className={`text-xs truncate ${
-            ['apple-music', 'spotify'].includes(content.service || '') || 
-            (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'hbo-max', 'apple-tv', 'paramount', 'peacock'].includes(content.service || '') && content.type !== 'music')
-              ? '!text-black' : 'text-white'
-          }`}>
+          <Play className="w-3 h-3 mr-1 text-white" />
+          <span className="text-xs truncate text-white">
             {playContent.isPending ? 'Opening...' : 'Play'}
           </span>
         </Button>
