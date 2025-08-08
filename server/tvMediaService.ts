@@ -106,24 +106,31 @@ export class TVMediaService {
    */
   async getProgramsForLineup(lineupId: string, hours: number = 3): Promise<TVMediaProgram[]> {
     try {
-      // Use the correct timezone parameter and detail level for better performance
+      // Get current time in America/Los_Angeles timezone (matching YouTube TV Los Angeles lineup)
+      const now = new Date();
+      const startTime = now.toISOString().slice(0, 19).replace('T', ' ');
+      const endTime = new Date(now.getTime() + (hours * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+      
       const params = {
-        timezone: 'America/New_York',
-        detail: 'brief'
+        start: startTime,
+        end: endTime,
+        timezone: 'America/Los_Angeles'
       };
+      
+      console.log(`📺 Requesting TV Media API programs from ${startTime} to ${endTime} (${hours} hours)`);
       
       const allPrograms = await this.makeRequest<TVMediaProgram[]>(`/lineups/${lineupId}/listings`, params);
       
       // Filter to only current and next few hours locally to reduce data transfer
-      const now = new Date();
-      const futureLimit = new Date(now.getTime() + (hours * 60 * 60 * 1000));
+      const filterTime = new Date();
+      const futureLimit = new Date(filterTime.getTime() + (hours * 60 * 60 * 1000));
       
       const filteredPrograms = allPrograms.filter(program => {
         const programStart = new Date(program.listDateTime);
         const programEnd = new Date(programStart.getTime() + (program.duration * 60 * 1000));
         
         // Include programs that are currently on or starting within our time window
-        return programEnd > now && programStart <= futureLimit;
+        return programEnd > filterTime && programStart <= futureLimit;
       });
       
       console.log(`📺 Filtered ${filteredPrograms.length} relevant programs from ${allPrograms.length} total`);
