@@ -25,6 +25,18 @@ export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [location] = useLocation();
 
+  // Update CSS variable for main content margin
+  React.useEffect(() => {
+    if (isCollapsed) {
+      document.body.classList.add('sidebar-collapsed');
+    } else {
+      document.body.classList.remove('sidebar-collapsed');
+    }
+    return () => {
+      document.body.classList.remove('sidebar-collapsed');
+    };
+  }, [isCollapsed]);
+
   const navigationItems = [
     {
       title: "Home",
@@ -83,7 +95,7 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <div 
       className={cn(
-        "h-screen bg-navy-light border-r border-navy-lighter transition-all duration-300 z-40 flex-shrink-0 relative",
+        "fixed left-0 top-0 h-screen bg-navy-light border-r border-navy-lighter transition-all duration-300 z-40 flex-shrink-0",
         isCollapsed ? "w-16" : "w-64",
         className
       )}
