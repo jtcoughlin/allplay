@@ -231,11 +231,14 @@ export class LiveTVSyncService {
         // End time is start time plus duration
         const endTime = new Date(startTime.getTime() + (content.duration || 60) * 60 * 1000);
         
-        // Extract channel from serviceContentId
-        const channel = content.serviceContentId?.split('-')[0] || 'unknown';
+        // For TV Media API data, extract channel number and map to network callsign
+        const channelNumber = content.serviceContentId?.split('-')[0] || 'unknown';
+        
+        // Map TV Media channel numbers to network callsigns for proper display
+        const networkCallsign = this.mapChannelNumberToNetwork(channelNumber);
         
         // Get channel-specific YouTube TV URL
-        const channelUrlMapping = getYouTubeTVChannelUrl(channel);
+        const channelUrlMapping = getYouTubeTVChannelUrl(networkCallsign.toLowerCase());
         const directUrl = channelUrlMapping?.webUrl || content.directUrl;
         
         return {
@@ -247,8 +250,8 @@ export class LiveTVSyncService {
           startTime: startTime.toISOString(),
           endTime: endTime.toISOString(),
           duration: content.duration || 60,
-          channel,
-          network: this.channelToNetwork(channel),
+          channel: channelNumber,
+          network: networkCallsign,
           genre: [content.genre],
           rating: content.rating ? parseFloat(content.rating) : undefined,
           imageUrl: content.imageUrl || undefined,
@@ -265,6 +268,38 @@ export class LiveTVSyncService {
       const allPrograms = await this.tvMazeService.getAllCurrentLivePrograms();
       return allPrograms.filter(program => program.isLive);
     }
+  }
+
+  private mapChannelNumberToNetwork(channelNumber: string): string {
+    // Map YouTube TV Los Angeles channel numbers to network callsigns based on TV Media API data
+    const channelNumberToNetworkMap: Record<string, string> = {
+      // Major Networks
+      '2': 'FOX',
+      '4': 'NBC', 
+      '7': 'ABC',
+      '9': 'CBS',
+      
+      // Cable Networks  
+      '6': 'AMC',
+      '12': 'TBS',
+      '13': 'TNT',
+      '16': 'CNN',
+      '17': 'CNBC',
+      '18': 'CNN',
+      '24': 'DISNEY',
+      '47': 'FS1',
+      '91': 'STARZ',
+      '107': 'Tennis Channel',
+      '108': 'TBS',
+      '109': 'TLC',
+      '110': 'SYFY',
+      '112': 'TRUTV',
+      '115': 'Unknown',
+      '117': 'SYFY',
+      '118': 'CBS'
+    };
+    
+    return channelNumberToNetworkMap[channelNumber] || `CH${channelNumber}`;
   }
 
   private channelToNetwork(channel: string): string {
