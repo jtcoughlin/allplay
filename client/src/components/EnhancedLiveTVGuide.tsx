@@ -59,8 +59,14 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
     return acc;
   }, {} as Record<string, LiveProgram[]>);
 
-  // Show ALL available channels from authentic data, not just mapped ones
-  const availableChannels = Object.keys(programsByChannel);
+  // Sort channels by channel number for proper TV guide order
+  const availableChannels = Object.keys(programsByChannel).sort((a, b) => {
+    const aPrograms = programsByChannel[a];
+    const bPrograms = programsByChannel[b];
+    const aChannelNum = parseInt(aPrograms[0]?.channel || '999');
+    const bChannelNum = parseInt(bPrograms[0]?.channel || '999');
+    return aChannelNum - bChannelNum;
+  });
 
   const getCurrentTime = () => {
     return new Date().toLocaleTimeString('en-US', { 
