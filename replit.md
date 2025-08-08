@@ -12,6 +12,8 @@ Allplay is a revolutionary TV homescreen application that replaces traditional s
 - **Tab Reordering**: Moved "Live TV" to second position after "All" for prominent placement
 - **Enhanced Content**: Updated TBS and TNT with comprehensive programming (Friends, American Dad, Animal Kingdom, AEW Wrestling)
 - **Data Protection**: Comprehensive backup system prevents content loss with automated sync capabilities
+- **Live TV Guide Enhancement**: Integrated real YouTube TV programming data with authentic scheduling and channel-specific deep linking
+- **LOCKED: Live TV Guide Formatting**: Aesthetic formatting of Live TV guide is locked (compact view, genre placement next to time, poster sizes). Requires explicit unlock instruction to modify visual layout.
 
 1. **Real OAuth Authentication** (Spotify, YouTube, Apple Music) - Full API integration with secure credential storage
 2. **App Integration/Deep Linking** (Netflix, Amazon Prime, Disney+, etc.) - Links to content that opens in the service's native app using existing device logins
@@ -30,6 +32,7 @@ Key features include service connection management, unified content discovery, c
 - Data protection priority: Critical requirement to prevent content loss through comprehensive backup systems
 - Automated workflow: All backup and sync operations handled automatically during development
 - **Automated data protection**: Agent should automatically implement backup best practices without manual user intervention
+- **Live TV Guide Format Lock**: The Live TV guide aesthetic formatting is permanently locked in compact view with genre badges positioned next to time slots. No aesthetic changes to this component unless explicitly unlocked by user instruction. Technical/functional updates (deep linking, data sources) remain unrestricted.
 
 # System Architecture
 
