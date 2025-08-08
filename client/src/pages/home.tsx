@@ -62,16 +62,16 @@ export default function Home() {
   // Organize TV shows by categories - ordered by content volume for fuller screen
   const showsByCategory = {
     'Streaming Hits': shows.filter((item: Content) => 
-      ['The Bear', 'Stranger Things', 'Wednesday', 'The Boys', 'Ozark', 'House of Cards'].includes(item.title || '')
+      ['The Bear', 'Stranger Things', 'Wednesday', 'The Boys', 'Ozark', 'House of Cards', 'The Last Dance'].includes(item.title || '')
     ),
     'Comedy & Sitcoms': shows.filter((item: Content) => 
-      item.genre === 'comedy' || ['Friends', 'American Dad!', 'Family Guy', 'The Misery Index'].includes(item.title || '')
+      item.genre === 'comedy' || ['Friends', 'American Dad!', 'Family Guy', 'The Misery Index', 'The Big Bang Theory'].includes(item.title || '')
     ),
     'Crime & Drama': shows.filter((item: Content) => 
-      item.genre === 'drama' || item.genre === 'crime' || ['Animal Kingdom', 'Law & Order', 'The Closer'].includes(item.title || '')
+      item.genre === 'drama' || item.genre === 'crime' || ['Animal Kingdom', 'Law & Order', 'The Closer', 'NBA on TNT'].includes(item.title || '')
     ),
     'Action & Thriller': shows.filter((item: Content) => 
-      item.genre === 'action' || item.genre === 'thriller' || ['The Boys', 'Animal Kingdom'].includes(item.title || '')
+      item.genre === 'action' || item.genre === 'thriller' || ['The Boys', 'Animal Kingdom', 'AEW Wrestling'].includes(item.title || '')
     ),
     'Award Winners': shows.filter((item: Content) => 
       ['The Bear', 'Ozark', 'House of Cards'].includes(item.title || '')

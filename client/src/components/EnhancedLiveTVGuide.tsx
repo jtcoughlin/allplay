@@ -76,6 +76,17 @@ export function EnhancedLiveTVGuide({ content, favorites, onToggleFavorite, onPl
     });
   };
 
+  // Enhanced program display with better channel identification
+  const getChannelDisplayInfo = (program: LiveProgram) => {
+    const networkKey = program.network.toLowerCase().replace('ch', '');
+    const channelData = channelInfo[networkKey] || {
+      name: program.network.replace('CH', '').toUpperCase(),
+      logoKey: 'DEFAULT' as NetworkLogoKey,
+      number: program.channel
+    };
+    return channelData;
+  };
+
   const handleProgramClick = (program: LiveProgram, channel: string) => {
     setSelectedProgram(program);
     setSelectedChannel(channel);

@@ -47,11 +47,14 @@ export default function Search() {
     { value: 'all', label: 'All Platforms' },
     { value: 'netflix', label: 'Netflix' },
     { value: 'hulu', label: 'Hulu' },
-    { value: 'disney', label: 'Disney+' },
-    { value: 'hbo', label: 'HBO Max' },
+    { value: 'disney-plus', label: 'Disney+' },
+    { value: 'max', label: 'Max (HBO)' },
+    { value: 'amazon-prime', label: 'Prime Video' },
+    { value: 'apple-tv', label: 'Apple TV+' },
+    { value: 'paramount-plus', label: 'Paramount+' },
     { value: 'spotify', label: 'Spotify' },
-    { value: 'apple', label: 'Apple Music' },
-    { value: 'youtube', label: 'YouTube Music' },
+    { value: 'apple-music', label: 'Apple Music' },
+    { value: 'youtube-tv', label: 'YouTube TV' },
   ];
 
   const genres = [

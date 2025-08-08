@@ -236,18 +236,18 @@ export class TVMediaService {
       // Get available lineups for the postal code
       const lineups = await this.getLineupsByPostalCode(postalCode);
       
-      // Find YouTube TV lineup specifically
+      // Find YouTube TV lineup specifically using correct property names
       let youtubetvLineup = lineups.find(lineup => 
-        lineup.providerName.toLowerCase().includes('youtube tv') ||
-        lineup.lineupName.toLowerCase().includes('youtube tv')
+        (lineup?.name && lineup.name.toLowerCase().includes('youtube tv')) ||
+        lineup?.lineup === '139014' // Known YouTube TV LA lineup ID
       );
       
-      // If YouTube TV not found, look for it by provider name or ID  
+      // If YouTube TV not found, look for it by known ID or transport type
       if (!youtubetvLineup) {
         youtubetvLineup = lineups.find(lineup => 
-          lineup.lineupID === '139014' || // Known YouTube TV LA lineup ID 
-          lineup.lineupID === '139095' || // YouTube TV Dallas lineup ID (alternative)
-          (lineup.providerName.toLowerCase().includes('youtube') && lineup.lineupType === 'VMVPD')
+          lineup?.lineup === '139014' || // Known YouTube TV LA lineup ID 
+          lineup?.lineup === '139095' || // YouTube TV Dallas lineup ID (alternative)
+          (lineup?.name && lineup.name.toLowerCase().includes('youtube') && lineup?.transport === 'Digital')
         );
       }
 
@@ -258,16 +258,16 @@ export class TVMediaService {
         }
         // Use first available lineup as fallback
         const fallbackLineup = lineups[0];
-        console.log(`📺 Using fallback lineup: ${fallbackLineup.lineupName}`);
+        console.log(`📺 Using fallback lineup: ${fallbackLineup.name}`);
         
-        const programs = await this.getProgramsForLineup(fallbackLineup.lineupID, hours);
+        const programs = await this.getProgramsForLineup(fallbackLineup.lineup, hours);
         return this.convertToLivePrograms(programs);
       }
 
-      console.log(`📺 Found lineup: ${youtubetvLineup.lineupName}`);
+      console.log(`📺 Found lineup: ${youtubetvLineup.name}`);
       
       // Get programs for the YouTube TV lineup
-      const programs = await this.getProgramsForLineup(youtubetvLineup.lineupID, hours);
+      const programs = await this.getProgramsForLineup(youtubetvLineup.lineup, hours);
       
       console.log(`📋 Retrieved ${programs.length} programs from TV Media API`);
       
