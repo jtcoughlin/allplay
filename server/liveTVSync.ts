@@ -1,5 +1,6 @@
 import { TVMazeService, LiveProgram } from './tvMazeService.js';
 import { storage } from './storage.js';
+import { getYouTubeTVChannelUrl } from './youtubeTVChannelMappings.js';
 import type { Content } from '../shared/schema.js';
 
 export class LiveTVSyncService {
@@ -84,8 +85,12 @@ export class LiveTVSyncService {
     
     for (const program of programs) {
       try {
-        // Generate YouTube TV deep link data
-        const { serviceContentId, directUrl } = this.tvMazeService.generateYouTubeTVDeepLink(program);
+        // Generate YouTube TV deep link data with channel-specific URLs
+        const { serviceContentId } = this.tvMazeService.generateYouTubeTVDeepLink(program);
+        
+        // Get channel-specific YouTube TV URL for better deep linking
+        const channelUrlMapping = getYouTubeTVChannelUrl(program.channel);
+        const directUrl = channelUrlMapping?.webUrl || `https://tv.youtube.com/browse/${program.channel}`;
         
         // Create Content object
         const content = {
@@ -212,6 +217,10 @@ export class LiveTVSyncService {
         // Extract channel from serviceContentId
         const channel = content.serviceContentId?.split('-')[0] || 'unknown';
         
+        // Get channel-specific YouTube TV URL
+        const channelUrlMapping = getYouTubeTVChannelUrl(channel);
+        const directUrl = channelUrlMapping?.webUrl || content.directUrl;
+        
         return {
           id: content.id,
           title: content.title,
@@ -227,7 +236,7 @@ export class LiveTVSyncService {
           rating: content.rating ? parseFloat(content.rating) : undefined,
           imageUrl: content.imageUrl || undefined,
           isLive: true,
-          originalData: content // Add the missing property
+          originalData: { ...content, directUrl } // Add the updated directUrl
         };
       });
 
