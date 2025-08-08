@@ -591,7 +591,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/live-tv/currently-airing', async (req, res) => {
     try {
       const programs = await liveTVSync.getCurrentlyAiringPrograms();
-      res.json(programs);
+      
+      // Add deep links to each program before returning  
+      const programsWithDeepLinks = programs.map(program => ({
+        ...program,
+        directUrl: liveTVSync.generateYouTubeTVWatchUrl ? liveTVSync.generateYouTubeTVWatchUrl(program) : 'https://tv.youtube.com/browse/live-tv'
+      }));
+      
+      res.json(programsWithDeepLinks);
     } catch (error) {
       console.error('Error fetching currently airing programs:', error);
       res.status(500).json({ message: 'Failed to fetch currently airing programs' });

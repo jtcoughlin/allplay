@@ -108,6 +108,8 @@ export class LiveTVSyncService {
         // Generate program-specific YouTube TV watch URL
         const directUrl = this.generateYouTubeTVWatchUrl(program);
         
+        console.log(`📺 Mapping program: ${program.showTitle} on channel ${program.channel}/${program.network} -> ${directUrl}`);
+        
         // Create Content object
         const content = {
           id: program.id,
@@ -148,8 +150,9 @@ export class LiveTVSyncService {
 
   /**
    * Generate YouTube TV live stream watch URL
+   * Made public for API route access
    */
-  private generateYouTubeTVWatchUrl(program: LiveProgram): string {
+  public generateYouTubeTVWatchUrl(program: LiveProgram): string {
     // Known working live stream URLs (CBS confirmed working)
     const knownLiveStreamMap: Record<string, string> = {
       // CBS - Confirmed working
@@ -287,9 +290,28 @@ export class LiveTVSyncService {
         // Map TV Media channel numbers to network callsigns for proper display
         const networkCallsign = this.mapChannelNumberToNetwork(channelNumber);
         
-        // Get channel-specific YouTube TV URL
-        const channelUrlMapping = getYouTubeTVChannelUrl(networkCallsign.toLowerCase());
-        const directUrl = channelUrlMapping?.webUrl || content.directUrl;
+        // Generate direct URL using our improved deep linking logic
+        const liveProgram: LiveProgram = {
+          id: content.id,
+          showTitle: content.title.split(':')[0] || content.title,
+          title: content.title,
+          channel: channelNumber,
+          network: networkCallsign,
+          startTime: '',
+          endTime: '',
+          duration: content.duration || 60,
+          genre: [content.genre],
+          isLive: true,
+          episodeTitle: content.title.includes(':') ? content.title.split(':').slice(1).join(':').trim() : undefined,
+          description: content.description,
+          rating: undefined,
+          season: undefined,
+          episode: undefined,
+          imageUrl: content.imageUrl,
+          originalData: {} as any
+        };
+        
+        const directUrl = this.generateYouTubeTVWatchUrl(liveProgram);
         
         return {
           id: content.id,
@@ -306,7 +328,18 @@ export class LiveTVSyncService {
           rating: content.rating ? parseFloat(content.rating) : undefined,
           imageUrl: content.imageUrl || undefined,
           isLive: true,
-          originalData: { ...content, directUrl } // Add the updated directUrl
+          originalData: {
+            id: content.id,
+            name: content.title,
+            airdate: new Date().toISOString().split('T')[0],
+            airtime: new Date().toLocaleTimeString(),
+            show: {
+              id: 1,
+              name: content.title,
+              genres: [content.genre],
+              image: content.imageUrl ? { medium: content.imageUrl, original: content.imageUrl } : undefined
+            } as any
+          } as any
         };
       });
 
