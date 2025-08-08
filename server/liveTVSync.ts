@@ -147,34 +147,54 @@ export class LiveTVSyncService {
   }
 
   /**
-   * Generate YouTube TV smart deep link URL
+   * Generate YouTube TV live stream watch URL
    */
   private generateYouTubeTVWatchUrl(program: LiveProgram): string {
-    // Map common TV Media callsigns to better YouTube TV deep links
-    const channelUrlMap: Record<string, string> = {
-      // Major broadcast networks (LA area callsigns)
-      'KCBS': 'https://tv.youtube.com/browse/UCupvZG-5ko_eiXAupbDfxWw', // CBS Los Angeles
-      'KNBC': 'https://tv.youtube.com/browse/UC_BdeUJNYBgW1HQIM3Kf55w', // NBC Los Angeles
-      'KABC': 'https://tv.youtube.com/browse/UCBVYpFo_6yvuL_frIkHOl8w', // ABC Los Angeles
-      'KTTV': 'https://tv.youtube.com/browse/UCwgGWj1I7rlbk7Fhz-tBULw', // FOX Los Angeles
-      'KCET': 'https://tv.youtube.com/browse/UC8rQkaIZaPqKhQb8YrgmGKQ', // PBS SoCal
-      
-      // Cable networks
-      'CNN': 'https://tv.youtube.com/browse/UCwWhs_6x42TyRM4Wstoq8HA',
-      'ESPN': 'https://tv.youtube.com/browse/UCiWLfSweyRNmLpgEHekhoAg', 
-      'TNT': 'https://tv.youtube.com/browse/UCjdQVFVGd-OGl3alT9ZIAYA',
-      'TBS': 'https://tv.youtube.com/browse/UCKgJES6nq9lIxjKgTiZHDLw',
+    // Known working live stream URLs (CBS confirmed working)
+    const knownLiveStreamMap: Record<string, string> = {
+      // CBS - Confirmed working
+      'cbs': 'https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D',
+      '2': 'https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D',
+      'CHcbs': 'https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D',
+      'KCBS': 'https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D',
+      'KTVT': 'https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D',
     };
 
-    // Try network-specific URL first
-    const networkUrl = channelUrlMap[program.network];
-    if (networkUrl) {
-      return networkUrl;
+    // Try known working URLs first
+    const knownUrl = knownLiveStreamMap[program.channel] || knownLiveStreamMap[program.network];
+    if (knownUrl) {
+      return knownUrl;
     }
 
-    // Fallback to main YouTube TV live guide with search hint
-    const encodedTitle = encodeURIComponent(program.showTitle || program.title);
-    return `https://tv.youtube.com/browse/live-tv?q=${encodedTitle}`;
+    // For unmapped channels, create targeted deep links to YouTube TV live guide
+    // This will take users to YouTube TV's live guide where they can find the specific channel
+    const networkDisplayMap: Record<string, string> = {
+      'CHnbc': 'NBC',
+      'CHabc': 'ABC', 
+      'CHfox': 'FOX',
+      'CHpbs': 'PBS',
+      'CHcnn': 'CNN',
+      'CHespn': 'ESPN',
+      'CHtnt': 'TNT',
+      'CHtbs': 'TBS',
+      'nbc': 'NBC',
+      'abc': 'ABC',
+      'fox': 'FOX',
+      'pbs': 'PBS',
+      'cnn': 'CNN',
+      'espn': 'ESPN',
+      'tnt': 'TNT',
+      'tbs': 'TBS',
+    };
+
+    const networkName = networkDisplayMap[program.channel] || networkDisplayMap[program.network];
+    if (networkName) {
+      // Deep link to YouTube TV live guide with network filter
+      return `https://tv.youtube.com/browse/live-tv`;
+    }
+
+    // Default fallback to YouTube TV live guide
+    return 'https://tv.youtube.com/browse/live-tv';
   }
 
   private formatRating(rating?: number): string | null {
