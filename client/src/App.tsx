@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Sidebar } from "@/components/Sidebar";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
-import Search from "@/pages/search";
+
 import Favorites from "@/pages/favorites";
 import Preferences from "@/pages/preferences";
 import Profile from "@/pages/profile";
@@ -40,7 +40,6 @@ function Router() {
         `}</style>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/search" component={Search} />
           <Route path="/favorites" component={Favorites} />
           <Route path="/preferences" component={Preferences} />
           <Route path="/profile" component={Profile} />

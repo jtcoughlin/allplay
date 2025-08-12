@@ -46,13 +46,6 @@ export function Sidebar({ className }: SidebarProps) {
       testId: "nav-home"
     },
     {
-      title: "Search",
-      href: "/search", 
-      icon: Search,
-      active: location === "/search",
-      testId: "nav-search"
-    },
-    {
       title: "TV & Movies",
       href: "/",
       icon: Tv,

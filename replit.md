@@ -11,6 +11,7 @@ Allplay is a revolutionary TV homescreen application that replaces traditional s
 - **✅ Afternoon Content**: Displays appropriate afternoon shows ("The Price is Right", "General Hospital", "NFL Live")
 - **✅ Anonymous Access**: Deep linking works without login requirements for live TV content
 - **✅ Enhanced User Experience**: Improved search functionality, content organization, and UI refinements
+- **✅ Header Search Integration**: Moved search from separate tab to top-right header search bar for better accessibility
 - **Smart Fallback System**: When TV Media API rate limited, generates realistic programming instead of cached evening shows
 - **Professional TV Guide Data**: TV Media API integration (developer.tvmedia.ca) with intelligent fallback
 - **YouTube TV Integration**: Connected to YouTube TV Los Angeles lineup with real-time program data

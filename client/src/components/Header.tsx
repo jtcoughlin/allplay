@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { User, ChevronDown, Grid3X3, List, Play, Home, Settings, LogOut } from "lucide-react";
+import { User, ChevronDown, Grid3X3, List, Play, Home, Settings, LogOut, Search } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,16 +15,24 @@ interface HeaderProps {
   viewMode: 'cards' | 'guide';
   onViewModeChange: (mode: 'cards' | 'guide') => void;
   hideViewToggle?: boolean;
+  onSearch?: (query: string) => void;
 }
 
-export function Header({ viewMode, onViewModeChange, hideViewToggle = false }: HeaderProps) {
+export function Header({ viewMode, onViewModeChange, hideViewToggle = false, onSearch }: HeaderProps) {
   const [location] = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navItems = [
     { href: "/", label: "Home", key: "home" },
-    { href: "/search", label: "Search", key: "search" },
     { href: "/favorites", label: "Favorites", key: "favorites" },
   ];
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim() && onSearch) {
+      onSearch(searchQuery.trim());
+    }
+  };
 
   const isActive = (href: string) => {
     if (href === "/" && location === "/") return true;
@@ -104,6 +113,27 @@ export function Header({ viewMode, onViewModeChange, hideViewToggle = false }: H
             </>
           )}
         </nav>
+        
+        {/* Search Bar */}
+        <div className="flex items-center flex-1 max-w-md mx-6">
+          <form onSubmit={handleSearchSubmit} className="relative w-full">
+            <Input
+              type="text"
+              placeholder="Search across all platforms..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-navy-light border-navy-lighter text-cream placeholder-gray-400 focus:border-blue-primary pl-4 pr-10 text-sm h-8"
+              data-testid="input-header-search"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-primary transition-colors"
+              data-testid="button-header-search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
         
         {/* User Profile */}
         <div className="flex items-center space-x-3">

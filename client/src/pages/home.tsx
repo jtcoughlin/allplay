@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { Search as SearchIcon } from "lucide-react";
 import { Header } from "@/components/Header";
 import { GenreBanner } from "@/components/GenreBanner";
 import { ContentRow } from "@/components/ContentRow";
@@ -20,6 +21,8 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<'cards' | 'guide'>('cards');
   const [currentTrack, setCurrentTrack] = useState<Content | undefined>();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   // Fetch content based on selected genre
   const { data: content = [], isLoading: isLoadingContent } = useQuery({
@@ -27,6 +30,13 @@ export default function Home() {
     retry: false,
     staleTime: 0, // No caching to ensure fresh data
     refetchOnMount: true,
+  });
+
+  // Fetch search results when searching
+  const { data: searchResults = [], isLoading: isLoadingSearch } = useQuery({
+    queryKey: ["/api/content", { search: searchQuery }],
+    enabled: searchQuery.length > 0,
+    retry: false,
   });
 
   // Fetch continue watching
@@ -137,6 +147,18 @@ export default function Home() {
 
   // Extract favorite content IDs
   const favoriteIds = typedFavorites.map((fav: any) => fav.contentId);
+
+  // Handle search from header
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setIsSearching(true);
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+    setIsSearching(false);
+  };
 
   // Get top-rated content
   const topPicks = typedContent
@@ -334,12 +356,82 @@ export default function Home() {
         viewMode={effectiveViewMode} 
         onViewModeChange={setViewMode}
         hideViewToggle={selectedGenre === 'live-tv'}
+        onSearch={handleSearch}
       />
-      <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
+      {!isSearching && <GenreBanner selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />}
       
       <main className="px-2 py-4 w-full max-w-none pb-20">
-        {/* Headliner Banner - Only show in card view, but never in live TV */}
-        {effectiveViewMode === 'cards' && selectedGenre !== 'live-tv' && headlinerContent && (
+        {/* Search Results */}
+        {isSearching && (
+          <section className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-cream">
+                Search Results for "{searchQuery}"
+              </h2>
+              <button 
+                onClick={clearSearch}
+                className="text-gray-400 hover:text-blue-primary transition-colors text-sm"
+                data-testid="button-clear-search"
+              >
+                Clear Search
+              </button>
+            </div>
+            
+            {isLoadingSearch ? (
+              <div className="text-center py-12">
+                <div className="animate-spin w-8 h-8 border-2 border-blue-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p className="text-gray-400">Searching...</p>
+              </div>
+            ) : (
+              <>
+                {(searchResults as Content[]).length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {(searchResults as Content[]).map((item) => (
+                      <div key={item.id} className="group cursor-pointer">
+                        <div 
+                          className="relative bg-navy-light rounded-lg overflow-hidden transition-transform group-hover:scale-105"
+                          onClick={() => handlePlay(item)}
+                          data-testid={`search-result-${item.id}`}
+                        >
+                          {item.imageUrl ? (
+                            <img 
+                              src={item.imageUrl} 
+                              alt={item.title}
+                              className="w-full h-32 object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-32 bg-navy-lighter flex items-center justify-center">
+                              <SearchIcon className="w-8 h-8 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="p-2">
+                            <h3 className="text-xs font-medium text-cream truncate">
+                              {item.title}
+                            </h3>
+                            <p className="text-xs text-gray-400 truncate">
+                              {item.service}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <SearchIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-lg text-gray-400 mb-2">No results found</p>
+                    <p className="text-sm text-gray-500">
+                      Try different keywords or check your spelling
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        )}
+
+        {/* Headliner Banner - Only show in card view, but never in live TV or search */}
+        {!isSearching && effectiveViewMode === 'cards' && selectedGenre !== 'live-tv' && headlinerContent && (
           <HeadlinerBanner
             title={headlinerContent.title}
             description={headlinerContent.description || "Experience premium entertainment"}
@@ -354,8 +446,8 @@ export default function Home() {
           />
         )}
 
-        {/* Guide View or Live TV Guide */}
-        {effectiveViewMode === 'guide' ? (
+        {/* Guide View or Live TV Guide - Only show when not searching */}
+        {!isSearching && effectiveViewMode === 'guide' ? (
           selectedGenre === 'live-tv' ? (
             <EnhancedLiveTVGuide
               content={liveContent}
@@ -378,7 +470,7 @@ export default function Home() {
               onPlay={handlePlay}
             />
           )
-        ) : (
+        ) : !isSearching ? (
           /* Card View - Existing Content Rows */
           <>
             {/* Continue Watching Section - Only show in "All" tab */}
@@ -558,7 +650,7 @@ export default function Home() {
 
 
           </>
-        )}
+        ) : null}
 
         {/* Loading State */}
         {(isLoadingContent || isLoadingContinue || isLoadingFavorites) && (
