@@ -7,8 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Content } from "@shared/schema";
-import spotifyLogo from "@/assets/platform-logos/spotify-logo.svg";
-import appleMusicLogo from "@/assets/platform-logos/apple-music-logo.svg";
+import spotifyLogo from "@/assets/platform-logos/spotify-official.svg";
+import appleMusicLogo from "@/assets/platform-logos/apple-music-official.svg";
 
 export default function Music() {
   const { user } = useAuth();
@@ -58,8 +58,8 @@ export default function Music() {
       name: 'Spotify',
       description: 'Stream millions of songs and playlists',
       logo: spotifyLogo,
-      color: 'bg-green-600',
-      hoverColor: 'hover:bg-green-700',
+      color: 'bg-white',
+      hoverColor: 'hover:bg-gray-50',
       url: 'https://open.spotify.com/',
       type: 'oauth'
     },
@@ -68,8 +68,8 @@ export default function Music() {
       name: 'Apple Music',
       description: 'Access your Apple Music library and playlists',
       logo: appleMusicLogo,
-      color: 'bg-gradient-to-br from-red-500 to-orange-500',
-      hoverColor: 'hover:from-red-600 hover:to-orange-600',
+      color: 'bg-white',
+      hoverColor: 'hover:bg-gray-50',
       url: 'https://music.apple.com/',
       type: 'oauth'
     }
@@ -102,7 +102,7 @@ export default function Music() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className={`w-16 h-16 rounded-lg ${service.color} ${service.hoverColor} transition-all flex items-center justify-center p-3`}>
+              <div className={`w-16 h-16 rounded-lg ${service.color} ${service.hoverColor} transition-all flex items-center justify-center p-2`}>
                 <img 
                   src={service.logo} 
                   alt={`${service.name} logo`}
