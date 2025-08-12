@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Content } from "@shared/schema";
+import spotifyLogo from "@/assets/platform-logos/spotify-logo.svg";
+import appleMusicLogo from "@/assets/platform-logos/apple-music-logo.svg";
 
 export default function Music() {
   const { user } = useAuth();
@@ -55,8 +57,9 @@ export default function Music() {
       id: 'spotify',
       name: 'Spotify',
       description: 'Stream millions of songs and playlists',
-      icon: '🎵',
+      logo: spotifyLogo,
       color: 'bg-green-600',
+      hoverColor: 'hover:bg-green-700',
       url: 'https://open.spotify.com/',
       type: 'oauth'
     },
@@ -64,8 +67,9 @@ export default function Music() {
       id: 'apple-music',
       name: 'Apple Music',
       description: 'Access your Apple Music library and playlists',
-      icon: '🍎',
-      color: 'bg-black',
+      logo: appleMusicLogo,
+      color: 'bg-gradient-to-br from-red-500 to-orange-500',
+      hoverColor: 'hover:from-red-600 hover:to-orange-600',
       url: 'https://music.apple.com/',
       type: 'oauth'
     }
@@ -98,8 +102,13 @@ export default function Music() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className={`w-16 h-16 rounded-lg ${service.color} flex items-center justify-center text-2xl`}>
-                {service.icon}
+              <div className={`w-16 h-16 rounded-lg ${service.color} ${service.hoverColor} transition-all flex items-center justify-center p-3`}>
+                <img 
+                  src={service.logo} 
+                  alt={`${service.name} logo`}
+                  className="w-full h-full object-contain"
+                  data-testid={`img-logo-${service.id}`}
+                />
               </div>
               
               <div className="flex-1">
