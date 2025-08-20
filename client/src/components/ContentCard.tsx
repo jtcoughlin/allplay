@@ -183,22 +183,37 @@ export function ContentCard({
           />
         ) : (
           <div 
-            className={`w-full ${imageSizeClasses[size]} bg-navy-lighter rounded-lg flex items-center justify-center`}
+            className={`w-full ${imageSizeClasses[size]} bg-gradient-to-br from-navy-lighter to-navy-darker rounded-lg flex items-center justify-center relative overflow-hidden`}
             data-testid={`placeholder-content-${content.id}`}
           >
-            <div className="text-center p-2">
-              {!content.imageUrl && (
-                <div className="text-red-400 text-xs mb-1">No Image URL</div>
-              )}
-              {imageError && (
-                <div className="text-red-400 text-xs mb-1">Image Load Failed</div>
-              )}
+            {/* Background pattern for visual interest */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-primary/5 to-transparent" />
+            
+            <div className="text-center p-3 relative z-10">
               {content.type === 'music' ? (
-                <Music className="w-8 h-8 text-gray-400 mx-auto" />
+                <Music className="w-12 h-12 text-blue-primary/70 mx-auto mb-2" />
+              ) : content.service === 'youtube-tv' || content.isLive ? (
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center mb-2">
+                    <div className="w-6 h-6 bg-red-500 rounded-full animate-pulse" />
+                  </div>
+                  <div className="text-xs text-gray-300 font-medium">LIVE TV</div>
+                </div>
               ) : (
-                <Play className="w-8 h-8 text-gray-400 mx-auto" />
+                <Play className="w-12 h-12 text-blue-primary/70 mx-auto mb-2" />
               )}
-              <div className="text-gray-500 text-xs mt-1">{content.service}</div>
+              
+              <div className="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                {content.service === 'youtube-tv' ? 'YouTube TV' : 
+                 content.service === 'netflix' ? 'Netflix' :
+                 content.service === 'amazon-prime' ? 'Prime Video' :
+                 content.service === 'disney-plus' ? 'Disney+' :
+                 content.service === 'hbo-max' ? 'HBO Max' :
+                 content.service === 'hulu' ? 'Hulu' :
+                 content.service === 'apple-tv-plus' ? 'Apple TV+' :
+                 content.service === 'paramount-plus' ? 'Paramount+' :
+                 content.service || 'Streaming'}
+              </div>
             </div>
           </div>
         )}
