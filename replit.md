@@ -3,6 +3,7 @@
 Allplay is a revolutionary TV homescreen application that replaces traditional streaming interfaces with a unified entertainment hub. The platform consolidates Netflix, Hulu, Disney+, Spotify, and other streaming services into one seamless experience. The application supports three types of service integrations:
 
 ## Recent Changes
+- **August 20, 2025**: Complete Artwork Coverage Resolution - Fixed all external URL 404 errors using verified TMDB sources
 - **August 8, 2025 (Final Update)**: Complete Live TV Deep Linking and Programming Fix
 - **✅ Deep Linking Working**: Fixed "whoops something went wrong" errors - all channels now properly redirect
 - **✅ CBS Direct Streaming**: CBS programs link directly to live streams (https://tv.youtube.com/watch/2OGfFsEyTU8?vp=0gEEEgIwAQ%3D%3D)
