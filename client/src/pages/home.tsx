@@ -75,7 +75,11 @@ export default function Home() {
       ['The Bear', 'Stranger Things', 'Wednesday', 'The Boys', 'Ozark', 'House of Cards', 'The Last Dance'].includes(item.title || '')
     ),
     'Comedy & Sitcoms': shows.filter((item: Content) => 
-      item.genre === 'comedy' || ['Friends', 'American Dad!', 'Family Guy', 'The Misery Index', 'The Big Bang Theory'].includes(item.title || '')
+      item.genre === 'comedy' || ['Friends', 'American Dad!', 'Family Guy', 'The Big Bang Theory', 'The Simpsons', 'Ted Lasso', 'The Marvelous Mrs. Maisel', 'Fleabag', 'Atlanta'].includes(item.title || '')
+    ),
+    'Reality Comedy Shows': shows.filter((item: Content) => 
+      ['Impractical Jokers', 'The Misery Index', 'The Carbonaro Effect', 'Ridiculousness', 'Teen Mom'].includes(item.title || '') || 
+      (item.genre === 'comedy' && item.type === 'show' && item.description?.toLowerCase().includes('reality'))
     ),
     'Crime & Drama': shows.filter((item: Content) => 
       item.genre === 'drama' || item.genre === 'crime' || ['Animal Kingdom', 'Law & Order', 'The Closer', 'NBA on TNT'].includes(item.title || '')
@@ -96,8 +100,14 @@ export default function Home() {
 
   // Organize movies by categories - ordered by content volume for fuller screen
   const moviesByCategory = {
-    'Comedy Collection': movies.filter((item: Content) => 
-      item.category === 'Comedies' || item.genre === 'comedy' || item.genre === 'family'
+    'Comedy Movies': movies.filter((item: Content) => 
+      item.category === 'Comedies' || item.genre === 'comedy' || item.genre === 'family' || 
+      ['Happy Gilmore 2', 'Borat Subsequent Moviefilm', 'Palm Springs', 'Coming 2 America', 'The Adam Project'].includes(item.title || '')
+    ),
+    'Stand-up Specials': movies.filter((item: Content) => 
+      item.description?.toLowerCase().includes('stand-up') || 
+      item.description?.toLowerCase().includes('comedy special') ||
+      (item.genre === 'comedy' && item.description?.toLowerCase().includes('comedian'))
     ),
     'Action & Adventure': movies.filter((item: Content) => 
       item.genre === 'action' || item.genre === 'sci-fi' || 
