@@ -646,8 +646,87 @@ export default function Home() {
               />
             )}
 
+            {/* Comedy Genre - Show sub-sections */}
+            {selectedGenre === 'comedy' && (
+              <>
+                {/* Comedy Movies */}
+                {typedContent.filter((item: Content) => 
+                  item.genre === 'comedy' && item.type === 'movie' && 
+                  (item.category === 'Comedy Movies' || item.category === 'Comedies' || ['Superbad', 'The Grand Budapest Hotel', 'Game Night', 'Happy Gilmore 2', 'Borat Subsequent Moviefilm', 'Palm Springs', 'Coming 2 America', 'The Lost City'].includes(item.title || ''))
+                ).length > 0 && (
+                  <ContentRow
+                    title="Comedy Movies"
+                    content={typedContent.filter((item: Content) => 
+                      item.genre === 'comedy' && item.type === 'movie' && 
+                      (item.category === 'Comedy Movies' || item.category === 'Comedies' || ['Superbad', 'The Grand Budapest Hotel', 'Game Night', 'Happy Gilmore 2', 'Borat Subsequent Moviefilm', 'Palm Springs', 'Coming 2 America', 'The Lost City'].includes(item.title || ''))
+                    )}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
+                {/* Comedy & Sitcoms */}
+                {typedContent.filter((item: Content) => 
+                  item.genre === 'comedy' && item.type === 'show' && 
+                  !['Impractical Jokers', 'The Carbonaro Effect', 'The Misery Index', 'Ridiculousness'].includes(item.title || '') &&
+                  item.category !== 'Reality Comedy'
+                ).length > 0 && (
+                  <ContentRow
+                    title="Comedy & Sitcoms"
+                    content={typedContent.filter((item: Content) => 
+                      item.genre === 'comedy' && item.type === 'show' && 
+                      !['Impractical Jokers', 'The Carbonaro Effect', 'The Misery Index', 'Ridiculousness'].includes(item.title || '') &&
+                      item.category !== 'Reality Comedy'
+                    )}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
+                {/* Reality Comedy Shows */}
+                {typedContent.filter((item: Content) => 
+                  item.category === 'Reality Comedy' || 
+                  ['Impractical Jokers', 'The Carbonaro Effect', 'The Misery Index', 'Ridiculousness'].includes(item.title || '')
+                ).length > 0 && (
+                  <ContentRow
+                    title="Reality Comedy Shows"
+                    content={typedContent.filter((item: Content) => 
+                      item.category === 'Reality Comedy' || 
+                      ['Impractical Jokers', 'The Carbonaro Effect', 'The Misery Index', 'Ridiculousness'].includes(item.title || '')
+                    )}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
+                {/* Stand-up Specials */}
+                {typedContent.filter((item: Content) => 
+                  item.category === 'Stand-up Specials' || 
+                  (item.genre === 'comedy' && item.type === 'movie' && (
+                    item.description?.toLowerCase().includes('stand-up') || 
+                    item.description?.toLowerCase().includes('comedy special') ||
+                    ['Dave Chappelle: Sticks & Stones', 'Bo Burnham: Inside', 'Hannah Gadsby: Nanette'].includes(item.title || '')
+                  ))
+                ).length > 0 && (
+                  <ContentRow
+                    title="Stand-up Specials"
+                    content={typedContent.filter((item: Content) => 
+                      item.category === 'Stand-up Specials' || 
+                      (item.genre === 'comedy' && item.type === 'movie' && (
+                        item.description?.toLowerCase().includes('stand-up') || 
+                        item.description?.toLowerCase().includes('comedy special') ||
+                        ['Dave Chappelle: Sticks & Stones', 'Bo Burnham: Inside', 'Hannah Gadsby: Nanette'].includes(item.title || '')
+                      ))
+                    )}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+              </>
+            )}
+
             {/* Other Genres */}
-            {!['all', 'movies', 'shows', 'live-tv', 'sports', 'news'].includes(selectedGenre) && (
+            {!['all', 'movies', 'shows', 'live-tv', 'sports', 'news', 'comedy'].includes(selectedGenre) && (
               <ContentRow
                 title={selectedGenre.charAt(0).toUpperCase() + selectedGenre.slice(1)}
                 content={typedContent.filter((item: Content) => 
