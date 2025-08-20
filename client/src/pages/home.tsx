@@ -622,16 +622,153 @@ export default function Home() {
               </>
             )}
 
-            {/* Sports Genre */}
+            {/* Sports Genre - Show sub-sections */}
             {selectedGenre === 'sports' && (
-              <ContentRow
-                title="Sports"
-                content={typedContent.filter((item: Content) => 
-                  item.genre === 'sports' || item.genre === 'live-sports'
+              <>
+                {/* My Favorites */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'My Favorites'
+                ).length > 0 && (
+                  <ContentRow
+                    title="My Favorites"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'My Favorites'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
                 )}
-                favorites={favoriteIds}
-                size="large"
-              />
+
+                {/* NFL */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'NFL'
+                ).length > 0 && (
+                  <ContentRow
+                    title="NFL"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'NFL'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* College Football */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'College Football'
+                ).length > 0 && (
+                  <ContentRow
+                    title="College Football"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'College Football'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* NHL */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'NHL'
+                ).length > 0 && (
+                  <ContentRow
+                    title="NHL"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'NHL'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* MLB */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'MLB'
+                ).length > 0 && (
+                  <ContentRow
+                    title="MLB"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'MLB'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* NBA */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'NBA'
+                ).length > 0 && (
+                  <ContentRow
+                    title="NBA"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'NBA'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* Golf */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'Golf'
+                ).length > 0 && (
+                  <ContentRow
+                    title="Golf"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'Golf'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* Soccer */}
+                {typedContent.filter((item: Content) => 
+                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  item.category === 'Soccer'
+                ).length > 0 && (
+                  <ContentRow
+                    title="Soccer"
+                    content={typedContent.filter((item: Content) => 
+                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      item.category === 'Soccer'
+                    )}
+                    favorites={favoriteIds}
+                    size="large"
+                  />
+                )}
+
+                {/* Sports Documentaries */}
+                {typedContent.filter((item: Content) => 
+                  item.genre === 'documentary' && 
+                  item.category === 'Sports Documentaries'
+                ).length > 0 && (
+                  <ContentRow
+                    title="Sports Documentaries"
+                    content={typedContent.filter((item: Content) => 
+                      item.genre === 'documentary' && 
+                      item.category === 'Sports Documentaries'
+                    )}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+              </>
             )}
 
             {/* News Genre */}
