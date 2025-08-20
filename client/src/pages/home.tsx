@@ -627,13 +627,13 @@ export default function Home() {
               <>
                 {/* My Favorites */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'My Favorites'
                 ).length > 0 && (
                   <ContentRow
                     title="My Favorites"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'My Favorites'
                     )}
                     favorites={favoriteIds}
@@ -643,13 +643,13 @@ export default function Home() {
 
                 {/* NFL */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'NFL'
                 ).length > 0 && (
                   <ContentRow
                     title="NFL"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'NFL'
                     )}
                     favorites={favoriteIds}
@@ -659,13 +659,13 @@ export default function Home() {
 
                 {/* College Football */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'College Football'
                 ).length > 0 && (
                   <ContentRow
                     title="College Football"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'College Football'
                     )}
                     favorites={favoriteIds}
@@ -675,13 +675,13 @@ export default function Home() {
 
                 {/* NHL */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'NHL'
                 ).length > 0 && (
                   <ContentRow
                     title="NHL"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'NHL'
                     )}
                     favorites={favoriteIds}
@@ -691,13 +691,13 @@ export default function Home() {
 
                 {/* MLB */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'MLB'
                 ).length > 0 && (
                   <ContentRow
                     title="MLB"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'MLB'
                     )}
                     favorites={favoriteIds}
@@ -707,13 +707,13 @@ export default function Home() {
 
                 {/* NBA */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'NBA'
                 ).length > 0 && (
                   <ContentRow
                     title="NBA"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'NBA'
                     )}
                     favorites={favoriteIds}
@@ -723,13 +723,13 @@ export default function Home() {
 
                 {/* Golf */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'Golf'
                 ).length > 0 && (
                   <ContentRow
                     title="Golf"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'Golf'
                     )}
                     favorites={favoriteIds}
@@ -739,13 +739,13 @@ export default function Home() {
 
                 {/* Soccer */}
                 {typedContent.filter((item: Content) => 
-                  (item.genre === 'sports' || item.genre === 'live-sports') && 
+                  (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                   item.category === 'Soccer'
                 ).length > 0 && (
                   <ContentRow
                     title="Soccer"
                     content={typedContent.filter((item: Content) => 
-                      (item.genre === 'sports' || item.genre === 'live-sports') && 
+                      (item.genre === 'Sports' || item.genre === 'sports' || item.genre === 'live-sports') && 
                       item.category === 'Soccer'
                     )}
                     favorites={favoriteIds}
