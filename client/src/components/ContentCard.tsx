@@ -155,15 +155,9 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // DEBUG: Log component state for debugging
-  if (content.service === 'youtube-tv' && content.title === 'Boston Bruins vs Toronto Maple Leafs') {
-    console.log('🔍 DEBUG ContentCard:', {
-      title: content.title,
-      imageError,
-      hasImageUrl: !!content.imageUrl,
-      imageUrlPreview: content.imageUrl?.substring(0, 100),
-      willShowImage: !imageError && !!content.imageUrl
-    });
+  // DEBUG: Log all YouTube TV items to see what's happening
+  if (content.service === 'youtube-tv') {
+    console.log(`🔍 ${content.title}: imageError=${imageError}, hasUrl=${!!content.imageUrl}, willShow=${!imageError && !!content.imageUrl}`);
   }
 
   return (
@@ -179,39 +173,11 @@ export function ContentCard({
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              // Comprehensive error logging that will show in webview console logs
-              console.error(`CRITICAL IMAGE ERROR for ${content.title} (${content.service})`);
-              console.error(`Image URL: ${content.imageUrl || 'NULL'}`);
-              console.error(`URL Type: ${content.imageUrl?.startsWith('data:image') ? 'DATA_URI' : content.imageUrl?.startsWith('https://') ? 'EXTERNAL_URL' : 'UNKNOWN'}`);
-              console.error(`Error Details:`, e.type, (e.target as HTMLImageElement)?.src?.substring(0, 100));
-              
-              // Send error to server for debugging
-              fetch('/api/image-debug', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  title: content.title,
-                  service: content.service,
-                  imageUrl: content.imageUrl,
-                  error: 'Image failed to load'
-                })
-              }).catch(() => {}); // Silent fail for debug endpoint
-              
+              console.error(`❌ IMAGE ERROR: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
               setImageError(true);
             }}
             onLoad={() => {
               console.log(`✅ IMAGE SUCCESS: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
-              // Send success to server for debugging
-              fetch('/api/image-debug', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  title: content.title,
-                  service: content.service,
-                  imageUrl: content.imageUrl,
-                  error: 'Image loaded successfully'
-                })
-              }).catch(() => {});
             }}
             data-testid={`img-content-${content.id}`}
           />
