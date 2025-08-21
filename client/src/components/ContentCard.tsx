@@ -174,7 +174,7 @@ export function ContentCard({
         {shouldShowImage ? (
           // DEBUG: Show actual image
           <img 
-            src={content.imageUrl}
+            src={content.imageUrl || ''}
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
