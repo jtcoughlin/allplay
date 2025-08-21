@@ -15,6 +15,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
+  // Debug route for testing images  
+  app.get('/debug-images', (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html>
+<head><title>Debug Images</title></head>
+<body style="background:#111;color:white;font-family:Arial;padding:20px;">
+    <h1>Image Debug Test</h1>
+    <h2>Test: Manual SVG</h2>
+    <img style="width:200px;height:300px;border:2px solid red;" 
+         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300'%3E%3Crect width='200' height='300' fill='%23e50914'/%3E%3Ctext x='100' y='120' text-anchor='middle' fill='white' font-size='16' font-weight='bold'%3EYOUTUBE TV%3C/text%3E%3C/svg%3E" />
+    <h2>Test: API Data</h2>
+    <div id="test"></div>
+    <script>
+      fetch('/api/content').then(r=>r.json()).then(d=>{
+        const item = d.find(i => i.service === 'youtube-tv');
+        document.getElementById('test').innerHTML = 
+          '<p>URL: ' + (item.imageUrl || 'NULL') + '</p>' +
+          '<img style="width:200px;height:300px;border:2px solid blue;" src="' + (item.imageUrl || '') + '" onload="alert(\'SUCCESS\')" onerror="alert(\'ERROR\')" />';
+      });
+    </script>
+</body>
+</html>`);
+  });
+
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {

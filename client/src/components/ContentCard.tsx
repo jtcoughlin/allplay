@@ -167,17 +167,29 @@ export function ContentCard({
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`Image failed to load for ${content.title} (${content.service}):`, content.imageUrl);
-              console.error('Image error event:', e);
-              // Test direct access to the URL with cache busting
-              const testUrl = content.imageUrl + '?t=' + Date.now();
-              fetch(testUrl)
-                .then(response => console.log(`Direct fetch status for ${content.title}:`, response.status, 'URL:', testUrl))
-                .catch(err => console.error(`Direct fetch error for ${content.title}:`, err));
+              console.error(`❌ IMAGE FAILED: ${content.title} (${content.service})`);
+              console.error(`URL: ${content.imageUrl}`);
+              console.error('Error event:', e);
+              console.error('Image element:', e.target);
+              
+              // Force show what type of URL this is
+              if (content.imageUrl?.startsWith('data:image')) {
+                console.error('🔍 DATA URI detected - should always work!');
+                console.error('Data URI length:', content.imageUrl.length);
+                console.error('Data URI preview:', content.imageUrl.substring(0, 100));
+              } else if (content.imageUrl?.startsWith('https://image.tmdb.org')) {
+                console.error('🔍 TMDB URL detected - testing accessibility...');
+                fetch(content.imageUrl)
+                  .then(response => console.error(`TMDB status: ${response.status} for ${content.title}`))
+                  .catch(err => console.error(`TMDB fetch error: ${err}`));
+              } else {
+                console.error('🔍 UNKNOWN URL TYPE');
+              }
+              
               setImageError(true);
             }}
             onLoad={() => {
-              console.log(`Image loaded successfully for ${content.title} (${content.service}):`, content.imageUrl);
+              console.log(`✅ IMAGE SUCCESS: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
             }}
             data-testid={`img-content-${content.id}`}
           />
