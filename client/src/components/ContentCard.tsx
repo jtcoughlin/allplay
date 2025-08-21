@@ -155,6 +155,17 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
+  // DEBUG: Log component state for debugging
+  if (content.service === 'youtube-tv' && content.title === 'Boston Bruins vs Toronto Maple Leafs') {
+    console.log('🔍 DEBUG ContentCard:', {
+      title: content.title,
+      imageError,
+      hasImageUrl: !!content.imageUrl,
+      imageUrlPreview: content.imageUrl?.substring(0, 100),
+      willShowImage: !imageError && !!content.imageUrl
+    });
+  }
+
   return (
     <div 
       className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer mr-4 mb-4`}
@@ -162,6 +173,7 @@ export function ContentCard({
     >
       <div className="relative mb-2">
         {!imageError && content.imageUrl ? (
+          // DEBUG: Show actual image
           <img 
             src={content.imageUrl}
             alt={content.title}
@@ -189,10 +201,22 @@ export function ContentCard({
             }}
             onLoad={() => {
               console.log(`✅ IMAGE SUCCESS: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
+              // Send success to server for debugging
+              fetch('/api/image-debug', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  title: content.title,
+                  service: content.service,
+                  imageUrl: content.imageUrl,
+                  error: 'Image loaded successfully'
+                })
+              }).catch(() => {});
             }}
             data-testid={`img-content-${content.id}`}
           />
         ) : (
+          // DEBUG: Show fallback placeholder
           <div 
             className={`w-full ${imageSizeClasses[size]} bg-gradient-to-br from-navy-lighter to-navy-darker rounded-lg flex items-center justify-center relative overflow-hidden`}
             data-testid={`placeholder-content-${content.id}`}

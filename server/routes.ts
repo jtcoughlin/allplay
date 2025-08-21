@@ -28,17 +28,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
 <head><title>Debug Images</title></head>
 <body style="background:#111;color:white;font-family:Arial;padding:20px;">
     <h1>Image Debug Test</h1>
-    <h2>Test: Manual SVG</h2>
-    <img style="width:200px;height:300px;border:2px solid red;" 
-         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300'%3E%3Crect width='200' height='300' fill='%23e50914'/%3E%3Ctext x='100' y='120' text-anchor='middle' fill='white' font-size='16' font-weight='bold'%3EYOUTUBE TV%3C/text%3E%3C/svg%3E" />
-    <h2>Test: API Data</h2>
-    <div id="test"></div>
+    <h2>Test 1: Direct SVG Test</h2>
+    <img id="test1" style="width:200px;height:300px;border:2px solid red;" 
+         src="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><rect width='200' height='300' fill='red'/><text x='100' y='150' text-anchor='middle' fill='white' font-size='20'>TEST</text></svg>" 
+         onload="console.log('Direct SVG loaded!'); document.getElementById('result1').innerHTML='✅ SUCCESS';"
+         onerror="console.log('Direct SVG failed!'); document.getElementById('result1').innerHTML='❌ ERROR';" />
+    <div id="result1">Loading...</div>
+    
+    <h2>Test 2: API Response Test</h2>
+    <div id="api-test">Loading API data...</div>
+    
     <script>
+      console.log('🔍 Starting comprehensive image test...');
+      
+      // Test API response
       fetch('/api/content').then(r=>r.json()).then(d=>{
-        const item = d.find(i => i.service === 'youtube-tv');
-        document.getElementById('test').innerHTML = 
-          '<p>URL: ' + (item.imageUrl || 'NULL') + '</p>' +
-          '<img style="width:200px;height:300px;border:2px solid blue;" src="' + (item.imageUrl || '') + '" onload="alert(\'SUCCESS\')" onerror="alert(\'ERROR\')" />';
+        console.log('📦 API data received, total items:', d.length);
+        
+        const testItem = d.find(i => i.title === 'Boston Bruins vs Toronto Maple Leafs');
+        if (testItem) {
+          console.log('🎯 Found test item:', testItem.title);
+          console.log('🖼️ Image URL:', testItem.imageUrl);
+          
+          document.getElementById('api-test').innerHTML = 
+            '<h3>Test Item: ' + testItem.title + '</h3>' +
+            '<p><strong>Image URL:</strong> ' + (testItem.imageUrl || 'NULL') + '</p>' +
+            '<img style="width:200px;height:300px;border:2px solid blue;" ' +
+            'src="' + (testItem.imageUrl || '') + '" ' +
+            'onload="console.log(\'API image loaded!\'); this.nextElementSibling.innerHTML=\'✅ SUCCESS\';" ' +
+            'onerror="console.log(\'API image failed!\'); this.nextElementSibling.innerHTML=\'❌ ERROR\';" />' +
+            '<div>Loading...</div>';
+        } else {
+          document.getElementById('api-test').innerHTML = '❌ Test item not found';
+        }
+      }).catch(err => {
+        console.error('❌ API Error:', err);
+        document.getElementById('api-test').innerHTML = '❌ API Error: ' + err;
       });
     </script>
 </body>
