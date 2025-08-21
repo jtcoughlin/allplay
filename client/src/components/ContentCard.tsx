@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, Play, Music, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +25,11 @@ export function ContentCard({
 }: ContentCardProps) {
   const [imageError, setImageError] = useState(false);
   const { toast } = useToast();
+  
+  // CRITICAL FIX: Reset imageError when content changes
+  useEffect(() => {
+    setImageError(false);
+  }, [content.imageUrl]);
   const queryClient = useQueryClient();
 
   const sizeClasses = {
@@ -155,10 +160,10 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // DEBUG: Log all YouTube TV items to see what's happening
-  if (content.service === 'youtube-tv') {
-    console.log(`🔍 ${content.title}: imageError=${imageError}, hasUrl=${!!content.imageUrl}, willShow=${!imageError && !!content.imageUrl}`);
-  }
+  // TEMPORARY: Force show images for YouTube TV to test if this fixes the issue
+  const shouldShowImage = content.service === 'youtube-tv' ? 
+    !!content.imageUrl : // Always show if URL exists for YouTube TV
+    !imageError && !!content.imageUrl; // Use normal logic for other services
 
   return (
     <div 
@@ -166,7 +171,7 @@ export function ContentCard({
       data-testid={`card-content-${content.id}`}
     >
       <div className="relative mb-2">
-        {!imageError && content.imageUrl ? (
+        {shouldShowImage ? (
           // DEBUG: Show actual image
           <img 
             src={content.imageUrl}
