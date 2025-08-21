@@ -167,24 +167,23 @@ export function ContentCard({
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`❌ IMAGE FAILED: ${content.title} (${content.service})`);
-              console.error(`URL: ${content.imageUrl}`);
-              console.error('Error event:', e);
-              console.error('Image element:', e.target);
+              // Comprehensive error logging that will show in webview console logs
+              console.error(`CRITICAL IMAGE ERROR for ${content.title} (${content.service})`);
+              console.error(`Image URL: ${content.imageUrl || 'NULL'}`);
+              console.error(`URL Type: ${content.imageUrl?.startsWith('data:image') ? 'DATA_URI' : content.imageUrl?.startsWith('https://') ? 'EXTERNAL_URL' : 'UNKNOWN'}`);
+              console.error(`Error Details:`, e.type, (e.target as HTMLImageElement)?.src?.substring(0, 100));
               
-              // Force show what type of URL this is
-              if (content.imageUrl?.startsWith('data:image')) {
-                console.error('🔍 DATA URI detected - should always work!');
-                console.error('Data URI length:', content.imageUrl.length);
-                console.error('Data URI preview:', content.imageUrl.substring(0, 100));
-              } else if (content.imageUrl?.startsWith('https://image.tmdb.org')) {
-                console.error('🔍 TMDB URL detected - testing accessibility...');
-                fetch(content.imageUrl)
-                  .then(response => console.error(`TMDB status: ${response.status} for ${content.title}`))
-                  .catch(err => console.error(`TMDB fetch error: ${err}`));
-              } else {
-                console.error('🔍 UNKNOWN URL TYPE');
-              }
+              // Send error to server for debugging
+              fetch('/api/image-debug', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  title: content.title,
+                  service: content.service,
+                  imageUrl: content.imageUrl,
+                  error: 'Image failed to load'
+                })
+              }).catch(() => {}); // Silent fail for debug endpoint
               
               setImageError(true);
             }}

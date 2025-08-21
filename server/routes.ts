@@ -15,6 +15,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
+  // Image debug endpoint to capture client-side errors
+  app.post('/api/image-debug', (req, res) => {
+    console.error('🖼️ CLIENT IMAGE ERROR:', req.body);
+    res.json({ received: true });
+  });
+
   // Debug route for testing images  
   app.get('/debug-images', (req, res) => {
     res.send(`<!DOCTYPE html>
