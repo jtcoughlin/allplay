@@ -160,10 +160,8 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // TEMPORARY: Force show images for YouTube TV to test if this fixes the issue
-  const shouldShowImage = content.service === 'youtube-tv' ? 
-    !!content.imageUrl : // Always show if URL exists for YouTube TV
-    !imageError && !!content.imageUrl; // Use normal logic for other services
+  // Show images for all services if URL exists, ignore imageError state for now
+  const shouldShowImage = !!content.imageUrl;
 
   return (
     <div 
