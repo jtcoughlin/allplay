@@ -29,7 +29,7 @@ export function ContentCard({
   // CRITICAL FIX: Reset imageError when content changes
   useEffect(() => {
     setImageError(false);
-  }, [content.imageUrl]);
+  }, [content.imageUrl, content.id]);
   const queryClient = useQueryClient();
 
   const sizeClasses = {
@@ -160,11 +160,11 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // Show images for all services if URL exists
-  const shouldShowImage = !!content.imageUrl && !imageError;
+  // Show images for all services if URL exists - ALWAYS try to show images, ignore previous errors
+  const shouldShowImage = !!content.imageUrl;
   
   // Debug logging to track what's happening
-  console.log(`🔍 DEBUG: ${content.title} - URL exists: ${!!content.imageUrl}, Error: ${imageError}, Show: ${shouldShowImage}`);
+  console.log(`🔍 DEBUG: ${content.title} - URL: ${content.imageUrl?.substring(0, 60)}... | Show: ${shouldShowImage}`);
 
   return (
     <div 
@@ -178,8 +178,10 @@ export function ContentCard({
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`❌ IMAGE FAILED: ${content.title} - URL: ${content.imageUrl?.substring(0, 100)}`);
-              setImageError(true);
+              console.error(`❌ IMAGE FAILED: ${content.title}`);
+              console.error(`   URL: ${content.imageUrl}`);
+              console.error(`   Error:`, e);
+              // Don't set imageError - keep trying to show images
             }}
             onLoad={() => {
               console.log(`✅ IMAGE LOADED: ${content.title}`);

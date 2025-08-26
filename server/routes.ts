@@ -35,6 +35,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
          onerror="console.log('Direct SVG failed!'); document.getElementById('result1').innerHTML='❌ ERROR';" />
     <div id="result1">Loading...</div>
     
+    <h2>Test 2: Database SVG Test</h2>
+    <img id="test2" style="width:200px;height:300px;border:2px solid blue;" 
+         src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22300%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22200%22%20height%3D%22300%22%20fill%3D%22%23e50914%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22100%22%20y%3D%22120%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-size%3D%2216%22%20font-weight%3D%22bold%22%3EYOUTUBE%20TV%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22100%22%20cy%3D%22180%22%20r%3D%2230%22%20fill%3D%22white%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3Cpolygon%20points%3D%2290%2C165%2090%2C195%20120%2C180%22%20fill%3D%22white%22%2F%3E%0A%20%20%20%20%3C%2Fsvg%3E" 
+         onload="console.log('Database SVG loaded!'); document.getElementById('result2').innerHTML='✅ SUCCESS';"
+         onerror="console.log('Database SVG failed!'); document.getElementById('result2').innerHTML='❌ ERROR';" />
+    <div id="result2">Loading...</div>
+    
     <h2>Test 2: API Response Test</h2>
     <div id="api-test">Loading API data...</div>
     
@@ -42,10 +49,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('🔍 Starting comprehensive image test...');
       
       // Test API response
-      fetch('/api/content').then(r=>r.json()).then(d=>{
+      fetch('/api/content').then(r=>{
+        if(!r.ok) throw new Error('Auth required: ' + r.status);
+        return r.json();
+      }).then(d=>{
         console.log('📦 API data received, total items:', d.length);
         
-        const testItem = d.find(i => i.title === 'Boston Bruins vs Toronto Maple Leafs');
+        const testItem = d[0]; // Use first item instead of searching
         if (testItem) {
           console.log('🎯 Found test item:', testItem.title);
           console.log('🖼️ Image URL:', testItem.imageUrl);
