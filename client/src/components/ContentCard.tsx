@@ -160,11 +160,11 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // Show images for all services if URL exists, with enhanced debugging
-  const shouldShowImage = !!content.imageUrl;
+  // Show images for all services if URL exists
+  const shouldShowImage = !!content.imageUrl && !imageError;
   
   // Debug logging to track what's happening
-  console.log(`🔍 CARD DEBUG: ${content.title} (${content.service}) - imageUrl: ${content.imageUrl?.substring(0, 80)}... | shouldShowImage: ${shouldShowImage} | imageError: ${imageError}`);
+  console.log(`🔍 DEBUG: ${content.title} - URL exists: ${!!content.imageUrl}, Error: ${imageError}, Show: ${shouldShowImage}`);
 
   return (
     <div 
@@ -173,19 +173,16 @@ export function ContentCard({
     >
       <div className="relative mb-2">
         {shouldShowImage ? (
-          // DEBUG: Show actual image
           <img 
             src={content.imageUrl || ''}
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`❌ IMAGE LOAD FAILED: ${content.title} (${content.service}) - URL: ${content.imageUrl}`);
-              console.error(`❌ Error details:`, e);
-              // Don't set imageError to true - keep trying to show images
-              // setImageError(true);
+              console.error(`❌ IMAGE FAILED: ${content.title} - URL: ${content.imageUrl?.substring(0, 100)}`);
+              setImageError(true);
             }}
             onLoad={() => {
-              console.log(`✅ IMAGE LOADED SUCCESSFULLY: ${content.title} (${content.service}) - URL: ${content.imageUrl}`);
+              console.log(`✅ IMAGE LOADED: ${content.title}`);
             }}
             data-testid={`img-content-${content.id}`}
           />

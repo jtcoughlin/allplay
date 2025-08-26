@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG Data URL Test</title>
+</head>
+<body>
+    <h1>SVG Data URL Test</h1>
+    
+    <h2>Test 1: Simple SVG</h2>
+    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><rect width='200' height='300' fill='%23e50914'/><text x='100' y='150' text-anchor='middle' fill='white' font-size='16'>TEST</text></svg>" alt="Simple SVG" style="border: 1px solid black;">
+    
+    <h2>Test 2: URL Encoded SVG (like our database)</h2>
+    <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22300%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22200%22%20height%3D%22300%22%20fill%3D%22%23e50914%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22100%22%20y%3D%22120%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-size%3D%2216%22%20font-weight%3D%22bold%22%3EYOUTUBE%20TV%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22100%22%20cy%3D%22180%22%20r%3D%2230%22%20fill%3D%22white%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3Cpolygon%20points%3D%2290%2C165%2090%2C195%20120%2C180%22%20fill%3D%22white%22%2F%3E%0A%20%20%20%20%3C%2Fsvg%3E" alt="Encoded SVG" style="border: 1px solid black;">
+    
+    <h2>Test 3: Base64 SVG</h2>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIj4KICAgICAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNlNTA5MTQiLz4KICAgICAgPHRleHQgeD0iMTAwIiB5PSIxMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCI+WU9VVFVCRSBUVJY8L3RleHQ+CiAgICAgIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjE4MCIgcj0iMzAiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjMiLz4KICAgICAgPHBvbHlnb24gcG9pbnRzPSI5MCwxNjUgOTAsMTk1IDEyMCwxODAiIGZpbGw9IndoaXRlIi8+CiAgICA8L3N2Zz4=" alt="Base64 SVG" style="border: 1px solid black;">
+    
+    <script>
+        console.log('SVG Test Page Loaded');
+        
+        // Test if images load properly
+        document.querySelectorAll('img').forEach((img, index) => {
+            img.onload = () => console.log(`✅ Image ${index + 1} loaded successfully`);
+            img.onerror = (e) => console.error(`❌ Image ${index + 1} failed to load:`, e);
+        });
+    </script>
+</body>
+</html>
