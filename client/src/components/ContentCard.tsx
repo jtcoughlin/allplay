@@ -160,8 +160,11 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // Show images for all services if URL exists, ignore imageError state for now
+  // Show images for all services if URL exists, with enhanced debugging
   const shouldShowImage = !!content.imageUrl;
+  
+  // Debug logging to track what's happening
+  console.log(`🔍 CARD DEBUG: ${content.title} (${content.service}) - imageUrl: ${content.imageUrl?.substring(0, 80)}... | shouldShowImage: ${shouldShowImage} | imageError: ${imageError}`);
 
   return (
     <div 
@@ -176,11 +179,13 @@ export function ContentCard({
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`❌ IMAGE ERROR: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
-              setImageError(true);
+              console.error(`❌ IMAGE LOAD FAILED: ${content.title} (${content.service}) - URL: ${content.imageUrl}`);
+              console.error(`❌ Error details:`, e);
+              // Don't set imageError to true - keep trying to show images
+              // setImageError(true);
             }}
             onLoad={() => {
-              console.log(`✅ IMAGE SUCCESS: ${content.title} (${content.service}) - ${content.imageUrl?.substring(0, 50)}...`);
+              console.log(`✅ IMAGE LOADED SUCCESSFULLY: ${content.title} (${content.service}) - URL: ${content.imageUrl}`);
             }}
             data-testid={`img-content-${content.id}`}
           />
