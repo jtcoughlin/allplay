@@ -162,6 +162,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Data URL Fix endpoint
+  app.post('/api/fix-data-urls', async (req, res) => {
+    try {
+      console.log('🔧 Starting data URL fix process...');
+      
+      // Create backup before fixing
+      await BackupManager.createContentBackup(`pre-dataurl-fix-${new Date().toISOString().split('T')[0]}`);
+      
+      const { DataUrlFixer } = await import('./utils/dataUrlFixer');
+      const fixedCount = await DataUrlFixer.fixAllDataUrls();
+      
+      // Sync to seed file after fixing
+      await BackupManager.syncDatabaseToSeed();
+      
+      res.json({ 
+        message: `Successfully fixed ${fixedCount} malformed data URLs`,
+        fixedCount
+      });
+    } catch (error) {
+      console.error('Error fixing data URLs:', error);
+      res.status(500).json({ 
+        message: 'Failed to fix data URLs',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Automated backup endpoints
   app.post('/api/backup/create', async (req, res) => {
     try {
