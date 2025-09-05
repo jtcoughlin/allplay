@@ -168,8 +168,20 @@ export function ContentCard({
   const shouldShowImage = !!smartImageUrl && !localImageError;
   const showLoadingState = imageLoading && !localImageError;
   
-  // Enhanced debug logging
-  console.log(`🔍 SMART: ${content.title} - Original: ${content.imageUrl?.substring(0, 40)}... | Smart: ${smartImageUrl?.substring(0, 40)}... | Show: ${shouldShowImage} | Loading: ${imageLoading}`);
+  // COMPREHENSIVE DEBUG LOGGING FOR AUDIT
+  console.log(`
+🔍 CONTENTCARD AUDIT: ${content.title}
+   📍 Content ID: ${content.id}
+   📍 Service: ${content.service}
+   📍 Type: ${content.type}
+   🖼️ Original URL: ${content.imageUrl || 'NULL'}
+   🎯 Smart URL: ${smartImageUrl || 'NULL'}
+   📊 URL Type: ${content.imageUrl?.includes('image.tmdb.org') ? 'TMDB' : content.imageUrl?.includes('data:image/svg+xml') ? 'SVG' : content.imageUrl ? 'OTHER' : 'NONE'}
+   ⚙️ Should Show: ${shouldShowImage}
+   ⏳ Loading: ${imageLoading}
+   ❌ Local Error: ${localImageError}
+   🎪 Image Error: ${imageError || 'none'}
+  `);
 
   return (
     <div 

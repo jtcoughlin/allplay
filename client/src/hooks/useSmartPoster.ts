@@ -24,17 +24,23 @@ export const useSmartPoster = (content: {
     setLoading(false);
     setError(null);
 
-    // Add cache busting for TMDb URLs to ensure fresh images
-    if (processedImageUrl?.includes('image.tmdb.org')) {
-      console.log(`🎬 TMDb poster detected for: ${content.title}`);
-    } else if (processedImageUrl?.includes('data:image/svg+xml')) {
-      console.log(`🎨 SVG placeholder for: ${content.title}`);
-    } else if (processedImageUrl) {
-      console.log(`🖼️ Standard image for: ${content.title}`);
-    } else {
-      console.log(`❓ No image URL for: ${content.title}`);
-    }
-  }, [content.id, content.imageUrl, content.title, processedImageUrl]);
+    // COMPREHENSIVE SMART POSTER AUDIT LOGGING
+    console.log(`
+🎯 SMARTPOSTER AUDIT: ${content.title}
+   📍 Content ID: ${content.id}
+   📍 Service: ${content.service || 'unknown'}
+   📍 Type: ${content.type || 'unknown'}
+   🖼️ Raw imageUrl: ${content.imageUrl || 'NULL'}
+   🔄 Processed URL: ${processedImageUrl || 'NULL'}
+   📊 URL Classification: ${
+     processedImageUrl?.includes('image.tmdb.org') ? '🎬 TMDB POSTER' :
+     processedImageUrl?.includes('data:image/svg+xml') ? '🎨 SVG PLACEHOLDER' :
+     processedImageUrl ? '🖼️ OTHER IMAGE' : '❓ NO IMAGE'
+   }
+   ⚙️ Loading: ${loading}
+   ❌ Error: ${error || 'none'}
+    `);
+  }, [content.id, content.imageUrl, content.title, processedImageUrl, content.service, content.type, loading, error]);
 
   return {
     imageUrl: processedImageUrl,
