@@ -164,45 +164,19 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // TEMPORARY FIX: Force show TMDb images to diagnose the issue
+  // Show images if we have a smart image URL and no local error
   const isTMDbImage = smartImageUrl?.includes('image.tmdb.org');
-  const shouldShowImage = !!smartImageUrl && (isTMDbImage || !localImageError);
+  const shouldShowImage = !!smartImageUrl && !localImageError;
   const showLoadingState = imageLoading && !localImageError;
   
-  // COMPREHENSIVE DEBUG LOGGING FOR AUDIT
-  console.log(`
-🔍 CONTENTCARD AUDIT: ${content.title}
-   📍 Content ID: ${content.id}
-   📍 Service: ${content.service}
-   📍 Type: ${content.type}
-   🖼️ Original URL: ${content.imageUrl || 'NULL'}
-   🎯 Smart URL: ${smartImageUrl || 'NULL'}
-   📊 URL Type: ${content.imageUrl?.includes('image.tmdb.org') ? 'TMDB' : content.imageUrl?.includes('data:image/svg+xml') ? 'SVG' : content.imageUrl ? 'OTHER' : 'NONE'}
-   🎬 Is TMDb: ${isTMDbImage}
-   ⚙️ Should Show: ${shouldShowImage}
-   ⏳ Loading: ${imageLoading}
-   ❌ Local Error: ${localImageError}
-   🎪 Image Error: ${imageError || 'none'}
-   🔧 FORCE SHOW TMDb: ${isTMDbImage ? 'YES - OVERRIDING ERRORS' : 'NO'}
-   🧪 TEST URL FOR CARBONARO: ${content.title === 'The Carbonaro Effect' ? 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg' : 'Not Carbonaro'}
-  `);
 
   return (
     <div 
       className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer mr-4 mb-4`}
       data-testid={`card-content-${content.id}`}
-      style={{ 
-        border: isTMDbImage ? '2px solid lime' : '1px solid gray',
-        minHeight: '200px'
-      }}
     >
       <div 
         className="relative mb-2"
-        style={{ 
-          border: '1px solid blue',
-          minHeight: '150px',
-          overflow: 'visible'
-        }}
       >
         {showLoadingState ? (
           // Loading state for smart poster
@@ -216,81 +190,18 @@ export function ContentCard({
             </div>
           </div>
         ) : shouldShowImage ? (
-          <div>
-            {console.log(`🎬 RENDERING IMG ELEMENT FOR: ${content.title} - URL: ${smartImageUrl}`)}
-            <img 
-              src={content.title === 'The Carbonaro Effect' ? 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg' : smartImageUrl || ''}
-              alt={content.title}
-              className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
-              style={{ 
-                border: '3px solid red', 
-                minHeight: '100px', 
-                minWidth: '100px',
-                display: 'block',
-                visibility: 'visible',
-                opacity: '1',
-                position: 'relative',
-                zIndex: '999',
-                backgroundColor: 'rgba(255, 0, 0, 0.2)' // Red overlay to show if space is filled
-              }}
-              onError={(e) => {
-                console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
-                console.error(`   Smart URL: ${smartImageUrl}`);
-                console.error(`   Original URL: ${content.imageUrl}`);
-                console.error(`   Error details:`, {
-                  message: e.currentTarget.error,
-                  naturalWidth: e.currentTarget.naturalWidth,
-                  naturalHeight: e.currentTarget.naturalHeight,
-                  complete: e.currentTarget.complete,
-                  clientWidth: e.currentTarget.clientWidth,
-                  clientHeight: e.currentTarget.clientHeight,
-                  offsetWidth: e.currentTarget.offsetWidth,
-                  offsetHeight: e.currentTarget.offsetHeight,
-                  src: e.currentTarget.src,
-                  currentSrc: e.currentTarget.currentSrc,
-                  crossOrigin: e.currentTarget.crossOrigin,
-                  loading: e.currentTarget.loading
-                });
-                // Test direct image access
-                console.error(`   🔍 Testing direct image load for: ${smartImageUrl}`);
-                const testImg = new Image();
-                testImg.onload = () => console.log(`   ✅ Direct image test PASSED for ${content.title}`);
-                testImg.onerror = () => console.error(`   ❌ Direct image test FAILED for ${content.title}`);
-                testImg.src = smartImageUrl || '';
-                
-                // Only set local error for non-TMDb images for now
-                if (!isTMDbImage) {
-                  setLocalImageError(true);
-                }
-              }}
-              onLoad={(e) => {
-                console.log(`✅ SMART IMAGE LOADED: ${content.title}`);
-                console.log(`   URL: ${smartImageUrl}`);
-                console.log(`   Image dimensions:`, {
-                  naturalWidth: e.currentTarget.naturalWidth,
-                  naturalHeight: e.currentTarget.naturalHeight,
-                  clientWidth: e.currentTarget.clientWidth,
-                  clientHeight: e.currentTarget.clientHeight,
-                  offsetWidth: e.currentTarget.offsetWidth,
-                  offsetHeight: e.currentTarget.offsetHeight,
-                  src: e.currentTarget.src,
-                  currentSrc: e.currentTarget.currentSrc,
-                  complete: e.currentTarget.complete,
-                  loading: e.currentTarget.loading
-                });
-                
-                // Check if image has actual content
-                if (e.currentTarget.naturalWidth === 0 || e.currentTarget.naturalHeight === 0) {
-                  console.error(`   ⚠️ Image loaded but has zero dimensions!`);
-                } else {
-                  console.log(`   🎯 Image has valid dimensions: ${e.currentTarget.naturalWidth}x${e.currentTarget.naturalHeight}`);
-                }
-                
-                setLocalImageError(false); // Reset error state on successful load
-              }}
-              data-testid={`img-content-${content.id}`}
-            />
-          </div>
+          <img 
+            src={smartImageUrl || ''}
+            alt={content.title}
+            className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
+            onError={() => {
+              setLocalImageError(true);
+            }}
+            onLoad={() => {
+              setLocalImageError(false);
+            }}
+            data-testid={`img-content-${content.id}`}
+          />
         ) : (
           // DEBUG: Show fallback placeholder
           <div 
