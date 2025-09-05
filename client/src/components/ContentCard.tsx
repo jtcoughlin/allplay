@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { useSmartPoster } from "@/hooks/useSmartPoster";
 import type { Content, WatchHistory } from "@shared/schema";
 
 interface ContentCardProps {
@@ -23,14 +24,17 @@ export function ContentCard({
   size = 'medium',
   showProgress = false 
 }: ContentCardProps) {
-  const [imageError, setImageError] = useState(false);
   const { toast } = useToast();
-  
-  // CRITICAL FIX: Reset imageError when content changes
-  useEffect(() => {
-    setImageError(false);
-  }, [content.imageUrl, content.id]);
   const queryClient = useQueryClient();
+  
+  // Use smart poster hook for enhanced image handling
+  const { imageUrl: smartImageUrl, loading: imageLoading, error: imageError } = useSmartPoster(content);
+  const [localImageError, setLocalImageError] = useState(false);
+  
+  // Reset local image error when content changes
+  useEffect(() => {
+    setLocalImageError(false);
+  }, [content.id, smartImageUrl]);
 
   const sizeClasses = {
     small: 'w-36',
@@ -160,11 +164,12 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // Show images for all services if URL exists - ALWAYS try to show images, ignore previous errors
-  const shouldShowImage = !!content.imageUrl;
+  // Show images if we have a smart image URL and no local error
+  const shouldShowImage = !!smartImageUrl && !localImageError;
+  const showLoadingState = imageLoading && !localImageError;
   
-  // Debug logging to track what's happening
-  console.log(`🔍 DEBUG: ${content.title} - URL: ${content.imageUrl?.substring(0, 60)}... | Show: ${shouldShowImage}`);
+  // Enhanced debug logging
+  console.log(`🔍 SMART: ${content.title} - Original: ${content.imageUrl?.substring(0, 40)}... | Smart: ${smartImageUrl?.substring(0, 40)}... | Show: ${shouldShowImage} | Loading: ${imageLoading}`);
 
   return (
     <div 
@@ -172,19 +177,32 @@ export function ContentCard({
       data-testid={`card-content-${content.id}`}
     >
       <div className="relative mb-2">
-        {shouldShowImage ? (
+        {showLoadingState ? (
+          // Loading state for smart poster
+          <div 
+            className={`w-full ${imageSizeClasses[size]} bg-gradient-to-br from-navy-lighter to-navy-darker rounded-lg flex items-center justify-center`}
+            data-testid={`loading-content-${content.id}`}
+          >
+            <div className="text-center">
+              <div className="w-8 h-8 border-2 border-blue-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <div className="text-gray-400 text-xs">Loading poster...</div>
+            </div>
+          </div>
+        ) : shouldShowImage ? (
           <img 
-            src={content.imageUrl || ''}
+            src={smartImageUrl || ''}
             alt={content.title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
             onError={(e) => {
-              console.error(`❌ IMAGE FAILED: ${content.title}`);
-              console.error(`   URL: ${content.imageUrl}`);
+              console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
+              console.error(`   Smart URL: ${smartImageUrl}`);
+              console.error(`   Original URL: ${content.imageUrl}`);
               console.error(`   Error:`, e);
-              // Don't set imageError - keep trying to show images
+              setLocalImageError(true);
             }}
             onLoad={() => {
-              console.log(`✅ IMAGE LOADED: ${content.title}`);
+              console.log(`✅ SMART IMAGE LOADED: ${content.title}`);
+              console.log(`   URL: ${smartImageUrl}`);
             }}
             data-testid={`img-content-${content.id}`}
           />
