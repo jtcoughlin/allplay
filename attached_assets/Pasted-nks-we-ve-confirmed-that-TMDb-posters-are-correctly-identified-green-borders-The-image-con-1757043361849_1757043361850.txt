@@ -1,0 +1,48 @@
+nks — we’ve confirmed that:
+
+✅ TMDb posters are correctly identified (green borders)
+✅ The image containers and `<img>` elements are rendering (blue + red borders)
+❌ BUT: The poster images themselves are not visible — the red-bordered boxes are just empty
+
+That means the issue is likely one of the following:
+
+1. The image is failing to load *into* the `<img>` tag (even though it exists in DOM)
+2. The image is loaded, but sizing/aspect-ratio/layout is causing it to render as an invisible strip
+3. Safari-specific rendering bug (e.g. naturalWidth/Height or onload event not firing)
+
+🔧 Next steps to fix this:
+
+1. Add a background color **inside the image box** to confirm if space is actually being filled:
+   ```js
+   backgroundColor: 'rgba(255, 0, 0, 0.2)' // should overlay behind poster
+Log actual image load success/failure using JS event handlers:
+useEffect(() => {
+  const img = document.getElementById('poster-' + content.id);
+  if (!img) return;
+
+  img.onload = () => console.log("✅ Image loaded:", img.src);
+  img.onerror = () => console.error("❌ Image failed to load:", img.src);
+}, [smartImageUrl]);
+Log these values in console for each image:
+img.complete
+naturalWidth
+naturalHeight
+clientWidth
+clientHeight
+Temporarily hard-code a known valid image URL (e.g., TMDb poster for “American Dad”) into a test card. If that doesn't render, the problem is layout/CSS, not the URL.
+Please do not assume success based on DOM structure — only consider this resolved when actual poster artwork is visibly rendered in the AllPlay UI. Start debugging based on real image loading, and once confirmed working, clean up the debug styles and make the fix permanent.
+
+---
+
+## 🎯 What to Expect Next
+
+Replit should now:
+
+- Add JS that confirms whether the image actually **successfully loads**
+- Log image dimensions and visibility flags
+- Potentially discover a Safari-specific rendering quirk
+- Hard-code a test image to isolate layout vs. logic issues
+
+---
+
+Let me know what Replit says or shows after this — we’ll get it locked down. You're right at the edge of resolution.
