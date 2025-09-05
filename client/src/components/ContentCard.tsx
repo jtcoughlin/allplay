@@ -184,6 +184,7 @@ export function ContentCard({
    ❌ Local Error: ${localImageError}
    🎪 Image Error: ${imageError || 'none'}
    🔧 FORCE SHOW TMDb: ${isTMDbImage ? 'YES - OVERRIDING ERRORS' : 'NO'}
+   🧪 TEST URL FOR CARBONARO: ${content.title === 'The Carbonaro Effect' ? 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg' : 'Not Carbonaro'}
   `);
 
   return (
@@ -218,7 +219,7 @@ export function ContentCard({
           <div>
             {console.log(`🎬 RENDERING IMG ELEMENT FOR: ${content.title} - URL: ${smartImageUrl}`)}
             <img 
-              src={smartImageUrl || ''}
+              src={content.title === 'The Carbonaro Effect' ? 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg' : smartImageUrl || ''}
               alt={content.title}
               className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
               style={{ 
