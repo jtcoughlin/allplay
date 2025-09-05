@@ -12,6 +12,7 @@ import Favorites from "@/pages/favorites";
 import Preferences from "@/pages/preferences";
 import Profile from "@/pages/profile";
 import Music from "@/pages/music";
+import { MediaCardTest } from "@/pages/MediaCardTest";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
     return (
       <Switch>
         <Route path="/" component={Landing} />
+        <Route path="/test-media" component={MediaCardTest} />
         <Route component={NotFound} />
       </Switch>
     );
@@ -44,6 +46,7 @@ function Router() {
           <Route path="/preferences" component={Preferences} />
           <Route path="/profile" component={Profile} />
           <Route path="/music" component={Music} />
+          <Route path="/test-media" component={MediaCardTest} />
           <Route component={NotFound} />
         </Switch>
       </main>

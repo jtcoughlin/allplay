@@ -15,6 +15,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
+  // TMDb API key endpoint for frontend (for direct API approach as requested)
+  app.get("/api/tmdb-config", (req, res) => {
+    // Note: In production, consider using a backend proxy instead
+    res.json({
+      apiKey: process.env.TMDB_API_KEY || '',
+      baseUrl: 'https://api.themoviedb.org/3',
+      imageBaseUrl: 'https://image.tmdb.org/t/p/w500'
+    });
+  });
+
   // Image debug endpoint to capture client-side errors
   app.post('/api/image-debug', (req, res) => {
     console.error('🖼️ CLIENT IMAGE ERROR:', req.body);
@@ -28,708 +38,444 @@ export async function registerRoutes(app: Express): Promise<Server> {
 <head><title>Debug Images</title></head>
 <body style="background:#111;color:white;font-family:Arial;padding:20px;">
     <h1>Image Debug Test</h1>
-    <h2>Test 1: Direct SVG Test</h2>
-    <img id="test1" style="width:200px;height:300px;border:2px solid red;" 
-         src="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><rect width='200' height='300' fill='red'/><text x='100' y='150' text-anchor='middle' fill='white' font-size='20'>TEST</text></svg>" 
-         onload="console.log('Direct SVG loaded!'); document.getElementById('result1').innerHTML='✅ SUCCESS';"
-         onerror="console.log('Direct SVG failed!'); document.getElementById('result1').innerHTML='❌ ERROR';" />
-    <div id="result1">Loading...</div>
     
-    <h2>Test 2: Database SVG Test</h2>
-    <img id="test2" style="width:200px;height:300px;border:2px solid blue;" 
-         src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22300%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22200%22%20height%3D%22300%22%20fill%3D%22%23e50914%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22100%22%20y%3D%22120%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-size%3D%2216%22%20font-weight%3D%22bold%22%3EYOUTUBE%20TV%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22100%22%20cy%3D%22180%22%20r%3D%2230%22%20fill%3D%22white%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3Cpolygon%20points%3D%2290%2C165%2090%2C195%20120%2C180%22%20fill%3D%22white%22%2F%3E%0A%20%20%20%20%3C%2Fsvg%3E" 
-         onload="console.log('Database SVG loaded!'); document.getElementById('result2').innerHTML='✅ SUCCESS';"
-         onerror="console.log('Database SVG failed!'); document.getElementById('result2').innerHTML='❌ ERROR';" />
-    <div id="result2">Loading...</div>
-    
-    <h2>Test 2: API Response Test</h2>
-    <div id="api-test">Loading API data...</div>
-    
+    <div style="margin:20px 0;padding:15px;border:1px solid #333;">
+      <h2>Test 1: Direct SVG Test</h2>
+      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22300%22%3E%3Crect%20width%3D%22200%22%20height%3D%22300%22%20fill%3D%22%2523233a56%22%2F%3E%3Ctext%20x%3D%22100%22%20y%3D%22120%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-size%3D%2216%22%20font-weight%3D%22bold%22%3ETEST%3C%2Ftext%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22180%22%20r%3D%2230%22%20fill%3D%22white%22%20opacity%3D%220.3%22%2F%3E%3Cpolygon%20points%3D%2290%2C165%2090%2C195%20120%2C180%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E" 
+           onload="document.getElementById('test1').innerHTML='✅ SUCCESS'" 
+           onerror="document.getElementById('test1').innerHTML='❌ FAILED'"
+           style="max-width:200px;margin:10px;" />
+      <div id="test1">Loading...</div>
+    </div>
+
+    <div style="margin:20px 0;padding:15px;border:1px solid #333;">
+      <h2>Test 2: API Response Test</h2>
+      <div id="test2">Loading API data...</div>
+      <div id="apiImages"></div>
+    </div>
+
     <script>
-      console.log('🔍 Starting comprehensive image test...');
-      
-      // Test API response
-      fetch('/api/content').then(r=>{
-        if(!r.ok) throw new Error('Auth required: ' + r.status);
-        return r.json();
-      }).then(d=>{
-        console.log('📦 API data received, total items:', d.length);
-        
-        const testItem = d[0]; // Use first item instead of searching
-        if (testItem) {
-          console.log('🎯 Found test item:', testItem.title);
-          console.log('🖼️ Image URL:', testItem.imageUrl);
+      fetch('/api/content')
+        .then(r => r.json())
+        .then(data => {
+          const firstFive = data.slice(0, 5);
+          document.getElementById('test2').innerHTML = '✅ SUCCESS: Got ' + data.length + ' content items';
           
-          document.getElementById('api-test').innerHTML = 
-            '<h3>Test Item: ' + testItem.title + '</h3>' +
-            '<p><strong>Image URL:</strong> ' + (testItem.imageUrl || 'NULL') + '</p>' +
-            '<img style="width:200px;height:300px;border:2px solid blue;" ' +
-            'src="' + (testItem.imageUrl || '') + '" ' +
-            'onload="console.log(\'API image loaded!\'); this.nextElementSibling.innerHTML=\'✅ SUCCESS\';" ' +
-            'onerror="console.log(\'API image failed!\'); this.nextElementSibling.innerHTML=\'❌ ERROR\';" />' +
-            '<div>Loading...</div>';
-        } else {
-          document.getElementById('api-test').innerHTML = '❌ Test item not found';
-        }
-      }).catch(err => {
-        console.error('❌ API Error:', err);
-        document.getElementById('api-test').innerHTML = '❌ API Error: ' + err;
-      });
+          const container = document.getElementById('apiImages');
+          firstFive.forEach((item, i) => {
+            if (item.imageUrl) {
+              const div = document.createElement('div');
+              div.innerHTML = \`
+                <p><strong>\${item.title}</strong></p>
+                <img src="\${item.imageUrl}" 
+                     onload="this.nextSibling.innerHTML='✅ LOADED'" 
+                     onerror="this.nextSibling.innerHTML='❌ FAILED: ' + this.src.substring(0,50) + '...'"
+                     style="max-width:100px;margin:5px;" />
+                <span>Loading...</span>
+              \`;
+              container.appendChild(div);
+            }
+          });
+        })
+        .catch(e => {
+          document.getElementById('test2').innerHTML = '❌ FAILED: ' + e.message;
+        });
     </script>
 </body>
 </html>`);
   });
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // Live TV routes with new TV Media API integration
+  app.use('/api/tv-media', tvMediaRoutes);
 
-  // Seed content endpoint with automatic backup
-  app.post('/api/seed-content', async (req, res) => {
-    try {
-      // Create backup before seeding
-      console.log('🔄 Creating backup before content seeding...');
-      await BackupManager.createContentBackup(`pre-seed-${new Date().toISOString().split('T')[0]}`);
-      
-      await seedRealContent();
-      
-      // Sync to seed file after seeding
-      console.log('🔄 Synchronizing database to seed file...');
-      await BackupManager.syncDatabaseToSeed();
-      
-      res.json({ message: 'Content seeded successfully with automatic backup and sync' });
-    } catch (error) {
-      console.error('Error seeding content:', error);
-      res.status(500).json({ message: 'Failed to seed content' });
+  // User authentication and profile
+  app.get("/api/auth/user", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-  });
-
-  // TMDB Movie Poster Update endpoint
-  app.post('/api/update-movie-posters', async (req, res) => {
-    try {
-      const { services } = req.body;
-      const validServices = services || ['hulu', 'hbo-max'];
-      
-      console.log(`🎬 Starting TMDB poster update for: ${validServices.join(', ')}`);
-      
-      // Create backup before updating
-      await BackupManager.createContentBackup(`pre-tmdb-update-${new Date().toISOString().split('T')[0]}`);
-      
-      const imageService = new ImageAssignmentService();
-      await imageService.updateMoviePostersForServices(validServices);
-      
-      // Sync to seed file after updating
-      await BackupManager.syncDatabaseToSeed();
-      
-      res.json({ 
-        message: `Successfully updated movie posters for ${validServices.join(', ')} using TMDB API`,
-        services: validServices
-      });
-    } catch (error) {
-      console.error('Error updating movie posters:', error);
-      res.status(500).json({ 
-        message: 'Failed to update movie posters',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  });
-
-  // TMDB TV Show Poster Update endpoint
-  app.post('/api/update-show-posters', async (req, res) => {
-    try {
-      const { services } = req.body;
-      const validServices = services || ['netflix', 'amazon-prime', 'hulu', 'hbo-max', 'apple-tv', 'disney-plus', 'paramount-plus'];
-      
-      console.log(`📺 Starting TMDB TV show poster update for: ${validServices.join(', ')}`);
-      
-      // Create backup before updating
-      await BackupManager.createContentBackup(`pre-tmdb-shows-update-${new Date().toISOString().split('T')[0]}`);
-      
-      const imageService = new ImageAssignmentService();
-      await imageService.updateShowPostersForServices(validServices);
-      
-      // Sync to seed file after updating
-      await BackupManager.syncDatabaseToSeed();
-      
-      res.json({ 
-        message: `Successfully updated TV show posters for ${validServices.join(', ')} using TMDB API`,
-        services: validServices
-      });
-    } catch (error) {
-      console.error('Error updating movie posters:', error);
-      res.status(500).json({ 
-        message: 'Failed to update movie posters',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  });
-
-  // Data URL Fix endpoint
-  app.post('/api/fix-data-urls', async (req, res) => {
-    try {
-      console.log('🔧 Starting data URL fix process...');
-      
-      // Create backup before fixing
-      await BackupManager.createContentBackup(`pre-dataurl-fix-${new Date().toISOString().split('T')[0]}`);
-      
-      const { DataUrlFixer } = await import('./utils/dataUrlFixer');
-      const fixedCount = await DataUrlFixer.fixAllDataUrls();
-      
-      // Sync to seed file after fixing
-      await BackupManager.syncDatabaseToSeed();
-      
-      res.json({ 
-        message: `Successfully fixed ${fixedCount} malformed data URLs`,
-        fixedCount
-      });
-    } catch (error) {
-      console.error('Error fixing data URLs:', error);
-      res.status(500).json({ 
-        message: 'Failed to fix data URLs',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  });
-
-  // Automated backup endpoints
-  app.post('/api/backup/create', async (req, res) => {
-    try {
-      const { name } = req.body;
-      const backupPath = await BackupManager.createContentBackup(name);
-      await BackupManager.syncDatabaseToSeed();
-      res.json({ 
-        message: 'Backup created and synchronized successfully',
-        backupPath,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error creating backup:', error);
-      res.status(500).json({ message: 'Failed to create backup' });
-    }
-  });
-
-  app.get('/api/backup/list', async (req, res) => {
-    try {
-      const backups = await BackupManager.listBackups();
-      res.json({ backups });
-    } catch (error) {
-      console.error('Error listing backups:', error);
-      res.status(500).json({ message: 'Failed to list backups' });
-    }
+    res.json(req.user);
   });
 
   // Content routes
-  app.get('/api/content', async (req, res) => {
-    try {
-      const { genre, platform, search, type } = req.query;
-      
-      let content;
-      if (search) {
-        content = await storage.searchContent(search as string);
-      } else if (genre && genre !== 'all') {
-        content = await storage.getContentByGenre(genre as string);
-      } else if (platform) {
-        content = await storage.getContentByPlatform(platform as string);
-      } else {
-        content = await storage.getAllContent();
-      }
-      
-      // Filter by type if specified
-      if (type && type !== 'all') {
-        content = content.filter(item => item.type === type);
-      }
-      
-      res.json(content);
-    } catch (error) {
-      console.error("Error fetching content:", error);
-      res.status(500).json({ message: "Failed to fetch content" });
-    }
+  app.get("/api/content", async (req, res) => {
+    const allContent = await storage.getAllContent();
+    res.json(allContent);
   });
 
-  app.get('/api/content/:id', async (req, res) => {
-    try {
-      const content = await storage.getContentById(req.params.id);
-      if (!content) {
-        return res.status(404).json({ message: "Content not found" });
-      }
-      res.json(content);
-    } catch (error) {
-      console.error("Error fetching content:", error);
-      res.status(500).json({ message: "Failed to fetch content" });
+  app.get("/api/content/:id", async (req, res) => {
+    const content = await storage.getContentById(req.params.id);
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
     }
+    res.json(content);
   });
 
-  app.post('/api/content', isAuthenticated, async (req, res) => {
-    try {
-      const validatedData = insertContentSchema.parse(req.body);
-      const content = await storage.createContent(validatedData);
-      res.status(201).json(content);
-    } catch (error) {
-      console.error("Error creating content:", error);
-      res.status(400).json({ message: "Invalid content data" });
+  app.get("/api/search", async (req, res) => {
+    const query = req.query.q as string;
+    if (!query) {
+      return res.status(400).json({ message: "Query parameter 'q' is required" });
     }
+    const results = await storage.searchContent(query);
+    res.json(results);
   });
 
   // Favorites routes
-  app.get('/api/favorites', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const favorites = await storage.getUserFavorites(userId);
-      res.json(favorites);
-    } catch (error) {
-      console.error("Error fetching favorites:", error);
-      res.status(500).json({ message: "Failed to fetch favorites" });
+  app.get("/api/favorites", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-  });
-
-  app.post('/api/favorites', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertFavoriteSchema.parse({
-        ...req.body,
-        userId
-      });
-      const favorite = await storage.addToFavorites(validatedData);
-      res.status(201).json(favorite);
-    } catch (error) {
-      console.error("Error adding favorite:", error);
-      res.status(400).json({ message: "Invalid favorite data" });
-    }
-  });
-
-  app.delete('/api/favorites/:contentId', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      await storage.removeFromFavorites(userId, req.params.contentId);
-      res.status(204).send();
-    } catch (error) {
-      console.error("Error removing favorite:", error);
-      res.status(500).json({ message: "Failed to remove favorite" });
-    }
-  });
-
-  // Favorites toggle endpoint
-  app.post('/api/favorites/toggle', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { contentId } = req.body;
-      const result = await storage.toggleFavorite(userId, contentId);
-      res.json(result);
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-      res.status(500).json({ message: "Failed to toggle favorite" });
-    }
-  });
-
-  // Service authentication route (simulates OAuth flow)
-  app.get("/api/auth/:service/login", isAuthenticated, async (req: any, res) => {
-    const { service } = req.params;
-    const userId = req.user.claims.sub;
     
-    try {
-      // Simulate OAuth connection
-      await storage.connectService(userId, service);
-      
-      // Redirect back to profile with success message
-      res.redirect(`/profile?connected=${service}`);
-    } catch (error) {
-      console.error(`Error connecting to ${service}:`, error);
-      res.redirect(`/profile?error=connection_failed&service=${service}`);
-    }
+    const userFavorites = await storage.getUserFavorites(req.user.id);
+    res.json(userFavorites);
   });
 
-  // User connections endpoints
-  app.get('/api/user/connections', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const connections = await storage.getUserConnections(userId);
-      res.json(connections);
-    } catch (error) {
-      console.error("Error fetching user connections:", error);
-      res.status(500).json({ message: "Failed to fetch connections" });
+  app.post("/api/favorites", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const { contentId } = req.body;
+    if (!contentId) {
+      return res.status(400).json({ message: "Content ID is required" });
+    }
+    
+    const favorite = await storage.addToFavorites({
+      userId: req.user.id,
+      contentId
+    });
+    
+    res.json(favorite);
   });
 
-    // Real OAuth initiation route
-  app.get('/api/oauth/initiate/:service', isAuthenticated, async (req: any, res) => {
-    try {
-      const { service } = req.params;
-      const userId = req.user.claims.sub;
-      
-      // Generate state parameter for security
-      const state = nanoid();
-      
-      // Store state temporarily (in production, use Redis or similar)
-      req.session.oauthState = { state, service, userId };
-      
-      const authUrl = generateAuthUrl(service, state);
-      res.json({ authUrl });
-    } catch (error) {
-      console.error('Error initiating OAuth:', error);
-      res.status(500).json({ message: 'Failed to initiate OAuth' });
+  app.delete("/api/favorites/:contentId", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-  });
-
-  // OAuth callback route
-  app.get('/api/oauth/callback/:service', async (req: any, res) => {
-    try {
-      const { service } = req.params;
-      const { code, state } = req.query;
-      
-      // Verify state parameter
-      if (!req.session.oauthState || req.session.oauthState.state !== state) {
-        return res.status(400).json({ message: 'Invalid state parameter' });
-      }
-      
-      const { userId } = req.session.oauthState;
-      
-      // Exchange code for tokens
-      const tokens = await exchangeCodeForToken(service, code);
-      
-      // Get user profile from the service
-      const profile = await getUserProfile(service, tokens.access_token);
-      
-      // Store the connection
-      const connection = await storage.createUserConnection({
-        userId,
-        service,
-        credentials: {
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token,
-          expiresAt: tokens.expires_in ? Date.now() + (tokens.expires_in * 1000) : null,
-          serviceUserId: profile.id,
-          serviceUserName: profile.display_name || profile.name,
-          serviceUserEmail: profile.email,
-        }
-      });
-      
-      // Clean up session
-      delete req.session.oauthState;
-      
-      // Redirect back to the app
-      res.redirect('/?connected=' + service);
-    } catch (error) {
-      console.error('Error in OAuth callback:', error);
-      res.redirect('/?error=connection_failed');
-    }
-  });
-
-  app.post('/api/user/connect', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { service } = req.body;
-      
-      // Services with OAuth support
-      if (['spotify', 'youtube', 'apple-music'].includes(service)) {
-        const state = nanoid();
-        req.session.oauthState = { state, service, userId };
-        
-        try {
-          const authUrl = generateAuthUrl(service, state);
-          res.json({ authUrl, requiresOAuth: true, connectionType: 'oauth' });
-        } catch (error: any) {
-          console.error(`OAuth error for ${service}:`, error);
-          res.status(400).json({ 
-            message: `OAuth not available for ${service}. Please ensure API keys are configured.`,
-            requiresOAuth: false,
-            connectionType: 'unavailable'
-          });
-        }
-      } 
-      // Services with deep link support - require verification
-      else if (['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock', 'youtube-tv', 'espn-plus'].includes(service)) {
-        // Don't auto-connect, require verification
-        res.json({ 
-          requiresVerification: true,
-          connectionType: 'deeplink',
-          service,
-          message: `To connect ${service}, please confirm you have an active subscription.`
-        });
-      } 
-      // Other services - simulated connection
-      else {
-        const connection = await storage.connectService(userId, service);
-        res.json({ connection, requiresOAuth: false, connectionType: 'simulated' });
-      }
-    } catch (error) {
-      console.error("Error connecting service:", error);
-      res.status(500).json({ message: "Failed to connect service" });
-    }
-  });
-
-  // Verify deep link service subscription
-  app.post('/api/user/verify-subscription', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { service, hasSubscription } = req.body;
-
-      console.log('Verify subscription request:', { service, hasSubscription, body: req.body });
-
-      if (!service || hasSubscription === undefined) {
-        console.log('Missing required parameters:', { service, hasSubscription });
-        return res.status(400).json({ message: 'Service and subscription status required' });
-      }
-
-      if (!hasSubscription) {
-        return res.status(400).json({ 
-          message: `You need an active ${service} subscription to connect this service.` 
-        });
-      }
-
-      // Create the deep link connection
-      const connection = await storage.connectService(userId, service);
-      res.json({ 
-        connection,
-        connectionType: 'deeplink',
-        message: `${service} connected! Content will open in the ${service} app when played.`
-      });
-    } catch (error) {
-      console.error('Error verifying subscription:', error);
-      res.status(500).json({ message: 'Failed to verify subscription' });
-    }
-  });
-
-  // Deep link content route
-  app.post('/api/play-external/:contentId', async (req, res) => {
-    try {
-      const { contentId } = req.params;
-      const userId = 'anonymous'; // Allow anonymous access for live TV deep linking
-      
-      // Get content details from database
-      const contentDetails = await storage.getContentById(contentId);
-      if (!contentDetails) {
-        return res.status(404).json({ message: "Content not found" });
-      }
-      
-      // Generate deep links for the service using content's service_content_id and direct URL
-      const { appUrl, webUrl } = generateDeepLink(contentDetails.service, 'play', contentDetails.serviceContentId, contentDetails.directUrl || undefined);
-      
-      // Skip watch progress logging for anonymous users (live TV)
-      if (userId !== 'anonymous') {
-        await storage.updateWatchProgress({
-          userId,
-          contentId,
-          progress: 0,
-          isCompleted: false
-        });
-      }
-      
-      res.json({ 
-        appUrl, 
-        webUrl,
-        title: contentDetails.title,
-        service: contentDetails.service,
-        message: `Opening ${contentDetails.title} in ${contentDetails.service}...`,
-        returnUrl: `${req.protocol}://${req.get('host')}?returning=true&service=${contentDetails.service}&content=${contentId}`
-      });
-    } catch (error) {
-      console.error("Error generating deep link:", error);
-      res.status(500).json({ message: "Failed to open content" });
-    }
-  });
-
-  app.delete('/api/user/connect/:service', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { service } = req.params;
-      
-      await storage.disconnectService(userId, service);
-      res.json({ message: "Service disconnected successfully" });
-    } catch (error) {
-      console.error("Error disconnecting service:", error);
-      res.status(500).json({ message: "Failed to disconnect service" });
-    }
-  });
-
-
-
-  // Play content endpoint - simulate direct streaming
-  app.post('/api/play/:contentId', isAuthenticated, async (req: any, res) => {
-    try {
-      const { contentId } = req.params;
-      const userId = req.user.claims.sub;
-      
-      // Log play event and update watch history
-      await storage.updateWatchProgress({
-        userId,
-        contentId,
-        progress: 0,
-        isCompleted: false
-      });
-      
-      // Return streaming URL (simulated)
-      res.json({ 
-        streamUrl: `https://stream.allplay.tv/${contentId}`,
-        message: "Now playing within Allplay interface" 
-      });
-    } catch (error) {
-      console.error("Error starting playback:", error);
-      res.status(500).json({ message: "Failed to start playback" });
-    }
-  });
-
-  app.get('/api/favorites/:contentId/check', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const isFavorite = await storage.isFavorite(userId, req.params.contentId);
-      res.json({ isFavorite });
-    } catch (error) {
-      console.error("Error checking favorite:", error);
-      res.status(500).json({ message: "Failed to check favorite status" });
-    }
+    
+    await storage.removeFromFavorites(req.user.id, req.params.contentId);
+    res.json({ message: "Removed from favorites" });
   });
 
   // Watch history routes
-  app.get('/api/watch-history', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const history = await storage.getUserWatchHistory(userId);
-      res.json(history);
-    } catch (error) {
-      console.error("Error fetching watch history:", error);
-      res.status(500).json({ message: "Failed to fetch watch history" });
+  app.get("/api/continue-watching", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const continueWatching = await storage.getContinueWatching(req.user.id);
+    res.json(continueWatching);
   });
 
-  app.get('/api/continue-watching', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const continueWatching = await storage.getContinueWatching(userId);
-      res.json(continueWatching);
-    } catch (error) {
-      console.error("Error fetching continue watching:", error);
-      res.status(500).json({ message: "Failed to fetch continue watching" });
+  app.post("/api/watch-progress", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const { contentId, progress } = req.body;
+    if (!contentId || progress === undefined) {
+      return res.status(400).json({ message: "Content ID and progress are required" });
+    }
+    
+    const watchHistory = await storage.updateWatchProgress({
+      userId: req.user.id,
+      contentId,
+      progress,
+      lastWatched: new Date()
+    });
+    
+    res.json(watchHistory);
   });
 
-  app.post('/api/watch-progress', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertWatchHistorySchema.parse({
-        ...req.body,
-        userId
-      });
-      const watchHistory = await storage.updateWatchProgress(validatedData);
-      res.json(watchHistory);
-    } catch (error) {
-      console.error("Error updating watch progress:", error);
-      res.status(400).json({ message: "Invalid watch progress data" });
+  // Service connection routes
+  app.get("/api/connections", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const connections = await storage.getUserConnections(req.user.id);
+    res.json(connections);
+  });
+
+  app.post("/api/connections", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    const { service } = req.body;
+    if (!service) {
+      return res.status(400).json({ message: "Service is required" });
+    }
+    
+    const connection = await storage.connectService(req.user.id, service);
+    res.json(connection);
+  });
+
+  app.delete("/api/connections/:service", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    await storage.disconnectService(req.user.id, req.params.service);
+    res.json({ message: "Service disconnected" });
   });
 
   // User preferences routes
-  app.get('/api/user/preferences', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const preferences = await storage.getUserPreferences(userId);
-      res.json(preferences || null);
-    } catch (error) {
-      console.error("Error fetching user preferences:", error);
-      res.status(500).json({ message: "Failed to fetch preferences" });
+  app.get("/api/preferences", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const preferences = await storage.getUserPreferences(req.user.id);
+    res.json(preferences);
   });
 
-  app.post('/api/user/preferences', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertUserPreferencesSchema.parse({ ...req.body, userId });
-      const preferences = await storage.upsertUserPreferences(validatedData);
-      res.json(preferences);
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
-      res.status(500).json({ message: "Failed to update preferences" });
+  app.post("/api/preferences", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const preferences = await storage.upsertUserPreferences({
+      userId: req.user.id,
+      ...req.body
+    });
+    
+    res.json(preferences);
   });
 
-  // Get recommended content based on user preferences
-  app.get('/api/user/recommendations', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const recommendations = await storage.getRecommendedContent(userId);
-      res.json(recommendations);
-    } catch (error) {
-      console.error("Error fetching recommendations:", error);
-      res.status(500).json({ message: "Failed to fetch recommendations" });
+  // Enhanced features
+  app.get("/api/recommendations", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const recommendations = await storage.getRecommendedContent(req.user.id);
+    res.json(recommendations);
   });
 
-  // Live TV data routes
-  app.post('/api/live-tv/sync', async (req, res) => {
-    try {
-      await liveTVSync.forceSync();
-      res.json({ message: 'Live TV data synchronized successfully' });
-    } catch (error) {
-      console.error('Error syncing live TV data:', error);
-      res.status(500).json({ message: 'Failed to sync live TV data' });
+  app.post("/api/toggle-favorite", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    const { contentId } = req.body;
+    if (!contentId) {
+      return res.status(400).json({ message: "Content ID is required" });
+    }
+    
+    const result = await storage.toggleFavorite(req.user.id, contentId);
+    res.json(result);
   });
 
-  app.get('/api/live-tv/channels', async (req, res) => {
-    try {
-      const channels = liveTVSync.getSupportedChannels();
-      res.json({ channels });
-    } catch (error) {
-      console.error('Error fetching supported channels:', error);
-      res.status(500).json({ message: 'Failed to fetch channels' });
+  // Play content routes
+  app.post("/api/play/:contentId", async (req, res) => {
+    const contentId = req.params.contentId;
+    const content = await storage.getContentById(contentId);
+    
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
     }
+    
+    // For non-external services, return basic play response
+    res.json({ 
+      message: `Now playing ${content.title}`,
+      content 
+    });
   });
 
-  app.get('/api/live-tv/currently-airing', async (req, res) => {
-    try {
-      const programs = await liveTVSync.getCurrentlyAiringPrograms();
-      
-      // Add deep links to each program before returning  
-      const programsWithDeepLinks = programs.map(program => ({
-        ...program,
-        directUrl: liveTVSync.generateYouTubeTVWatchUrl ? liveTVSync.generateYouTubeTVWatchUrl(program) : 'https://tv.youtube.com/browse/live-tv'
-      }));
-      
-      res.json(programsWithDeepLinks);
-    } catch (error) {
-      console.error('Error fetching currently airing programs:', error);
-      res.status(500).json({ message: 'Failed to fetch currently airing programs' });
+  app.post("/api/play-external/:contentId", async (req, res) => {
+    const contentId = req.params.contentId;
+    const { service, title } = req.body;
+    const content = await storage.getContentById(contentId);
+    
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
     }
-  });
 
-  app.get('/api/live-tv/channel/:channelId/guide', async (req, res) => {
+    // Handle different external services with deep linking
+    let appUrl = '';
+    let webUrl = '';
+    
     try {
-      const { channelId } = req.params;
-      const hours = parseInt(req.query.hours as string) || 6;
-      const guide = await liveTVSync.getChannelProgramGuide(channelId, hours);
-      res.json(guide);
-    } catch (error) {
-      console.error('Error fetching channel guide:', error);
-      res.status(500).json({ message: 'Failed to fetch channel guide' });
-    }
-  });
-
-  app.post('/api/live-tv/sync-channels', async (req, res) => {
-    try {
-      const { channels } = req.body;
-      if (!Array.isArray(channels)) {
-        return res.status(400).json({ message: 'Channels must be an array' });
+      switch (service) {
+        case 'netflix':
+          const netflixSearchQuery = encodeURIComponent(title);
+          appUrl = `netflix://title/${content.serviceContentId || 'search'}`;
+          webUrl = content.directUrl || `https://www.netflix.com/search?q=${netflixSearchQuery}`;
+          break;
+          
+        case 'disney-plus':
+          appUrl = content.directUrl || `disneyplus://content/${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || 'https://www.disneyplus.com/';
+          break;
+          
+        case 'hulu':
+          appUrl = content.directUrl || `hulu://watch/${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || 'https://www.hulu.com/';
+          break;
+          
+        case 'amazon-prime':
+          const primeSearchQuery = encodeURIComponent(title);
+          appUrl = content.directUrl || `primevideo://x-callback-url/deeplink?contentId=${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || `https://www.amazon.com/gp/video/search?phrase=${primeSearchQuery}`;
+          break;
+          
+        case 'hbo-max':
+          appUrl = content.directUrl || `hbomax://feature/${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || 'https://play.hbomax.com/';
+          break;
+          
+        case 'apple-tv':
+          appUrl = content.directUrl || `tv://x-callback-url/openURL?url=${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || 'https://tv.apple.com/';
+          break;
+          
+        case 'paramount-plus':
+          appUrl = content.directUrl || `paramountplus://content/${content.serviceContentId || 'home'}`;
+          webUrl = content.directUrl || 'https://www.paramountplus.com/';
+          break;
+          
+        case 'youtube-tv':
+          appUrl = content.directUrl || 'https://tv.youtube.com/browse/live-tv';
+          webUrl = content.directUrl || 'https://tv.youtube.com/browse/live-tv';
+          break;
+          
+        case 'espn-plus':
+          appUrl = content.directUrl || 'espn://home';
+          webUrl = content.directUrl || 'https://www.espn.com/watch/';
+          break;
+          
+        default:
+          webUrl = content.directUrl || `https://www.google.com/search?q=${encodeURIComponent(title + ' watch online')}`;
+          appUrl = webUrl;
       }
-      await liveTVSync.syncSpecificChannels(channels);
+      
+      console.log(`🎬 Opening ${service} content: ${title}`);
+      console.log(`   App URL: ${appUrl}`);
+      console.log(`   Web URL: ${webUrl}`);
+      
       res.json({ 
-        message: `Successfully synced ${channels.length} channels`,
-        channels 
+        message: `Opening ${title} in ${service}`,
+        appUrl,
+        webUrl,
+        content
+      });
+      
+    } catch (error) {
+      console.error('Error generating URLs for external service:', error);
+      res.status(500).json({ 
+        message: "Failed to generate service URLs",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // OAuth routes
+  app.get("/api/oauth/:service/url", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const service = req.params.service;
+    const authUrl = generateAuthUrl(service);
+    
+    if (!authUrl) {
+      return res.status(400).json({ message: "Unsupported service" });
+    }
+    
+    res.json({ authUrl });
+  });
+
+  app.get("/api/oauth/:service/callback", isAuthenticated, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const service = req.params.service;
+    const { code } = req.query;
+    
+    if (!code) {
+      return res.status(400).json({ message: "Missing authorization code" });
+    }
+    
+    try {
+      const tokens = await exchangeCodeForToken(service, code as string);
+      const profile = await getUserProfile(service, tokens.access_token);
+      
+      // Store the connection
+      await storage.createUserConnection({
+        userId: req.user.id,
+        service,
+        isConnected: true,
+        credentials: tokens
+      });
+      
+      res.json({ 
+        message: "Successfully connected",
+        profile 
       });
     } catch (error) {
-      console.error('Error syncing specific channels:', error);
-      res.status(500).json({ message: 'Failed to sync channels' });
+      console.error('OAuth callback error:', error);
+      res.status(500).json({ message: "Failed to complete OAuth flow" });
     }
   });
 
-  // TV Media API routes
-  app.use('/api/tv-media', tvMediaRoutes);
+  // Admin/utility routes
+  app.post("/api/reseed", async (req, res) => {
+    try {
+      await seedRealContent();
+      res.json({ message: "Database reseeded successfully" });
+    } catch (error) {
+      console.error('Reseed error:', error);
+      res.status(500).json({ message: "Failed to reseed database" });
+    }
+  });
+
+  app.post("/api/backup", async (req, res) => {
+    try {
+      const backupManager = new BackupManager();
+      const backupInfo = await backupManager.createBackup();
+      res.json({ 
+        message: "Backup created successfully",
+        backup: backupInfo
+      });
+    } catch (error) {
+      console.error('Backup error:', error);
+      res.status(500).json({ message: "Failed to create backup" });
+    }
+  });
+
+  app.post("/api/assign-images", async (req, res) => {
+    try {
+      const imageService = new ImageAssignmentService();
+      const result = await imageService.assignMissingImages();
+      res.json({
+        message: "Image assignment completed",
+        result
+      });
+    } catch (error) {
+      console.error('Image assignment error:', error);
+      res.status(500).json({ message: "Failed to assign images" });
+    }
+  });
+
+  // Live TV sync control endpoints
+  app.post("/api/live-tv/sync", async (req, res) => {
+    try {
+      await liveTVSync.syncData();
+      res.json({ message: "Live TV sync completed successfully" });
+    } catch (error) {
+      console.error('Live TV sync error:', error);
+      res.status(500).json({ 
+        message: "Live TV sync failed",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/live-tv/status", (req, res) => {
+    const status = liveTVSync.status;
+    res.json(status);
+  });
 
   const httpServer = createServer(app);
   return httpServer;
