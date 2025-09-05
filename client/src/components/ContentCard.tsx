@@ -164,8 +164,9 @@ export function ContentCard({
     return Math.min((watchHistory.progress / content.duration) * 100, 100);
   };
 
-  // Show images if we have a smart image URL and no local error
-  const shouldShowImage = !!smartImageUrl && !localImageError;
+  // TEMPORARY FIX: Force show TMDb images to diagnose the issue
+  const isTMDbImage = smartImageUrl?.includes('image.tmdb.org');
+  const shouldShowImage = !!smartImageUrl && (isTMDbImage || !localImageError);
   const showLoadingState = imageLoading && !localImageError;
   
   // COMPREHENSIVE DEBUG LOGGING FOR AUDIT
@@ -177,10 +178,12 @@ export function ContentCard({
    🖼️ Original URL: ${content.imageUrl || 'NULL'}
    🎯 Smart URL: ${smartImageUrl || 'NULL'}
    📊 URL Type: ${content.imageUrl?.includes('image.tmdb.org') ? 'TMDB' : content.imageUrl?.includes('data:image/svg+xml') ? 'SVG' : content.imageUrl ? 'OTHER' : 'NONE'}
+   🎬 Is TMDb: ${isTMDbImage}
    ⚙️ Should Show: ${shouldShowImage}
    ⏳ Loading: ${imageLoading}
    ❌ Local Error: ${localImageError}
    🎪 Image Error: ${imageError || 'none'}
+   🔧 FORCE SHOW TMDb: ${isTMDbImage ? 'YES - OVERRIDING ERRORS' : 'NO'}
   `);
 
   return (
@@ -201,23 +204,35 @@ export function ContentCard({
             </div>
           </div>
         ) : shouldShowImage ? (
-          <img 
-            src={smartImageUrl || ''}
-            alt={content.title}
-            className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
-            onError={(e) => {
-              console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
-              console.error(`   Smart URL: ${smartImageUrl}`);
-              console.error(`   Original URL: ${content.imageUrl}`);
-              console.error(`   Error:`, e);
-              setLocalImageError(true);
-            }}
-            onLoad={() => {
-              console.log(`✅ SMART IMAGE LOADED: ${content.title}`);
-              console.log(`   URL: ${smartImageUrl}`);
-            }}
-            data-testid={`img-content-${content.id}`}
-          />
+          <div>
+            {console.log(`🎬 RENDERING IMG ELEMENT FOR: ${content.title} - URL: ${smartImageUrl}`)}
+            <img 
+              src={smartImageUrl || ''}
+              alt={content.title}
+              className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
+              onError={(e) => {
+                console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
+                console.error(`   Smart URL: ${smartImageUrl}`);
+                console.error(`   Original URL: ${content.imageUrl}`);
+                console.error(`   Error details:`, {
+                  message: e.currentTarget.error,
+                  naturalWidth: e.currentTarget.naturalWidth,
+                  naturalHeight: e.currentTarget.naturalHeight,
+                  complete: e.currentTarget.complete
+                });
+                // Only set local error for non-TMDb images for now
+                if (!isTMDbImage) {
+                  setLocalImageError(true);
+                }
+              }}
+              onLoad={() => {
+                console.log(`✅ SMART IMAGE LOADED: ${content.title}`);
+                console.log(`   URL: ${smartImageUrl}`);
+                setLocalImageError(false); // Reset error state on successful load
+              }}
+              data-testid={`img-content-${content.id}`}
+            />
+          </div>
         ) : (
           // DEBUG: Show fallback placeholder
           <div 
