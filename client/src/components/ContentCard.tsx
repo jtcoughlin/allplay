@@ -229,7 +229,8 @@ export function ContentCard({
                 visibility: 'visible',
                 opacity: '1',
                 position: 'relative',
-                zIndex: '999'
+                zIndex: '999',
+                backgroundColor: 'rgba(255, 0, 0, 0.2)' // Red overlay to show if space is filled
               }}
               onError={(e) => {
                 console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
@@ -243,8 +244,19 @@ export function ContentCard({
                   clientWidth: e.currentTarget.clientWidth,
                   clientHeight: e.currentTarget.clientHeight,
                   offsetWidth: e.currentTarget.offsetWidth,
-                  offsetHeight: e.currentTarget.offsetHeight
+                  offsetHeight: e.currentTarget.offsetHeight,
+                  src: e.currentTarget.src,
+                  currentSrc: e.currentTarget.currentSrc,
+                  crossOrigin: e.currentTarget.crossOrigin,
+                  loading: e.currentTarget.loading
                 });
+                // Test direct image access
+                console.error(`   🔍 Testing direct image load for: ${smartImageUrl}`);
+                const testImg = new Image();
+                testImg.onload = () => console.log(`   ✅ Direct image test PASSED for ${content.title}`);
+                testImg.onerror = () => console.error(`   ❌ Direct image test FAILED for ${content.title}`);
+                testImg.src = smartImageUrl || '';
+                
                 // Only set local error for non-TMDb images for now
                 if (!isTMDbImage) {
                   setLocalImageError(true);
@@ -259,8 +271,20 @@ export function ContentCard({
                   clientWidth: e.currentTarget.clientWidth,
                   clientHeight: e.currentTarget.clientHeight,
                   offsetWidth: e.currentTarget.offsetWidth,
-                  offsetHeight: e.currentTarget.offsetHeight
+                  offsetHeight: e.currentTarget.offsetHeight,
+                  src: e.currentTarget.src,
+                  currentSrc: e.currentTarget.currentSrc,
+                  complete: e.currentTarget.complete,
+                  loading: e.currentTarget.loading
                 });
+                
+                // Check if image has actual content
+                if (e.currentTarget.naturalWidth === 0 || e.currentTarget.naturalHeight === 0) {
+                  console.error(`   ⚠️ Image loaded but has zero dimensions!`);
+                } else {
+                  console.log(`   🎯 Image has valid dimensions: ${e.currentTarget.naturalWidth}x${e.currentTarget.naturalHeight}`);
+                }
+                
                 setLocalImageError(false); // Reset error state on successful load
               }}
               data-testid={`img-content-${content.id}`}
