@@ -190,8 +190,19 @@ export function ContentCard({
     <div 
       className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer mr-4 mb-4`}
       data-testid={`card-content-${content.id}`}
+      style={{ 
+        border: isTMDbImage ? '2px solid lime' : '1px solid gray',
+        minHeight: '200px'
+      }}
     >
-      <div className="relative mb-2">
+      <div 
+        className="relative mb-2"
+        style={{ 
+          border: '1px solid blue',
+          minHeight: '150px',
+          overflow: 'visible'
+        }}
+      >
         {showLoadingState ? (
           // Loading state for smart poster
           <div 
@@ -210,6 +221,16 @@ export function ContentCard({
               src={smartImageUrl || ''}
               alt={content.title}
               className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg`}
+              style={{ 
+                border: '3px solid red', 
+                minHeight: '100px', 
+                minWidth: '100px',
+                display: 'block',
+                visibility: 'visible',
+                opacity: '1',
+                position: 'relative',
+                zIndex: '999'
+              }}
               onError={(e) => {
                 console.error(`❌ SMART IMAGE FAILED: ${content.title}`);
                 console.error(`   Smart URL: ${smartImageUrl}`);
@@ -218,16 +239,28 @@ export function ContentCard({
                   message: e.currentTarget.error,
                   naturalWidth: e.currentTarget.naturalWidth,
                   naturalHeight: e.currentTarget.naturalHeight,
-                  complete: e.currentTarget.complete
+                  complete: e.currentTarget.complete,
+                  clientWidth: e.currentTarget.clientWidth,
+                  clientHeight: e.currentTarget.clientHeight,
+                  offsetWidth: e.currentTarget.offsetWidth,
+                  offsetHeight: e.currentTarget.offsetHeight
                 });
                 // Only set local error for non-TMDb images for now
                 if (!isTMDbImage) {
                   setLocalImageError(true);
                 }
               }}
-              onLoad={() => {
+              onLoad={(e) => {
                 console.log(`✅ SMART IMAGE LOADED: ${content.title}`);
                 console.log(`   URL: ${smartImageUrl}`);
+                console.log(`   Image dimensions:`, {
+                  naturalWidth: e.currentTarget.naturalWidth,
+                  naturalHeight: e.currentTarget.naturalHeight,
+                  clientWidth: e.currentTarget.clientWidth,
+                  clientHeight: e.currentTarget.clientHeight,
+                  offsetWidth: e.currentTarget.offsetWidth,
+                  offsetHeight: e.currentTarget.offsetHeight
+                });
                 setLocalImageError(false); // Reset error state on successful load
               }}
               data-testid={`img-content-${content.id}`}
