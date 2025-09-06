@@ -140,13 +140,15 @@ class YouTubeTVPosterFixer {
   private async updateContentPoster(
     item: any, 
     imageUrl: string, 
-    source: 'tmdb' | 'youtube' | 'staticMap' | 'fallback' = 'fallback'
+    source: 'tmdb' | 'youtube' | 'staticMap' | 'fallback' = 'fallback',
+    lockPoster: boolean = false
   ): Promise<void> {
     try {
       await storage.createOrUpdateContent({
         ...item,
         imageUrl,
         posterSource: source,
+        posterLocked: lockPoster,
         updatedAt: new Date()
       });
     } catch (error) {
@@ -159,6 +161,11 @@ class YouTubeTVPosterFixer {
    * Check if an item's poster should be updated (protection logic)
    */
   private shouldUpdatePoster(item: any): boolean {
+    // Never update locked posters
+    if (this.isPosterLocked(item)) {
+      return false;
+    }
+    
     // Always update if no poster
     if (!item.imageUrl) return true;
     
@@ -184,6 +191,24 @@ class YouTubeTVPosterFixer {
     }
     
     return false; // Default: don't update if unsure
+  }
+
+  /**
+   * Check if a poster is locked and should not be overwritten
+   */
+  private isPosterLocked(item: any): boolean {
+    // Check database posterLocked field
+    if (item.posterLocked) {
+      return true;
+    }
+    
+    // Check static mapping pinned status
+    const staticMapping = YouTubeTVStaticMapping.getStaticMapping(item.title);
+    if (staticMapping && staticMapping.pinned) {
+      return true;
+    }
+    
+    return false;
   }
 
   /**
