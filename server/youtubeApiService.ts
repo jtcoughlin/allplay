@@ -238,7 +238,7 @@ class YouTubeAPIService {
     const before = this.cache.size;
     const now = Date.now();
     
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [key, entry] of Array.from(this.cache.entries())) {
       if (now - entry.cachedAt > this.CACHE_DURATION) {
         this.cache.delete(key);
       }
