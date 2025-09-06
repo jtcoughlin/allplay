@@ -264,6 +264,14 @@ class YouTubeTVStaticMapping {
    * Get static poster for a show if available
    */
   static getStaticPoster(showTitle: string): string | null {
+    const mapping = this.getStaticMapping(showTitle);
+    return mapping ? mapping.imageUrl : null;
+  }
+
+  /**
+   * Get full static mapping for a show if available
+   */
+  static getStaticMapping(showTitle: string): StaticShowMapping | null {
     const normalized = this.normalizeTitle(showTitle);
     
     const match = this.SHOW_MAPPINGS.find(mapping => {
@@ -275,7 +283,7 @@ class YouTubeTVStaticMapping {
 
     if (match) {
       console.log(`📍 Static mapping found: ${showTitle} -> ${match.title} (${match.channel})`);
-      return match.imageUrl;
+      return match;
     }
 
     return null;
