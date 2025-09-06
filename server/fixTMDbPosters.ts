@@ -1,13 +1,17 @@
 import fetch from 'node-fetch';
 import { TMDBService } from './tmdbService';
 import { storage } from './storage';
+import { YouTubeTVStaticMapping } from './youtubetvStaticMapping';
 
 interface ContentItem {
   id: string;
   title: string;
   imageUrl: string | null;
   type: string;
-  year?: number;
+  service?: string;
+  year?: number | null;
+  posterSource?: string;
+  posterLocked?: boolean;
 }
 
 class TMDbPosterValidator {
@@ -33,12 +37,13 @@ class TMDbPosterValidator {
   /**
    * Get fresh poster URL from TMDb API
    */
-  async getFreshPosterUrl(title: string, type: string, year?: number): Promise<string | null> {
+  async getFreshPosterUrl(title: string, type: string, year?: number | null): Promise<string | null> {
     try {
+      const searchYear = year || undefined;
       if (type === 'movie') {
-        return await this.tmdbService.getMoviePosterUrl(title, year);
+        return await this.tmdbService.getMoviePosterUrl(title, searchYear);
       } else if (type === 'show' || type === 'tv') {
-        const tvResult = await this.tmdbService.searchTVShow(title, year);
+        const tvResult = await this.tmdbService.searchTVShow(title, searchYear);
         if (tvResult && tvResult.poster_path) {
           return this.tmdbService.getPosterUrl(tvResult.poster_path);
         }
@@ -48,6 +53,115 @@ class TMDbPosterValidator {
       console.error(`Error fetching fresh poster for ${title}:`, error);
       return null;
     }
+  }
+
+  /**
+   * Check if a poster is locked and should not be overwritten
+   */
+  private isPosterLocked(item: ContentItem): boolean {
+    // Check database posterLocked field
+    if (item.posterLocked) {
+      return true;
+    }
+    
+    // Check static mapping pinned status
+    const staticMapping = YouTubeTVStaticMapping.getStaticMapping(item.title);
+    if (staticMapping && staticMapping.pinned) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Detect the source of a poster URL
+   */
+  private detectPosterSource(imageUrl: string | null): 'tmdb' | 'youtube' | 'staticMap' | 'fallback' | 'missing' {
+    if (!imageUrl) return 'missing';
+    
+    if (imageUrl.includes('image.tmdb.org')) {
+      // High-quality TMDb URLs from static mappings
+      if (imageUrl.includes('/t/p/w500/') && imageUrl.length > 80) {
+        return 'staticMap';
+      }
+      return 'tmdb';
+    }
+    
+    if (imageUrl.includes('ytimg.com') || imageUrl.includes('youtube.com')) {
+      return 'youtube';
+    }
+    
+    if (imageUrl.includes('data:image/svg+xml')) {
+      return 'fallback';
+    }
+    
+    return 'tmdb'; // Default assumption
+  }
+
+  /**
+   * Update content with new poster and metadata
+   */
+  private async updateContentPoster(
+    item: ContentItem, 
+    newImageUrl: string, 
+    posterSource: string,
+    lockPoster: boolean = false
+  ): Promise<void> {
+    try {
+      const updatedContent = {
+        ...item,
+        imageUrl: newImageUrl,
+        posterSource,
+        posterLocked: lockPoster
+      };
+      
+      await storage.createOrUpdateContent(updatedContent as any);
+      console.log(`   ✅ Updated poster (source: ${posterSource}, locked: ${lockPoster})`);
+    } catch (error) {
+      console.error(`   ❌ Failed to update poster: ${error}`);
+    }
+  }
+
+  /**
+   * Get smart fallback poster based on service type
+   */
+  private getSmartFallback(item: ContentItem): string | null {
+    const service = item.service?.toLowerCase();
+    
+    // Generate SVG fallback with service branding
+    if (service === 'espn-plus' || service === 'espn') {
+      return this.generateSVGFallback('ESPN', '#FF0000');
+    } else if (service === 'cnn') {
+      return this.generateSVGFallback('CNN', '#CC0000');
+    } else if (service === 'fox-news') {
+      return this.generateSVGFallback('FOX', '#003366');
+    } else if (service === 'youtube-tv') {
+      return this.generateSVGFallback('Live TV', '#FF0000');
+    } else if (service === 'netflix') {
+      return this.generateSVGFallback('Netflix', '#E50914');
+    } else if (service === 'hulu') {
+      return this.generateSVGFallback('Hulu', '#1CE783');
+    } else if (service === 'disney-plus') {
+      return this.generateSVGFallback('Disney+', '#113CCF');
+    }
+    
+    // Generic fallback
+    return this.generateSVGFallback('Content', '#666666');
+  }
+
+  /**
+   * Generate branded SVG fallback
+   */
+  private generateSVGFallback(text: string, color: string): string {
+    const svg = `
+      <svg width="300" height="450" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="${color}" opacity="0.1"/>
+        <rect x="20" y="20" width="260" height="410" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="10,5"/>
+        <text x="150" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="${color}">${text}</text>
+      </svg>
+    `.trim();
+    
+    return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
   }
 
   /**
@@ -71,6 +185,12 @@ class TMDbPosterValidator {
     for (const item of tmdbContent) {
       if (!item.imageUrl) continue;
 
+      // Skip locked posters
+      if (this.isPosterLocked(item)) {
+        console.log(`🔒 SKIPPED (LOCKED): ${item.title}`);
+        continue;
+      }
+
       console.log(`\n🔍 Validating: ${item.title}`);
       console.log(`   Current URL: ${item.imageUrl}`);
 
@@ -78,44 +198,47 @@ class TMDbPosterValidator {
       const isValid = await this.validateImageUrl(item.imageUrl);
       
       if (isValid) {
-        console.log(`   ✅ Valid - no action needed`);
-        validCount++;
-        continue;
-      }
-
-      console.log(`   ❌ Broken - fetching fresh poster...`);
-
-      // Get fresh poster URL
-      const freshUrl = await this.getFreshPosterUrl(item.title, item.type, item.year);
-      
-      if (freshUrl && freshUrl !== item.imageUrl) {
-        // Validate the fresh URL
-        const isFreshValid = await this.validateImageUrl(freshUrl);
+        console.log(`   ✅ Valid poster`);
         
-        if (isFreshValid) {
-          console.log(`   🔧 Updating with: ${freshUrl}`);
+        // Update posterSource if missing
+        const currentSource = this.detectPosterSource(item.imageUrl);
+        if (!item.posterSource || item.posterSource !== currentSource) {
+          await this.updateContentPoster(item, item.imageUrl, currentSource);
+        }
+        
+        validCount++;
+      } else {
+        console.log(`   ❌ Broken poster - attempting to fix...`);
+        
+        // Priority 1: Check if there's a static mapping available (highest priority)
+        const staticMapping = YouTubeTVStaticMapping.getStaticMapping(item.title);
+        if (staticMapping) {
+          console.log(`   📍 Applying static mapping: ${staticMapping.channel}`);
+          await this.updateContentPoster(item, staticMapping.imageUrl, 'staticMap', staticMapping.pinned);
+          fixedCount++;
+          continue;
+        }
+        
+        // Priority 2: Try to get a fresh poster URL from TMDb
+        const freshUrl = await this.getFreshPosterUrl(item.title, item.type, item.year);
+        
+        if (freshUrl && await this.validateImageUrl(freshUrl)) {
+          await this.updateContentPoster(item, freshUrl, 'tmdb');
+          console.log(`   ✅ Fixed with new TMDb URL`);
+          fixedCount++;
+        } else {
+          console.log(`   ❌ No valid TMDb replacement found - applying smart fallback`);
           
-          // Update in database
-          try {
-            await storage.createOrUpdateContent({
-              ...item,
-              imageUrl: freshUrl,
-              updatedAt: new Date()
-            });
-            
-            console.log(`   ✅ Successfully updated ${item.title}`);
+          // Priority 3: Apply smart fallback based on service
+          const fallbackUrl = this.getSmartFallback(item);
+          if (fallbackUrl) {
+            await this.updateContentPoster(item, fallbackUrl, 'fallback');
+            console.log(`   🔄 Applied branded service fallback`);
             fixedCount++;
-          } catch (error) {
-            console.error(`   ❌ Failed to update database for ${item.title}:`, error);
+          } else {
             failedCount++;
           }
-        } else {
-          console.log(`   ⚠️ Fresh URL also broken: ${freshUrl}`);
-          failedCount++;
         }
-      } else {
-        console.log(`   ⚠️ No fresh poster found for ${item.title}`);
-        failedCount++;
       }
 
       // Add delay to be respectful to APIs
