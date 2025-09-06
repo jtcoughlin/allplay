@@ -19,7 +19,8 @@ class YouTubeTVStaticMapping {
       title: 'First Take',
       imageUrl: 'https://image.tmdb.org/t/p/w500/8wOHyS55J7mFClQs5i8ykVgTvhe.jpg',
       channel: 'ESPN',
-      priority: 10
+      priority: 10,
+      pinned: true // LOCKED: Critical ESPN content
     },
     {
       title: 'The Herd with Colin Cowherd',
@@ -31,19 +32,29 @@ class YouTubeTVStaticMapping {
       title: 'SportsCenter',
       imageUrl: 'https://image.tmdb.org/t/p/w500/6aQBiE3zepieX0TRKfBhN9PjOMk.jpg',
       channel: 'ESPN',
-      priority: 10
+      priority: 10,
+      pinned: true // LOCKED: Critical ESPN content
     },
     {
       title: 'NFL Live',
       imageUrl: 'https://image.tmdb.org/t/p/w500/r8nMSHcP3lFpEfnLGdO0OGm3k4t.jpg',
       channel: 'ESPN',
-      priority: 8
+      priority: 10,
+      pinned: true // LOCKED: Critical ESPN content
     },
     {
       title: 'College GameDay',
       imageUrl: 'https://image.tmdb.org/t/p/w500/kF8fCjn9xV2h6G7t3vB2LJo4RJh.jpg',
       channel: 'ESPN',
-      priority: 8
+      priority: 10,
+      pinned: true // LOCKED: Critical ESPN content
+    },
+    {
+      title: 'Pardon the Interruption',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/s8KjSJQQ1zjz0Uv3H8BQ6Qoz9mK.jpg',
+      channel: 'ESPN',
+      priority: 10,
+      pinned: true // LOCKED: Critical ESPN content
     },
     // PERMANENTLY PINNED: ESPN+ 30 for 30 Series (DO NOT OVERRIDE)
     {

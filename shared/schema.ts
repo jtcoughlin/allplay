@@ -64,6 +64,8 @@ export const content = pgTable("content", {
   serviceContentId: varchar("service_content_id").notNull(), // ID in the source service
   directUrl: text("direct_url"), // Direct URL to content page on streaming service
   imageUrl: text("image_url"),
+  posterSource: varchar("poster_source"), // 'tmdb', 'youtube', 'staticMap', 'fallback', 'missing'
+  posterLocked: boolean("poster_locked").default(false), // If true, poster cannot be overwritten
   rating: varchar("rating"), // PG, R, TV-14, etc.
   year: integer("year"),
   artist: text("artist"), // for music content
