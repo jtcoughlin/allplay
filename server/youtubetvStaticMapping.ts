@@ -8,6 +8,7 @@ interface StaticShowMapping {
   imageUrl: string;
   channel: string;
   priority: number; // Higher = more reliable/popular
+  pinned?: boolean; // If true, this mapping should never be overwritten
 }
 
 class YouTubeTVStaticMapping {
@@ -44,24 +45,27 @@ class YouTubeTVStaticMapping {
       channel: 'ESPN',
       priority: 8
     },
-    // ESPN+ / 30 for 30 Series - Fix specific branding issues
+    // PERMANENTLY PINNED: ESPN+ 30 for 30 Series (DO NOT OVERRIDE)
     {
       title: '30 for 30',
       imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
       channel: 'ESPN+',
-      priority: 10
+      priority: 100, // PINNED: Permanent priority
+      pinned: true
     },
     {
       title: '30 for 30: Broke',
       imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
       channel: 'ESPN+',
-      priority: 10
+      priority: 100, // PINNED: Permanent priority  
+      pinned: true
     },
     {
       title: '30 for 30: The Tuck Rule',
       imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
       channel: 'ESPN+',
-      priority: 10
+      priority: 100, // PINNED: Permanent priority
+      pinned: true
     },
 
     // News Programming  
@@ -95,18 +99,20 @@ class YouTubeTVStaticMapping {
       channel: 'CNN',
       priority: 8
     },
-    // FIX: Specific problem cases mentioned by user
+    // PERMANENTLY PINNED: User-specified critical mappings (DO NOT OVERRIDE)
     {
       title: 'Tucker Carlson Tonight',
       imageUrl: 'https://image.tmdb.org/t/p/w500/4FzNhvKRrZ4jQQELJLQKA0N5qs7.jpg',
       channel: 'FOX News',
-      priority: 10
+      priority: 100, // PINNED: Permanent priority
+      pinned: true
     },
     {
       title: 'Anderson Cooper 360',
       imageUrl: 'https://image.tmdb.org/t/p/w500/mJ8KVOHqEBDGV2BTDwEEj3R9ykN.jpg', 
       channel: 'CNN',
-      priority: 10
+      priority: 100, // PINNED: Permanent priority
+      pinned: true
     },
 
     // Talk Shows
