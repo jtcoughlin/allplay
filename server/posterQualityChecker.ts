@@ -113,12 +113,12 @@ class PosterQualityChecker {
     }
 
     console.log('🚨 QUALITY ISSUES BY SERVICE:');
-    for (const [service, serviceReports] of serviceGroups.entries()) {
+    for (const [service, serviceReports] of Array.from(serviceGroups.entries())) {
       if (serviceReports.length > 0) {
         console.log(`\n📺 ${service.toUpperCase()}: ${serviceReports.length} issues`);
         
         // Show top 5 issues for each service
-        serviceReports.slice(0, 5).forEach(report => {
+        serviceReports.slice(0, 5).forEach((report: PosterQualityReport) => {
           console.log(`   ❌ ${report.title}`);
           console.log(`      Issues: ${report.qualityIssues.join(', ')}`);
           console.log(`      Source: ${report.posterSource}`);
