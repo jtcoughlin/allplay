@@ -13,7 +13,7 @@ interface StaticShowMapping {
 class YouTubeTVStaticMapping {
   // High-quality static mappings for popular recurring shows
   private static readonly SHOW_MAPPINGS: StaticShowMapping[] = [
-    // ESPN
+    // ESPN Sports Programming
     {
       title: 'First Take',
       imageUrl: 'https://image.tmdb.org/t/p/w500/8wOHyS55J7mFClQs5i8ykVgTvhe.jpg',
@@ -44,8 +44,27 @@ class YouTubeTVStaticMapping {
       channel: 'ESPN',
       priority: 8
     },
+    // ESPN+ / 30 for 30 Series - Fix specific branding issues
+    {
+      title: '30 for 30',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
+      channel: 'ESPN+',
+      priority: 10
+    },
+    {
+      title: '30 for 30: Broke',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
+      channel: 'ESPN+',
+      priority: 10
+    },
+    {
+      title: '30 for 30: The Tuck Rule',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/zwK8AWvmoxbIrvO0TRKzkZN5nG3.jpg',
+      channel: 'ESPN+',
+      priority: 10
+    },
 
-    // News
+    // News Programming  
     {
       title: 'Good Morning America',
       imageUrl: 'https://image.tmdb.org/t/p/w500/72c5P7nWHtGTWLwbL9TK5bhfDL.jpg',
@@ -75,6 +94,19 @@ class YouTubeTVStaticMapping {
       imageUrl: 'https://image.tmdb.org/t/p/w500/mR8V7nqk4qhDU7v2C8e2QjKlKBu.jpg',
       channel: 'CNN',
       priority: 8
+    },
+    // FIX: Specific problem cases mentioned by user
+    {
+      title: 'Tucker Carlson Tonight',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/4FzNhvKRrZ4jQQELJLQKA0N5qs7.jpg',
+      channel: 'FOX News',
+      priority: 10
+    },
+    {
+      title: 'Anderson Cooper 360',
+      imageUrl: 'https://image.tmdb.org/t/p/w500/mJ8KVOHqEBDGV2BTDwEEj3R9ykN.jpg', 
+      channel: 'CNN',
+      priority: 10
     },
 
     // Talk Shows
