@@ -421,6 +421,54 @@ class YouTubeTVPosterFixer {
     const mappingStats = YouTubeTVStaticMapping.getStats();
     console.log(`📋 Static mapping coverage: ${mappingStats.totalMappings} shows across ${mappingStats.uniqueChannels} channels`);
   }
+
+  /**
+   * Fix ESPN+ content specifically
+   */
+  async fixESPNPlusContent(): Promise<void> {
+    console.log('🏀 TARGETED ESPN+ CONTENT FIX\n');
+    
+    const allContent = await storage.getAllContent();
+    const espnPlusContent = allContent.filter(item => 
+      item.service === 'espn-plus' && this.shouldUpdatePoster(item)
+    );
+
+    console.log(`📊 Found ${espnPlusContent.length} ESPN+ items needing poster updates`);
+    
+    if (espnPlusContent.length === 0) {
+      console.log('✅ All ESPN+ content already has appropriate posters');
+      return;
+    }
+
+    for (const item of espnPlusContent) {
+      await this.fixSingleItem(item);
+    }
+  }
+
+  /**
+   * Fix TMDb content with specific titles (30 for 30, Untold)
+   */
+  async fixSpecificTMDbContent(): Promise<void> {
+    console.log('🎬 TARGETED TMDb CONTENT FIX (30 for 30, Untold)\n');
+    
+    const allContent = await storage.getAllContent();
+    const targetContent = allContent.filter(item => {
+      const title = item.title.toLowerCase();
+      return (title.includes('30 for 30') || title.includes('untold')) && 
+             this.shouldUpdatePoster(item);
+    });
+
+    console.log(`📊 Found ${targetContent.length} targeted TMDb items needing poster updates`);
+    
+    if (targetContent.length === 0) {
+      console.log('✅ All targeted TMDb content already has appropriate posters');
+      return;
+    }
+
+    for (const item of targetContent) {
+      await this.fixSingleItem(item);
+    }
+  }
 }
 
 // CLI interface
@@ -429,14 +477,22 @@ async function main() {
   const fixer = new YouTubeTVPosterFixer();
 
   if (args.includes('--fix')) {
-    await fixer.fixAllYouTubeTVPosters();
+    if (args.includes('--espn-plus')) {
+      await fixer.fixESPNPlusContent();
+    } else if (args.includes('--tmdb-targeted')) {
+      await fixer.fixSpecificTMDbContent();
+    } else {
+      await fixer.fixAllYouTubeTVPosters();
+    }
   } else if (args.includes('--report')) {
     await fixer.generateReport();
   } else {
     console.log('🎬 YouTube TV Poster Fixer');
     console.log('Usage:');
-    console.log('  npx tsx youtubeTVPosterFixer.ts --fix     # Fix all YouTube TV posters');
-    console.log('  npx tsx youtubeTVPosterFixer.ts --report  # Generate status report');
+    console.log('  npx tsx youtubeTVPosterFixer.ts --fix                # Fix all YouTube TV posters');
+    console.log('  npx tsx youtubeTVPosterFixer.ts --fix --espn-plus    # Fix ESPN+ content only');
+    console.log('  npx tsx youtubeTVPosterFixer.ts --fix --tmdb-targeted # Fix 30 for 30/Untold content');
+    console.log('  npx tsx youtubeTVPosterFixer.ts --report             # Generate status report');
   }
 }
 
