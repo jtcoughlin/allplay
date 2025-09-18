@@ -15,6 +15,8 @@ interface MediaCardProps {
   onPlay?: () => void;
   onToggleFavorite?: () => void;
   isFavorite?: boolean;
+  imageUrl?: string | null; // Add support for existing imageUrl
+  posterSource?: string | null; // Add support for posterSource
 }
 
 export function MediaCard({
@@ -27,10 +29,19 @@ export function MediaCard({
   size = 'medium',
   onPlay,
   onToggleFavorite,
-  isFavorite = false
+  isFavorite = false,
+  imageUrl: existingImageUrl,
+  posterSource
 }: MediaCardProps) {
-  const { imageUrl, loading, error } = useTMDbPoster(movieId);
+  // Only use TMDb poster if no existing imageUrl or if it's not a staticMap
+  const shouldUseTMDb = !existingImageUrl || (posterSource !== 'staticMap' && !existingImageUrl.includes('1000logos.net'));
+  const { imageUrl: tmdbImageUrl, loading, error } = useTMDbPoster(shouldUseTMDb ? movieId : null);
+  
+  // Prioritize existing imageUrl (especially staticMap) over TMDb
+  const finalImageUrl = existingImageUrl || tmdbImageUrl;
   const [imageFailed, setImageFailed] = useState(false);
+  
+  console.log(`🎯 MediaCard: ${title} - posterSource: ${posterSource}, existingUrl: ${existingImageUrl ? 'YES' : 'NO'}, shouldUseTMDb: ${shouldUseTMDb}, finalUrl: ${finalImageUrl ? 'YES' : 'NO'}`);
 
   const sizeClasses = {
     small: 'w-36',
@@ -65,12 +76,12 @@ export function MediaCard({
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     console.error(`❌ Image failed to load for: ${title}`);
-    console.error(`   URL: ${imageUrl}`);
+    console.error(`   URL: ${finalImageUrl}`);
     console.error(`   Error:`, e);
     setImageFailed(true);
   };
 
-  const showFallback = loading || error || !imageUrl || imageFailed;
+  const showFallback = loading || error || !finalImageUrl || imageFailed;
 
   return (
     <div 
@@ -80,7 +91,7 @@ export function MediaCard({
       <div className="relative mb-2">
         {!showFallback ? (
           <img 
-            src={imageUrl}
+            src={finalImageUrl}
             alt={title}
             className={`w-full ${imageSizeClasses[size]} object-cover rounded-lg shadow-lg`}
             onLoad={handleImageLoad}

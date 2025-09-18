@@ -24,9 +24,24 @@ export function useCurrentlyAiring() {
   return useQuery({
     queryKey: ['live-tv', 'currently-airing'],
     queryFn: async () => {
-      const response = await fetch('/api/live-tv/currently-airing');
-      if (!response.ok) throw new Error('Failed to fetch currently airing programs');
-      return response.json();
+      console.log('🔍 useCurrentlyAiring: Starting fetch to /api/live-tv/currently-airing');
+      try {
+        const response = await fetch('/api/live-tv/currently-airing');
+        console.log(`🔍 useCurrentlyAiring: Response status: ${response.status}, ok: ${response.ok}`);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`❌ useCurrentlyAiring: API error - Status: ${response.status}, Text: ${errorText}`);
+          throw new Error(`Failed to fetch currently airing programs: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        console.log(`✅ useCurrentlyAiring: Successfully fetched ${Array.isArray(data) ? data.length : 'unknown'} programs`, data);
+        return data;
+      } catch (error) {
+        console.error('❌ useCurrentlyAiring: Fetch error:', error);
+        throw error;
+      }
     },
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
     staleTime: 2 * 60 * 1000, // Consider data stale after 2 minutes

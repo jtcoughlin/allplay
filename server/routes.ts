@@ -477,6 +477,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(status);
   });
 
+  // Get currently airing programs
+  app.get("/api/live-tv/currently-airing", async (req, res) => {
+    try {
+      console.log('🔍 API: Fetching currently airing programs...');
+      const programs = await liveTVSync.getCurrentlyAiringPrograms();
+      console.log(`✅ API: Returning ${programs.length} currently airing programs`);
+      res.json(programs);
+    } catch (error) {
+      console.error('❌ API: Error fetching currently airing programs:', error);
+      res.status(500).json({ 
+        message: "Failed to fetch currently airing programs",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
