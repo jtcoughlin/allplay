@@ -461,7 +461,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Live TV sync control endpoints
   app.post("/api/live-tv/sync", async (req, res) => {
     try {
-      await liveTVSync.syncData();
+      await liveTVSync.syncLiveTVData();
       res.json({ message: "Live TV sync completed successfully" });
     } catch (error) {
       console.error('Live TV sync error:', error);

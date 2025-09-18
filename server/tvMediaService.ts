@@ -124,7 +124,7 @@ export class TVMediaService {
       // Use smaller time window to reduce API load and get current programs only
       const now = new Date();
       const startTime = now.toISOString().slice(0, 19).replace('T', ' ');
-      const endTime = new Date(now.getTime() + (1 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' '); // Only 1 hour to reduce load
+      const endTime = new Date(now.getTime() + (hours * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' '); // Match hours parameter
       
       const params = {
         start: startTime,
