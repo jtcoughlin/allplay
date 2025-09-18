@@ -145,6 +145,8 @@ export class DatabaseStorage implements IStorage {
           category: contentData.category,
           artist: contentData.artist,
           album: contentData.album,
+          posterSource: contentData.posterSource,
+          posterLocked: contentData.posterLocked,
           updatedAt: new Date(),
         },
       })

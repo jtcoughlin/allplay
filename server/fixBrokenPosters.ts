@@ -214,9 +214,9 @@ class BrokenPosterFixer {
                 posterSource: "staticMap",
                 posterLocked: true,
                 updatedAt: new Date(),
-              });
+              } as any);
 
-              console.log(`   ✅ Successfully updated`);
+              console.log(`   ✅ Successfully updated (locked & tracked)`);
               updatedCount++;
             } catch (error) {
               console.error(`   ❌ Failed to update: ${error}`);
