@@ -1,0 +1,88 @@
+GOAL: Finalize AllPlay UI and fix remaining visual + data rendering issues to ensure ESPN+ and YouTube TV content is fully branded and all poster cards are correctly rendered across the app.
+🛠️ Your job is to:
+FIX all frontend rendering issues for ESPN+ and YouTube TV poster cards
+IMPROVE UI logic to clean up visuals and metadata display
+IMPLEMENT new homepage carousels based on logical filters
+🐞 1. BUG FIXING: POSTER CARD DISPLAY (ESPN+ & YouTube TV)
+These cards are still not rendering correctly, despite correct backend data.
+Backend confirms the following for ESPN+ and YouTube TV content:
+posterSource = "staticMap"
+posterLocked = true
+imageUrl = VALID ESPN+ or YouTube TV branded image (returns 200)
+Yet on the frontend:
+Many tiles still show generic placeholders or nothing at all
+Some Live TV cards (especially ESPN+) do not show artwork
+🔧 Fix instructions:
+Ensure <MediaCard> and <ContentCard> prioritize item.imageUrl directly
+Do not override with TMDb fallback if posterSource === 'staticMap'
+Fallbacks should only occur if item.imageUrl is falsy or explicitly broken
+Audit all image logic hooks:
+useTMDbPoster, useSmartPoster, usePoster, etc.
+Make sure none of these override working static mappings
+Live TV fix:
+Ensure Live TV cards use the correct imageUrl from /api/live-tv/currently-airing
+Add logging or fallback warning if imageUrl is undefined or missing
+Fix any remaining API routing mismatches
+/api/live-tv/currently-airing should return JSON, not HTML
+Gracefully handle empty program arrays with empty UI state (not error screen)
+🧼 2. CARD UI CLEANUP + METADATA CORRECTIONS
+The visual UX needs significant cleanup:
+🧾 Title formatting:
+Ensure full titles are displayed — wrap or truncate with ellipsis only if necessary
+Use CSS text-wrap: balance or white-space: normal; word-break: break-word;
+Keep card sizes uniform even with wrapped titles
+🕰️ Fix release year metadata:
+Many tiles incorrectly show 2025 for all content
+Pull accurate year from item.releaseDate or item.year (whichever exists)
+If not available, remove year display from card to avoid misleading info
+🧬 Remove duplicate cards:
+Some tiles (especially in carousels like "Sports" or "News") show multiple copies of same content
+Add filtering logic when building card sections:
+const uniqueContent = Array.from(new Map(content.map(item => [item.id, item])).values());
+🖼️ Poster formatting:
+Double-check that all images:
+Use consistent aspect ratios (e.g. 2:3 for posters)
+Are not stretched or clipped
+Have alt text and proper loading fallback
+Badge overlays (e.g. "LIVE", "ESPN+") should not cover content or truncate title
+📺 3. HOMEPAGE + TAB IMPROVEMENTS (CAROUSELS + FILTERS)
+Add the following new horizontal content sections below the Hero / Featured section:
+🔥 Popular Now
+Filter: High engagement across all services (item.popularity > X)
+Include mix of live, trending, and recent shows/movies
+🆕 New Releases
+Filter: item.type === 'series' || item.type === 'mini-series'
+Release date: within last 30 days
+🏆 Best Movies of 2025
+Filter: item.type === 'movie'
+Release date: year === 2025
+Sort by item.rating or similar if available (IMDb, TMDb, etc.)
+⭐ My List (Universal Watchlist)
+Pull from user’s saved programs (item.saved === true)
+Include any type (movie, show, live, etc.) across all platforms
+🎥 Documentaries
+Filter: item.genre.includes('Documentary') || item.type === 'documentary'
+Include docuseries and true crime where applicable
+Each section should:
+Show horizontal scrollable carousel
+Have a section header with bold category name
+Use consistent MediaCard styling
+Avoid duplicates between sections
+✅ Final Checklist:
+ ESPN+ and YouTube TV branded posters show up
+ Titles render fully and consistently
+ Duplicate cards removed
+ Year metadata corrected
+ Poster artwork is clean and formatted properly
+ Live TV guide loads successfully (no error fallback)
+ New carousels (Popular Now, New Releases, etc.) implemented
+ Documentaries tab has appropriate content
+ “My List” section is personalized and service-agnostic
+Once these changes are live, run a full front-to-back test:
+Visit /, /live, /sports, and any other relevant tabs
+Confirm poster tiles visually display correctly
+Ensure the new carousels are populated with correct data
+Log any API warnings or poster fallback incidents in dev console
+💡 If you need to test poster image validity, run:
+curl -s http://localhost:5000/api/content | jq '.[] | select(.posterSource == "staticMap") | {title, imageUrl, service}'
+All imageUrls should return HTTP 200 and display ESPN/YouTube TV branding.

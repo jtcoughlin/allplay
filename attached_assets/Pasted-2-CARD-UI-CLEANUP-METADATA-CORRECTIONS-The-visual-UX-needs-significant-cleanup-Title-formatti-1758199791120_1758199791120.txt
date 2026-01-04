@@ -1,0 +1,43 @@
+2. CARD UI CLEANUP + METADATA CORRECTIONS
+The visual UX needs significant cleanup:
+🧾 Title formatting:
+Ensure full titles are displayed — wrap or truncate with ellipsis only if necessary
+Use CSS text-wrap: balance or white-space: normal; word-break: break-word;
+Keep card sizes uniform even with wrapped titles
+🕰️ Fix release year metadata:
+Many tiles incorrectly show 2025 for all content
+Pull accurate year from item.releaseDate or item.year (whichever exists)
+If not available, remove year display from card to avoid misleading info
+🧬 Remove duplicate cards:
+Some tiles (especially in carousels like "Sports" or "News") show multiple copies of same content
+Add filtering logic when building card sections:
+const uniqueContent = Array.from(new Map(content.map(item => [item.id, item])).values());
+🖼️ Poster formatting:
+Double-check that all images:
+Use consistent aspect ratios (e.g. 2:3 for posters)
+Are not stretched or clipped
+Have alt text and proper loading fallback
+Badge overlays (e.g. "LIVE", "ESPN+") should not cover content or truncate title
+📺 3. HOMEPAGE + TAB IMPROVEMENTS (CAROUSELS + FILTERS)
+Add the following new horizontal content sections below the Hero / Featured section:
+🔥 Popular Now
+Filter: High engagement across all services (item.popularity > X)
+Include mix of live, trending, and recent shows/movies
+🆕 New Releases
+Filter: item.type === 'series' || item.type === 'mini-series'
+Release date: within last 30 days
+🏆 Best Movies of 2025
+Filter: item.type === 'movie'
+Release date: year === 2025
+Sort by item.rating or similar if available (IMDb, TMDb, etc.)
+⭐ My List (Universal Watchlist)
+Pull from user’s saved programs (item.saved === true)
+Include any type (movie, show, live, etc.) across all platforms
+🎥 Documentaries
+Filter: item.genre.includes('Documentary') || item.type === 'documentary'
+Include docuseries and true crime where applicable
+Each section should:
+Show horizontal scrollable carousel
+Have a section header with bold category name
+Use consistent MediaCard styling
+Avoid duplicates between sections
