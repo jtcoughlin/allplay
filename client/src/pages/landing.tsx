@@ -9,7 +9,7 @@ export default function Landing() {
       <header className="border-b border-navy-lighter">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <Logo size="large" />
+            <Logo size="xlarge" />
             <Button 
               asChild
               className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
