@@ -49,7 +49,7 @@ export function Header({ viewMode, onViewModeChange, hideViewToggle = false, onS
           className="flex items-center hover:opacity-80 transition-opacity"
           data-testid="link-home"
         >
-          <Logo size="medium" />
+          <Logo size="xlarge" />
         </Link>
         
         {/* Inline Navigation */}

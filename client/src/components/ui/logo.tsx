@@ -2,7 +2,7 @@ import allplayLogo from "@assets/allplay3_1768093202371.png";
 
 interface LogoProps {
   className?: string;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
 }
 
 export function Logo({ className = "", size = 'medium' }: LogoProps) {
@@ -10,6 +10,7 @@ export function Logo({ className = "", size = 'medium' }: LogoProps) {
     small: 'h-6',
     medium: 'h-8',
     large: 'h-12',
+    xlarge: 'h-24',
   };
 
   return (
