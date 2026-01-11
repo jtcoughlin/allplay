@@ -150,7 +150,7 @@ export default function Music() {
               <Button
                 onClick={() => handleOpenService(service)}
                 variant="outline"
-                className="border-navy-lighter text-cream hover:bg-navy-lighter"
+                className="border-blue-primary text-blue-primary hover:bg-blue-primary hover:text-white"
                 data-testid={`button-open-${service.id}`}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
