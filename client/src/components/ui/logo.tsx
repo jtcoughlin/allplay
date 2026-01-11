@@ -1,23 +1,25 @@
-import { Play } from "lucide-react";
+import allplayLogo from "@assets/allplay3_1768093202371.png";
 
 interface LogoProps {
   className?: string;
-  showText?: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 
-export function Logo({ className = "", showText = true }: LogoProps) {
+export function Logo({ className = "", size = 'medium' }: LogoProps) {
+  const sizeClasses = {
+    small: 'h-6',
+    medium: 'h-8',
+    large: 'h-12',
+  };
+
   return (
-    <div className={`flex items-center space-x-2 ${className}`} data-testid="logo-allplay">
-      <div className="relative">
-        <div className="w-8 h-8 bg-blue-gradient rounded-full flex items-center justify-center">
-          <Play className="w-4 h-4 text-white fill-white" data-testid="logo-play-icon" />
-        </div>
-      </div>
-      {showText && (
-        <span className="text-cream font-bold text-xl tracking-tight" data-testid="logo-text">
-          allplay
-        </span>
-      )}
+    <div className={`flex items-center ${className}`} data-testid="logo-allplay">
+      <img 
+        src={allplayLogo} 
+        alt="allplay" 
+        className={`${sizeClasses[size]} w-auto object-contain`}
+        data-testid="logo-image"
+      />
     </div>
   );
 }

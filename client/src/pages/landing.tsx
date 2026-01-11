@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Tv, Shield, Zap, Users, Search } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 export default function Landing() {
   return (
@@ -8,10 +9,7 @@ export default function Landing() {
       <header className="border-b border-navy-lighter">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-1 text-2xl font-bold text-white">
-              <Play className="w-6 h-6 text-blue-primary" />
-              <span className="lowercase">allplay</span>
-            </div>
+            <Logo size="large" />
             <Button 
               asChild
               className="bg-blue-primary hover:bg-blue-600 text-white border border-blue-primary"
@@ -137,9 +135,8 @@ export default function Landing() {
       <footer className="border-t border-navy-lighter mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-2xl font-bold text-white mb-4">
-              <Play className="w-6 h-6 text-blue-primary" />
-              <span className="lowercase">allplay</span>
+            <div className="flex items-center justify-center mb-4">
+              <Logo size="medium" />
             </div>
             <p className="text-gray-400 mb-6">TV was broken. We fixed it.</p>
             <div className="flex justify-center space-x-8 text-sm text-gray-400">

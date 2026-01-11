@@ -9,11 +9,11 @@ import {
   ChevronLeft, 
   ChevronRight,
   Tv,
-  Settings,
-  Play
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/logo";
 
 interface SidebarProps {
   className?: string;
@@ -119,15 +119,12 @@ export function Sidebar({ className }: SidebarProps) {
           data-testid="button-brand-toggle"
         >
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-gradient rounded-lg flex items-center justify-center">
-              <Play className="w-4 h-4 text-white" />
-            </div>
-            {!isCollapsed && (
-              <div>
-                <h1 className="text-lg font-bold text-cream" data-testid="text-brand">
-                  AllPlay
-                </h1>
-                <p className="text-xs text-gray-400" data-testid="text-tagline">
+            {isCollapsed ? (
+              <Logo size="small" />
+            ) : (
+              <div className="flex flex-col">
+                <Logo size="medium" />
+                <p className="text-xs text-gray-400 mt-1" data-testid="text-tagline">
                   TV was broken. We fixed it.
                 </p>
               </div>

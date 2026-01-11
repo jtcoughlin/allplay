@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { User, ChevronDown, Grid3X3, List, Play, Home, Settings, LogOut, Search } from "lucide-react";
+import { User, ChevronDown, Grid3X3, List, Home, Settings, LogOut, Search } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,13 +46,10 @@ export function Header({ viewMode, onViewModeChange, hideViewToggle = false, onS
         {/* Logo */}
         <Link 
           href="/" 
-          className="flex items-center space-x-1 text-2xl font-bold text-cream hover:text-blue-primary transition-colors"
+          className="flex items-center hover:opacity-80 transition-opacity"
           data-testid="link-home"
         >
-          <div className="relative">
-            <Play className="w-6 h-6 text-blue-primary" />
-          </div>
-          <span className="lowercase">allplay</span>
+          <Logo size="medium" />
         </Link>
         
         {/* Inline Navigation */}
