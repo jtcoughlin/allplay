@@ -140,7 +140,7 @@ export default function Music() {
                 <Button
                   onClick={() => handleConnectService(service.id)}
                   disabled={connectService.isPending}
-                  className="bg-blue-gradient hover:bg-blue-primary text-white"
+                  className="bg-blue-primary text-white hover:bg-white hover:text-blue-primary border border-blue-primary"
                   data-testid={`button-connect-${service.id}`}
                 >
                   {connectService.isPending ? "Connecting..." : "Connect"}
@@ -149,8 +149,7 @@ export default function Music() {
               
               <Button
                 onClick={() => handleOpenService(service)}
-                variant="outline"
-                className="border-blue-primary text-blue-primary hover:bg-blue-primary hover:text-white"
+                className="bg-blue-primary text-white hover:bg-white hover:text-blue-primary border border-blue-primary"
                 data-testid={`button-open-${service.id}`}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
