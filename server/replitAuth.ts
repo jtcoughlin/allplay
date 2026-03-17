@@ -34,7 +34,7 @@ export function getSession() {
   return session({
     secret: process.env.SESSION_SECRET!,
     store: sessionStore,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
@@ -103,12 +103,15 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    req.session.save(() => {
-      passport.authenticate(`replitauth:${req.hostname}`, {
-        prompt: "login consent",
-        scope: ["openid", "email", "profile", "offline_access"],
-      })(req, res, next);
-    });
+    // Intercept redirect so we can save session (with OIDC state) before it fires
+    const originalRedirect = res.redirect.bind(res);
+    (res as any).redirect = function(url: string) {
+      req.session.save(() => originalRedirect(url));
+    };
+    passport.authenticate(`replitauth:${req.hostname}`, {
+      prompt: "login consent",
+      scope: ["openid", "email", "profile", "offline_access"],
+    })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
