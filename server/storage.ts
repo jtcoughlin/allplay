@@ -124,9 +124,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createOrUpdateContent(contentData: Content): Promise<Content> {
+    const safeData = { ...contentData };
+    if (safeData.availability === null || safeData.availability === undefined || safeData.availability === '') {
+      delete (safeData as any).availability;
+    }
     const [updatedContent] = await db
       .insert(content)
-      .values(contentData)
+      .values(safeData)
       .onConflictDoUpdate({
         target: content.id,
         set: {
@@ -156,12 +160,12 @@ export class DatabaseStorage implements IStorage {
 
   // Favorites operations
   async getUserFavorites(userId: string): Promise<(Favorite & { content: Content })[]> {
-    return await db
+    const rows = await db
       .select()
       .from(favorites)
       .innerJoin(content, eq(favorites.contentId, content.id))
-      .where(eq(favorites.userId, userId))
-      .then(rows => rows.map(row => ({ ...row.favorites, content: row.content })));
+      .where(eq(favorites.userId, userId));
+    return (rows || []).map(row => ({ ...row.favorites, content: row.content }));
   }
 
   async addToFavorites(favorite: InsertFavorite): Promise<Favorite> {

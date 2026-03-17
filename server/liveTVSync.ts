@@ -126,9 +126,13 @@ export class LiveTVSyncService {
           artist: null,
           album: null,
           duration: program.duration,
-          isLive: true, // All programs from live TV sync are live
+          isLive: true,
           category: this.categorizeByGenre(program.genre),
-          availability: null
+          availability: null,
+          posterSource: null,
+          posterLocked: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         } as Content;
 
         // Store in database
