@@ -39,7 +39,7 @@ export function getSession() {
     cookie: {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: sessionTtl,
     },
   });
@@ -103,11 +103,6 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    // Intercept redirect so we can save session (with OIDC state) before it fires
-    const originalRedirect = res.redirect.bind(res);
-    (res as any).redirect = function(url: string) {
-      req.session.save(() => originalRedirect(url));
-    };
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
@@ -115,26 +110,20 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/callback", (req, res, next) => {
-    console.log('🔐 Callback received for hostname:', req.hostname);
     passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any, info: any) => {
       if (err) {
-        console.error('🔐 Auth callback error:', err);
+        console.error('Auth callback error:', err.message || err);
         return res.redirect('/api/login');
       }
       if (!user) {
-        console.error('🔐 Auth callback - no user returned, info:', info);
         return res.redirect('/api/login');
       }
       req.logIn(user, (loginErr) => {
         if (loginErr) {
-          console.error('🔐 Login error:', loginErr);
           return res.redirect('/api/login');
         }
-        console.log('🔐 Login successful, user session created');
         req.session.save((saveErr) => {
-          if (saveErr) {
-            console.error('🔐 Session save error:', saveErr);
-          }
+          if (saveErr) console.error('Session save error:', saveErr);
           return res.redirect('/');
         });
       });
