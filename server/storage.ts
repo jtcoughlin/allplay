@@ -160,12 +160,13 @@ export class DatabaseStorage implements IStorage {
 
   // Favorites operations
   async getUserFavorites(userId: string): Promise<(Favorite & { content: Content })[]> {
+    if (!userId) return [];
     const rows = await db
       .select()
       .from(favorites)
       .innerJoin(content, eq(favorites.contentId, content.id))
       .where(eq(favorites.userId, userId));
-    return (rows || []).map(row => ({ ...row.favorites, content: row.content }));
+    return (rows ?? []).map(row => ({ ...row.favorites, content: row.content }));
   }
 
   async addToFavorites(favorite: InsertFavorite): Promise<Favorite> {
@@ -192,6 +193,7 @@ export class DatabaseStorage implements IStorage {
 
   // Watch history operations
   async getUserWatchHistory(userId: string): Promise<(WatchHistory & { content: Content })[]> {
+    if (!userId) return [];
     return await db
       .select()
       .from(watchHistory)
@@ -202,6 +204,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getContinueWatching(userId: string): Promise<(WatchHistory & { content: Content })[]> {
+    if (!userId) return [];
     return await db
       .select()
       .from(watchHistory)
@@ -248,7 +251,9 @@ export class DatabaseStorage implements IStorage {
 
   // Service connection operations
   async getUserConnections(userId: string): Promise<ServiceConnection[]> {
-    return await db.select().from(serviceConnections).where(eq(serviceConnections.userId, userId));
+    if (!userId) return [];
+    const rows = await db.select().from(serviceConnections).where(eq(serviceConnections.userId, userId));
+    return rows ?? [];
   }
 
   async getConnection(userId: string, service: string): Promise<ServiceConnection | undefined> {
@@ -326,6 +331,7 @@ export class DatabaseStorage implements IStorage {
 
   // User preferences operations
   async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    if (!userId) return undefined;
     const [prefs] = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId));
     return prefs;
   }

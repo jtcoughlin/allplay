@@ -124,9 +124,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
-    const userFavorites = await storage.getUserFavorites(req.user.id);
-    res.json(userFavorites);
+    try {
+      const userFavorites = await storage.getUserFavorites(req.user.id);
+      res.json(userFavorites);
+    } catch (err) {
+      console.error("getUserFavorites error:", err);
+      res.json([]);
+    }
   });
 
   app.post("/api/favorites", isAuthenticated, async (req, res) => {

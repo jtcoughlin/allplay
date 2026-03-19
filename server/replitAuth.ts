@@ -101,7 +101,13 @@ export async function setupAuth(app: Express) {
   }
 
   passport.serializeUser((user: Express.User, cb) => cb(null, user));
-  passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+  passport.deserializeUser((user: Express.User, cb) => {
+    const u = user as any;
+    if (!u.id && u.claims?.sub) {
+      u.id = u.claims.sub;
+    }
+    cb(null, u);
+  });
 
   app.get("/api/login", (req, res, next) => {
     passport.authenticate(`replitauth:${req.hostname}`, {
