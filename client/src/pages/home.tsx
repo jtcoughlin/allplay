@@ -255,7 +255,7 @@ export default function Home() {
             queryClient.invalidateQueries({ queryKey: ['/api/continue-watching'] });
           }
         } else {
-          // Call play endpoint to simulate in-Allplay streaming
+          // Call play endpoint to simulate in-Vuno streaming
           const response = await fetch(`/api/play/${content.id}`, {
             method: 'POST',
             headers: {
@@ -264,10 +264,10 @@ export default function Home() {
           });
           
           if (response.ok) {
-            console.log('Now streaming within Allplay:', content.title);
+            console.log('Now streaming within Vuno:', content.title);
             toast({
-              title: "Now Playing in Allplay",
-              description: `${content.title} is streaming directly in Allplay - no app switching needed!`,
+              title: "Now Playing in Vuno",
+              description: `${content.title} is streaming directly in Vuno - no app switching needed!`,
             });
             
             // Invalidate continue watching to refresh the data
@@ -448,7 +448,7 @@ export default function Home() {
             imageUrl={headlinerContent.id === 'espn-5' ? 'https://image.tmdb.org/t/p/original/kY0h95L73t7a6ev6Rv0aHSCtN7y.jpg' : 
                      headlinerContent.title === 'Top Gun: Maverick' ? 'https://image.tmdb.org/t/p/original/kBSSbN1sOiJtXjAGVZXxHJR9Kox.jpg' : 
                      headlinerContent.imageUrl || ""}
-            platform={headlinerContent.service || "allplay"}
+            platform={headlinerContent.service || "vuno"}
             eventDate={headlinerContent.isLive ? "Live Now" : undefined}
             eventTime={headlinerContent.isLive ? "Currently Broadcasting" : undefined}
             type={headlinerContent.isLive ? 'live-event' : headlinerContent.type as any}

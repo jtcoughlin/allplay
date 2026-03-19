@@ -261,7 +261,7 @@ export default function Music() {
                 </div>
                 <div>
                   <p className="text-cream font-medium">Seamless Experience</p>
-                  <p className="text-sm text-gray-400">Return to AllPlay anytime to switch between TV, movies, and music</p>
+                  <p className="text-sm text-gray-400">Return to Vuno anytime to switch between TV, movies, and music</p>
                 </div>
               </div>
             </div>

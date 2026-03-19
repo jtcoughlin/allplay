@@ -174,7 +174,7 @@ export default function Profile() {
       const serviceName = verificationModal.service?.name || 'Service';
       toast({
         title: `${serviceName} Linked Successfully!`,
-        description: `${serviceName} is now connected to Allplay. Content will open in the ${serviceName} app when selected.`,
+        description: `${serviceName} is now connected to Vuno. Content will open in the ${serviceName} app when selected.`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/user/connections"] });
       setVerificationModal({ isOpen: false });
@@ -254,7 +254,7 @@ export default function Profile() {
             data-testid="button-make-homepage"
           >
             <Home className="w-5 h-5 mr-2" />
-            Make allplay my homepage
+            Make Vuno my homepage
           </Button>
         </div>
 
@@ -312,7 +312,7 @@ export default function Profile() {
                     <h3 className="text-lg font-semibold text-cream">
                       {user && ((user as any).firstName || (user as any).lastName)
                         ? `${(user as any).firstName || ''} ${(user as any).lastName || ''}`.trim()
-                        : 'Allplay User'
+                        : 'Vuno User'
                       }
                     </h3>
                     <p className="text-gray-400">{user ? (user as any).email : ''}</p>
@@ -487,7 +487,7 @@ export default function Profile() {
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Your credentials are encrypted and stored securely</li>
                     <li>• Automatic login to all connected services</li>
-                    <li>• Single sign-on across the Allplay platform</li>
+                    <li>• Single sign-on across the Vuno platform</li>
                     <li>• No more remembering multiple passwords</li>
                   </ul>
                 </div>
@@ -614,7 +614,7 @@ export default function Profile() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="text-cream font-medium">Watch History Tracking</Label>
-                    <p className="text-sm text-gray-400">Allow Allplay to track your viewing history for recommendations</p>
+                    <p className="text-sm text-gray-400">Allow Vuno to track your viewing history for recommendations</p>
                   </div>
                   <Switch
                     checked={preferences?.trackWatchHistory !== false}
@@ -668,7 +668,7 @@ export default function Profile() {
               <CardHeader>
                 <CardTitle className="text-cream">Help & Support</CardTitle>
                 <CardDescription className="text-gray-400">
-                  Get help with Allplay features, troubleshooting, and setup
+                  Get help with Vuno features, troubleshooting, and setup
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -728,7 +728,7 @@ export default function Profile() {
               <CardHeader>
                 <CardTitle className="text-cream">We're on Your Team</CardTitle>
                 <CardDescription className="text-gray-400">
-                  Help us make Allplay better for you
+                  Help us make Vuno better for you
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -738,7 +738,7 @@ export default function Profile() {
                   </h3>
                   <div className="space-y-3 text-gray-300">
                     <p>
-                      Allplay doesn't care where the show lives. We don't have a horse in the race. 
+                      Vuno doesn't care where the show lives. We don't have a horse in the race. 
                       We're not trying to push one service over another.
                     </p>
                     <p>
@@ -776,7 +776,7 @@ export default function Profile() {
                       <Label htmlFor="feedback-message" className="text-cream">Your Feedback</Label>
                       <textarea
                         id="feedback-message"
-                        placeholder="Tell us what you think, what features you'd love, or how we can improve Allplay for you..."
+                        placeholder="Tell us what you think, what features you'd love, or how we can improve Vuno for you..."
                         className="w-full mt-1 bg-gray-800 border border-gray-600 text-cream rounded-md px-3 py-2 h-32 resize-none"
                         data-testid="textarea-feedback"
                       />
@@ -824,7 +824,7 @@ export default function Profile() {
               {['spotify', 'youtube', 'apple-music'].includes(authModal.service?.id) ? (
                 `You'll be redirected to ${authModal.service?.name} for real authentication with your existing account.`
               ) : ['netflix', 'disney-plus', 'hulu', 'amazon-prime', 'max', 'apple-tv', 'paramount-plus', 'peacock'].includes(authModal.service?.id) ? (
-                `This links ${authModal.service?.name} to Allplay. Content will open in the ${authModal.service?.name} app using your existing login.`
+                `This links ${authModal.service?.name} to Vuno. Content will open in the ${authModal.service?.name} app using your existing login.`
               ) : (
                 `This simulates connecting to ${authModal.service?.name}. Real connection requires API partnerships.`
               )}
@@ -839,7 +839,7 @@ export default function Profile() {
                 <ul className="text-sm text-gray-300 space-y-1">
                   <li>• You'll log in with your existing {authModal.service?.name} account</li>
                   <li>• Your credentials are encrypted and stored securely</li>
-                  <li>• Content from {authModal.service?.name} will appear in Allplay</li>
+                  <li>• Content from {authModal.service?.name} will appear in Vuno</li>
                   <li>• Full API integration with real data</li>
                 </ul>
               </div>
@@ -852,9 +852,9 @@ export default function Profile() {
                 <ul className="text-sm text-gray-300 space-y-1">
                   <li>• Links to your existing {authModal.service?.name} subscription</li>
                   <li>• Content opens directly in the {authModal.service?.name} app</li>
-                  <li>• Returns to Allplay when you're done watching</li>
+                  <li>• Returns to Vuno when you're done watching</li>
                   <li>• Uses your device's existing {authModal.service?.name} login</li>
-                  <li>• No username/password needed in Allplay</li>
+                  <li>• No username/password needed in Vuno</li>
                 </ul>
               </div>
             )}
@@ -865,7 +865,7 @@ export default function Profile() {
                 <h4 className="font-semibold text-cream mb-2">Demo Connection:</h4>
                 <ul className="text-sm text-gray-300 space-y-1">
                   <li>• Simulates connection for demonstration</li>
-                  <li>• Shows how Allplay would work with this service</li>
+                  <li>• Shows how Vuno would work with this service</li>
                   <li>• Real connection requires API partnerships</li>
                   <li>• Content appears in the unified interface</li>
                 </ul>
@@ -947,8 +947,8 @@ export default function Profile() {
                 <li>• Requires an active {verificationModal.service?.name} subscription</li>
                 <li>• Content opens directly in the {verificationModal.service?.name} app</li>
                 <li>• Uses your device's existing {verificationModal.service?.name} login</li>
-                <li>• Returns to Allplay when you're done watching</li>
-                <li>• No need to enter credentials in Allplay</li>
+                <li>• Returns to Vuno when you're done watching</li>
+                <li>• No need to enter credentials in Vuno</li>
               </ul>
             </div>
             
@@ -958,7 +958,7 @@ export default function Profile() {
                 <span className="text-sm font-medium text-amber-400">Privacy & Security</span>
               </div>
               <p className="text-xs text-gray-300">
-                Allplay never stores your {verificationModal.service?.name} login credentials. 
+                Vuno never stores your {verificationModal.service?.name} login credentials. 
                 We only link to content that opens in their official app using your existing device login.
               </p>
             </div>

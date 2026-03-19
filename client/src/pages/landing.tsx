@@ -31,7 +31,7 @@ export default function Landing() {
             all your streaming in one place
           </p>
           <p className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto">
-            Stop jumping between apps. Allplay consolidates Netflix, Hulu, Disney+, Spotify, and more 
+            Stop jumping between apps. Vuno consolidates Netflix, Hulu, Disney+, Spotify, and more 
             into one unified experience. Watch everything from one interface that becomes your TV's homescreen.
           </p>
           <Button 
@@ -50,7 +50,7 @@ export default function Landing() {
             <Tv className="w-12 h-12 text-blue-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">TV Homescreen</h3>
             <p className="text-gray-300">
-              Set Allplay as your default TV interface. Turn on your TV and you're already logged in and ready to watch.
+              Set Vuno as your default TV interface. Turn on your TV and you're already logged in and ready to watch.
             </p>
           </div>
           
@@ -105,11 +105,11 @@ export default function Landing() {
               and 12 different interfaces just to watch TV.
             </p>
             <p>
-              We built Allplay because entertainment should be simple. You shouldn't need to remember 
+              We built Vuno because entertainment should be simple. You shouldn't need to remember 
               which service has which show, or hunt through multiple apps to find something to watch.
             </p>
             <p className="text-white font-semibold">
-              Allplay isn't just another streaming service – we're the homescreen that brings all your 
+              Vuno isn't just another streaming service – we're the homescreen that brings all your 
               services together. Watch Netflix shows, Hulu series, Disney movies, and Spotify playlists 
               all from one beautiful interface that never makes you leave.
             </p>

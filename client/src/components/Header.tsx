@@ -153,7 +153,7 @@ export function Header({ viewMode, onViewModeChange, hideViewToggle = false, onS
                   data-testid="link-homepage"
                 >
                   <Home className="w-4 h-4 mr-2" />
-                  Make allplay my homepage
+                  Make Vuno my homepage
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>

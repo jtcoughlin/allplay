@@ -115,7 +115,7 @@ export function ContentCard({
       } else {
         toast({
           title: "Now Playing",
-          description: data.message || "Content is now playing in Allplay interface",
+          description: data.message || "Content is now playing in Vuno interface",
         });
       }
     },
