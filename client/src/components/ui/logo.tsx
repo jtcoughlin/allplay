@@ -1,4 +1,4 @@
-import allplayLogo from "@assets/allplay3_1768093202371.png";
+import vunoLogo from "@assets/Vuno_Logo_Cropped_1773886730767.png";
 
 interface LogoProps {
   className?: string;
@@ -14,10 +14,10 @@ export function Logo({ className = "", size = 'medium' }: LogoProps) {
   };
 
   return (
-    <div className={`flex items-center ${className}`} data-testid="logo-allplay">
+    <div className={`flex items-center ${className}`} data-testid="logo-vuno">
       <img 
-        src={allplayLogo} 
-        alt="allplay" 
+        src={vunoLogo} 
+        alt="Vuno" 
         className={`${sizeClasses[size]} w-auto object-contain`}
         data-testid="logo-image"
       />
