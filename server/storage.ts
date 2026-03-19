@@ -198,7 +198,7 @@ export class DatabaseStorage implements IStorage {
       .innerJoin(content, eq(watchHistory.contentId, content.id))
       .where(eq(watchHistory.userId, userId))
       .orderBy(desc(watchHistory.lastWatched))
-      .then(rows => rows.map(row => ({ ...row.watch_history, content: row.content })));
+      .then(rows => (rows ?? []).map(row => ({ ...row.watch_history, content: row.content })));
   }
 
   async getContinueWatching(userId: string): Promise<(WatchHistory & { content: Content })[]> {
@@ -214,7 +214,7 @@ export class DatabaseStorage implements IStorage {
       )
       .orderBy(desc(watchHistory.lastWatched))
       .limit(10)
-      .then(rows => rows.map(row => ({ ...row.watch_history, content: row.content })));
+      .then(rows => (rows ?? []).map(row => ({ ...row.watch_history, content: row.content })));
   }
 
   async updateWatchProgress(watchHistoryData: InsertWatchHistory): Promise<WatchHistory> {
