@@ -161,9 +161,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
-    const continueWatching = await storage.getContinueWatching(req.user.id);
-    res.json(continueWatching);
+    try {
+      const continueWatching = await storage.getContinueWatching(req.user.id);
+      res.json(continueWatching);
+    } catch (err) {
+      console.error("getContinueWatching error:", err);
+      res.json([]);
+    }
   });
 
   app.post("/api/watch-progress", isAuthenticated, async (req, res) => {

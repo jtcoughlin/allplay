@@ -50,6 +50,7 @@ function updateUserSession(
   tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers
 ) {
   user.claims = tokens.claims();
+  user.id = user.claims?.sub;
   user.access_token = tokens.access_token;
   user.refresh_token = tokens.refresh_token;
   user.expires_at = user.claims?.exp;
