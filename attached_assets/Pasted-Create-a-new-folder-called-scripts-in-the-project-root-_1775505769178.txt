@@ -1,0 +1,93 @@
+Create a new folder called `scripts` in the project root if it does not already exist.
+
+Then create a file at `scripts/seed-tmdb.js`.
+
+Paste the following code into that file exactly:
+
+```js
+const { createClient } = require("@supabase/supabase-js");
+
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!TMDB_API_KEY) throw new Error("Missing TMDB_API_KEY");
+if (!SUPABASE_URL) throw new Error("Missing SUPABASE_URL");
+if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
+
+function yearFromDate(dateStr) {
+  if (!dateStr) return null;
+  const year = Number(String(dateStr).slice(0, 4));
+  return Number.isNaN(year) ? null : year;
+}
+
+async function fetchTmdb(endpoint) {
+  const url = `https://api.themoviedb.org/3/${endpoint}?api_key=${TMDB_API_KEY}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`TMDb request failed: ${res.status} ${res.statusText} - ${text}`);
+  }
+  return res.json();
+}
+
+async function upsertMovies() {
+  const data = await fetchTmdb("movie/popular");
+
+  const rows = data.results.map((movie) => ({
+    content_type: "movie",
+    title: movie.title,
+    description: movie.overview || null,
+    release_year: yearFromDate(movie.release_date),
+    poster_url: movie.poster_path ? `${TMDB_IMAGE_BASE}${movie.poster_path}` : null,
+    backdrop_url: movie.backdrop_path ? `${TMDB_IMAGE_BASE}${movie.backdrop_path}` : null,
+    tmdb_id: movie.id,
+  }));
+
+  const { error } = await supabase
+    .from("content_items")
+    .upsert(rows, { onConflict: "tmdb_id,content_type" });
+
+  if (error) throw error;
+  console.log(`Inserted/updated ${rows.length} movies`);
+}
+
+async function upsertSeries() {
+  const data = await fetchTmdb("tv/popular");
+
+  const rows = data.results.map((show) => ({
+    content_type: "series",
+    title: show.name,
+    description: show.overview || null,
+    release_year: yearFromDate(show.first_air_date),
+    poster_url: show.poster_path ? `${TMDB_IMAGE_BASE}${show.poster_path}` : null,
+    backdrop_url: show.backdrop_path ? `${TMDB_IMAGE_BASE}${show.backdrop_path}` : null,
+    tmdb_id: show.id,
+  }));
+
+  const { error } = await supabase
+    .from("content_items")
+    .upsert(rows, { onConflict: "tmdb_id,content_type" });
+
+  if (error) throw error;
+  console.log(`Inserted/updated ${rows.length} series`);
+}
+
+async function main() {
+  await upsertMovies();
+  await upsertSeries();
+  console.log("TMDb seed complete");
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
+```
+
+Then make sure `@supabase/supabase-js` is installed. If it is not installed, install it.
+
+Do not change any other files. When done, tell me exactly what you created or changed.
