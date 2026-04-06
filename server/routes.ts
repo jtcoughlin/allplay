@@ -10,6 +10,7 @@ import { BackupManager } from "./backup-manager";
 import { ImageAssignmentService } from "./imageAssignmentService";
 import { liveTVSync } from "./liveTVSync";
 import tvMediaRoutes from "./routes/tvMedia.js";
+import catalogRoutes from "./routes/catalog.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -87,6 +88,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Live TV routes with new TV Media API integration
   app.use('/api/tv-media', tvMediaRoutes);
+
+  // Supabase catalog routes (content_items + availability)
+  app.use('/api/catalog', catalogRoutes);
 
   // User authentication and profile
   app.get("/api/auth/user", isAuthenticated, async (req, res) => {
