@@ -14,6 +14,48 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import type { Content } from "@shared/schema";
 
+// Shape returned by /api/catalog/items (Supabase)
+interface CatalogItem {
+  id: string;
+  content_type: string;
+  title: string;
+  description: string | null;
+  release_year: number | null;
+  runtime_minutes: number | null;
+  poster_url: string | null;
+  backdrop_url: string | null;
+  tmdb_id: number | null;
+  imdb_id: string | null;
+  original_title: string | null;
+}
+
+// Map a Supabase catalog item to the Content shape expected by existing components
+function adaptCatalogItem(item: CatalogItem): Content {
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description ?? "",
+    type: item.content_type === "series" ? "show" : "movie",
+    genre: item.content_type === "series" ? "drama" : "action",
+    service: "catalog",
+    serviceContentId: item.id,
+    imageUrl: item.poster_url ?? "",
+    rating: null,
+    year: item.release_year ?? null,
+    isLive: false,
+    category: null,
+    availability: null,
+    createdAt: null,
+    updatedAt: null,
+    directUrl: null,
+    posterSource: "tmdb",
+    posterLocked: false,
+    artist: null,
+    album: null,
+    duration: item.runtime_minutes ?? null,
+  } as unknown as Content;
+}
+
 export default function Home() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -24,13 +66,23 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  // Fetch content based on selected genre
-  const { data: content = [], isLoading: isLoadingContent } = useQuery({
-    queryKey: ["/api/content"],
+  // Fetch catalog content from Supabase via /api/catalog/items
+  const {
+    data: catalogResponse,
+    isLoading: isLoadingContent,
+    isError: isCatalogError,
+  } = useQuery<{ items: CatalogItem[]; offset: number; limit: number }>({
+    queryKey: ["/api/catalog/items"],
     retry: false,
-    staleTime: 0, // No caching to ensure fresh data
+    staleTime: 0,
     refetchOnMount: true,
   });
+
+  const catalogItems = catalogResponse?.items ?? [];
+  console.log("CATALOG ITEMS:", catalogItems);
+
+  // Adapt catalog items to the Content shape used by existing components
+  const content: Content[] = catalogItems.map(adaptCatalogItem);
 
   // Fetch search results when searching
   const { data: searchResults = [], isLoading: isLoadingSearch } = useQuery({
@@ -481,8 +533,13 @@ export default function Home() {
             />
           )
         ) : !isSearching ? (
-          /* Card View - Existing Content Rows */
+          /* Card View - Catalog-driven Content Rows */
           <>
+            {/* Catalog data label */}
+            <div style={{ padding: "12px 16px", background: "red", color: "white", fontSize: "18px", fontWeight: "bold", marginBottom: "16px", borderRadius: "6px" }}>
+              LIVE CATALOG DATA
+            </div>
+
             {/* Continue Watching Section - Only show in "All" tab */}
             {selectedGenre === 'all' && typedContinueWatching.length > 0 && (
               <ContentRow
@@ -886,8 +943,16 @@ export default function Home() {
           </div>
         )}
 
+        {/* Error State */}
+        {isCatalogError && !isLoadingContent && (
+          <div className="text-center py-12" data-testid="error-content">
+            <p className="text-red-400 text-lg mb-2">Failed to load catalog</p>
+            <p className="text-gray-500 text-sm">Check your connection and try refreshing</p>
+          </div>
+        )}
+
         {/* Empty State */}
-        {!isLoadingContent && typedContent.length === 0 && (
+        {!isLoadingContent && !isCatalogError && typedContent.length === 0 && (
           <div className="text-center py-12" data-testid="empty-content">
             <p className="text-gray-400 text-lg mb-4">No content available</p>
             <p className="text-gray-500 text-sm">
