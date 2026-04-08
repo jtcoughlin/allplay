@@ -6,8 +6,8 @@
 - [x] A4b — Detail page catalog alignment + platform logos
 - [x] A5 — Navigation polish
 - [x] B1 — Watchlist
-- [ ] B2 — Continue watching
+- [x] B2 — Continue watching
+- [ ] C1 — Real availability data
 
 ## Backlog
-- [ ] C1 — Real availability ingestion
 - [ ] C2 — Deep linking improvements
