@@ -4,10 +4,8 @@
 - [x] A3 — Homepage cleanup
 - [x] A4a — Platform logo foundation + guide view
 - [x] A4b — Detail page catalog alignment + platform logos
-- [ ] A5 — Navigation polish
-
-## Ready
-- [ ] B1 — Watchlist (schema + UI)
+- [x] A5 — Navigation polish
+- [x] B1 — Watchlist
 - [ ] B2 — Continue watching
 
 ## Backlog
