@@ -3,7 +3,7 @@
 ## Active (Next Up)
 - [x] A3 — Homepage cleanup
 - [x] A4a — Platform logo foundation + guide view
-- [ ] A4b — Platform logos on content detail page
+- [x] A4b — Detail page catalog alignment + platform logos
 - [ ] A5 — Navigation polish
 
 ## Ready
