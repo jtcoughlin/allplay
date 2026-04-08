@@ -1,8 +1,9 @@
 # Vuno Task Queue
 
 ## Active (Next Up)
-- [ ] A3 — Homepage cleanup
-- [ ] A4 — Platform logos
+- [x] A3 — Homepage cleanup
+- [x] A4a — Platform logo foundation + guide view
+- [ ] A4b — Platform logos on content detail page
 - [ ] A5 — Navigation polish
 
 ## Ready
