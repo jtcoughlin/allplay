@@ -12,7 +12,8 @@
 - [x] C1c — Real availability ingestion plan
 - [x] C1 — Real availability data ingestion (US / Phase 1)
 - [x] C1d — Availability QA / coverage audit
-- [ ] C1e — Availability ingestion hardening
+- [x] C1e — Availability ingestion hardening
+- [ ] D2 — Filtering
 
 ## Backlog
 - [ ] C2 — Deep linking improvements
