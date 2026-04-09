@@ -17,7 +17,9 @@
 - [x] D3 — Ranking / sorting
 - [x] E1a — Recommendations architecture audit
 - [x] E1b — First recommendations implementation
-- [ ] F1a — Product stabilization / regression audit
+- [x] F1a — Product stabilization / regression audit
+- [x] F1b — Search + filter consistency hardening
+- [ ] F1c — Performance / data-flow hardening
 
 ## Backlog
 - [ ] C2 — Deep linking improvements
