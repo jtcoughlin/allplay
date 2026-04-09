@@ -10,7 +10,9 @@
 - [x] C1a — Availability architecture audit
 - [x] C1b — Availability UX alignment
 - [x] C1c — Real availability ingestion plan
-- [ ] C1 — Real availability data ingestion (US / Phase 1)
+- [x] C1 — Real availability data ingestion (US / Phase 1)
+- [x] C1d — Availability QA / coverage audit
+- [ ] C1e — Availability ingestion hardening
 
 ## Backlog
 - [ ] C2 — Deep linking improvements
