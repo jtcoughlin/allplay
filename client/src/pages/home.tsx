@@ -65,6 +65,8 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
+  const [sortOrder, setSortOrder] = useState<'default' | 'az' | 'year-desc' | 'year-asc'>('default');
 
   // Fetch catalog content from Supabase via /api/catalog/items
   const {
@@ -111,6 +113,20 @@ export default function Home() {
   const typedContent = (content as Content[]) || [];
   const typedFavorites = (favorites as any[]) || [];
   const typedContinueWatching = (continueWatching as any[]) || [];
+
+  // Sort content based on selected sort order
+  const sortedContent: Content[] = (() => {
+    const base = [...typedContent];
+    if (sortOrder === 'az') return base.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    if (sortOrder === 'year-desc') return base.sort((a, b) => (b.year || 0) - (a.year || 0));
+    if (sortOrder === 'year-asc') return base.sort((a, b) => (a.year || 0) - (b.year || 0));
+    return base;
+  })();
+
+  // "For You" row — newest catalog releases
+  const forYou = [...typedContent]
+    .sort((a, b) => (b.year || 0) - (a.year || 0))
+    .slice(0, 10);
 
   // Filter content by type for different sections
   const movies = typedContent.filter((item: Content) => item.type === 'movie');
@@ -535,10 +551,49 @@ export default function Home() {
         ) : !isSearching ? (
           /* Card View - Catalog-driven Content Rows */
           <>
-            {/* Catalog data label */}
-            <div style={{ padding: "12px 16px", background: "red", color: "white", fontSize: "18px", fontWeight: "bold", marginBottom: "16px", borderRadius: "6px" }}>
-              LIVE CATALOG DATA
-            </div>
+            {/* Platform filter + Sort controls — shown on All tab */}
+            {selectedGenre === 'all' && (
+              <div className="mb-4 flex flex-col gap-3">
+                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                  {[
+                    { slug: 'all', label: 'All' },
+                    { slug: 'netflix', label: 'Netflix' },
+                    { slug: 'hulu', label: 'Hulu' },
+                    { slug: 'disney-plus', label: 'Disney+' },
+                    { slug: 'prime-video', label: 'Prime' },
+                    { slug: 'max', label: 'Max' },
+                    { slug: 'apple-tv-plus', label: 'Apple TV+' },
+                    { slug: 'peacock', label: 'Peacock' },
+                    { slug: 'paramount-plus', label: 'Paramount+' },
+                  ].map(p => (
+                    <button
+                      key={p.slug}
+                      onClick={() => setSelectedPlatform(p.slug)}
+                      className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                        selectedPlatform === p.slug
+                          ? 'bg-blue-primary text-white'
+                          : 'bg-navy-light text-gray-300 hover:text-white'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-400">Sort:</span>
+                  <select
+                    value={sortOrder}
+                    onChange={e => setSortOrder(e.target.value as typeof sortOrder)}
+                    className="text-xs bg-navy-light text-cream border border-gray-700 rounded px-2 py-1 cursor-pointer"
+                  >
+                    <option value="default">Default</option>
+                    <option value="az">A–Z</option>
+                    <option value="year-desc">Newest first</option>
+                    <option value="year-asc">Oldest first</option>
+                  </select>
+                </div>
+              </div>
+            )}
 
             {/* Continue Watching Section - Only show in "All" tab */}
             {selectedGenre === 'all' && typedContinueWatching.length > 0 && (
@@ -555,6 +610,16 @@ export default function Home() {
             {/* Filter content based on selected genre */}
             {selectedGenre === 'all' && (
               <>
+                {/* For You Section — newest catalog releases */}
+                {forYou.length > 0 && (
+                  <ContentRow
+                    title="For You"
+                    content={forYou}
+                    favorites={favoriteIds}
+                    size="small"
+                  />
+                )}
+
                 {/* Top Picks Section */}
                 {topPicks.length > 0 && (
                   <ContentRow
