@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Sidebar } from "@/components/Sidebar";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
+import HomeV2 from "@/pages/home-v2";
 
 import Favorites from "@/pages/favorites";
 import Preferences from "@/pages/preferences";
@@ -41,7 +42,7 @@ function Router() {
           }
         `}</style>
         <Switch>
-          <Route path="/" component={Home} />
+          <Route path="/" component={HomeV2} />
           <Route path="/favorites" component={Favorites} />
           <Route path="/preferences" component={Preferences} />
           <Route path="/profile" component={Profile} />
