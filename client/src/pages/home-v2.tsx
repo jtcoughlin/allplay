@@ -156,14 +156,38 @@ export default function HomeV2() {
   const movies = filtered.filter((c) => c.type === "movie");
   const shows = filtered.filter((c) => c.type === "show");
 
-  // "For You" — newest releases, unaffected by search filter
-  const forYou = useMemo(
-    () =>
-      [...allContent]
-        .sort((a, b) => (b.year ?? 0) - (a.year ?? 0))
-        .slice(0, 10),
-    [allContent]
-  );
+  // "For You" — deterministic curation: mix of recent + older, movies + series,
+  // only items with both a poster and a description, deduplicated, max 10.
+  const forYou = useMemo(() => {
+    const withAssets = allContent.filter(
+      (c) => c.imageUrl && c.imageUrl.trim() !== "" && c.description && c.description.trim() !== ""
+    );
+    const recent = withAssets.filter((c) => (c.year ?? 0) >= 2020);
+    const older  = withAssets.filter((c) => (c.year ?? 0)  < 2020);
+
+    const recentMovies = recent.filter((c) => c.type === "movie");
+    const recentShows  = recent.filter((c) => c.type === "show");
+    const olderMovies  = older.filter((c)  => c.type === "movie");
+    const olderShows   = older.filter((c)  => c.type === "show");
+
+    // Interleave: 3 recent movies, 3 recent shows, 2 older movies, 2 older shows
+    const picks = [
+      ...recentMovies.slice(0, 3),
+      ...recentShows.slice(0, 3),
+      ...olderMovies.slice(0, 2),
+      ...olderShows.slice(0, 2),
+    ];
+
+    // Deduplicate by id
+    const seen = new Set<string>();
+    const deduped = picks.filter((c) => {
+      if (seen.has(c.id)) return false;
+      seen.add(c.id);
+      return true;
+    });
+
+    return deduped.slice(0, 10);
+  }, [allContent]);
 
   const continueWatchingContent = (continueWatching as any[])
     .map((item: any) => item.content)
