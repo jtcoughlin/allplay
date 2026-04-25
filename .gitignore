@@ -6,4 +6,3 @@ vite.config.ts.*
 *.tar.gz
 
 .claude/
-# Pipeline audit test 2026-04-25
