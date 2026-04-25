@@ -432,7 +432,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin/utility routes
-  app.post("/api/reseed", async (req, res) => {
+  app.post("/api/reseed", isAuthenticated, async (req, res) => {
     try {
       await seedRealContent();
       res.json({ message: "Database reseeded successfully" });
@@ -442,7 +442,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/backup", async (req, res) => {
+  app.post("/api/backup", isAuthenticated, async (req, res) => {
     try {
       const backupManager = new BackupManager();
       const backupInfo = await backupManager.createBackup();
@@ -456,7 +456,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/assign-images", async (req, res) => {
+  app.post("/api/assign-images", isAuthenticated, async (req, res) => {
     try {
       const imageService = new ImageAssignmentService();
       const result = await imageService.assignMissingImages();
@@ -471,7 +471,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Live TV sync control endpoints
-  app.post("/api/live-tv/sync", async (req, res) => {
+  app.post("/api/live-tv/sync", isAuthenticated, async (req, res) => {
     try {
       await liveTVSync.syncLiveTVData();
       res.json({ message: "Live TV sync completed successfully" });
@@ -484,13 +484,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/live-tv/status", (req, res) => {
+  app.get("/api/live-tv/status", isAuthenticated, (req, res) => {
     const status = liveTVSync.status;
     res.json(status);
   });
 
   // Get currently airing programs
-  app.get("/api/live-tv/currently-airing", async (req, res) => {
+  app.get("/api/live-tv/currently-airing", isAuthenticated, async (req, res) => {
     try {
       console.log('🔍 API: Fetching currently airing programs...');
       const programs = await liveTVSync.getCurrentlyAiringPrograms();
