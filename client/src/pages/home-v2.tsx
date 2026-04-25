@@ -22,6 +22,7 @@ interface CatalogItem {
   tmdb_id: number | null;
   imdb_id: string | null;
   original_title: string | null;
+  platform_slugs?: string[];
 }
 
 function adaptCatalogItem(item: CatalogItem): Content {
@@ -131,6 +132,15 @@ export default function HomeV2() {
     [catalogResponse]
   );
 
+  // Map content id -> platform slugs (for platform filter)
+  const platformSlugsById = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const item of catalogResponse?.items ?? []) {
+      map.set(item.id, item.platform_slugs ?? []);
+    }
+    return map;
+  }, [catalogResponse]);
+
   // Apply search + sort
   const filtered = useMemo(() => {
     let base = allContent;
@@ -142,7 +152,12 @@ export default function HomeV2() {
           (c.description ?? "").toLowerCase().includes(q)
       );
     }
-    // Platform filter is ready for future availability join; currently shows all.
+    if (selectedPlatform !== "all") {
+      base = base.filter((c) => {
+        const slugs = platformSlugsById.get(c.id) ?? [];
+        return slugs.includes(selectedPlatform);
+      });
+    }
     const sorted = [...base];
     if (sortOrder === "az")
       sorted.sort((a, b) => a.title.localeCompare(b.title));
@@ -151,7 +166,7 @@ export default function HomeV2() {
     else if (sortOrder === "year-asc")
       sorted.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
     return sorted;
-  }, [allContent, search, sortOrder]);
+  }, [allContent, search, sortOrder, selectedPlatform, platformSlugsById]);
 
   const movies = filtered.filter((c) => c.type === "movie");
   const shows = filtered.filter((c) => c.type === "show");

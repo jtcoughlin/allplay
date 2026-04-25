@@ -20,7 +20,24 @@ router.get("/items", async (req, res) => {
     let query = supabase
       .from("content_items")
       .select(
-        "id, content_type, title, original_title, description, release_year, runtime_minutes, poster_url, backdrop_url, tmdb_id, imdb_id"
+        `
+        id,
+        content_type,
+        title,
+        original_title,
+        description,
+        release_year,
+        runtime_minutes,
+        poster_url,
+        backdrop_url,
+        tmdb_id,
+        imdb_id,
+        content_platform_availability (
+          is_available,
+          region_code,
+          platforms ( slug )
+        )
+      `
       )
       .order("title")
       .range(offset, offset + limit - 1);
@@ -36,7 +53,20 @@ router.get("/items", async (req, res) => {
       return res.status(500).json({ error: "Failed to fetch content items" });
     }
 
-    res.json({ items: data, offset, limit, total: count ?? null });
+    const items = (data ?? []).map((row: any) => {
+      const availability = Array.isArray(row.content_platform_availability)
+        ? row.content_platform_availability
+        : [];
+      const slugs = availability
+        .filter((a: any) => a.is_available && a.region_code === "US")
+        .map((a: any) => a.platforms?.slug)
+        .filter((s: any): s is string => typeof s === "string");
+      const platform_slugs = Array.from(new Set(slugs));
+      const { content_platform_availability, ...rest } = row;
+      return { ...rest, platform_slugs };
+    });
+
+    res.json({ items, offset, limit, total: count ?? null });
   } catch (err) {
     console.error("[catalog] list unexpected error:", err);
     res.status(500).json({ error: "Internal server error" });
