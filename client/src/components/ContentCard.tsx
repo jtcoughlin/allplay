@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { Heart, Play, Music, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -172,11 +171,7 @@ export function ContentCard({
   
 
   return (
-    <Link
-      href={`/content/${content.id}`}
-      data-testid={`card-link-${content.id}`}
-    >
-    <div
+    <div 
       className={`flex-shrink-0 ${sizeClasses[size]} card-hover cursor-pointer mr-4 mb-4`}
       data-testid={`card-content-${content.id}`}
     >
@@ -352,6 +347,10 @@ export function ContentCard({
         
         {/* Play button */}
         <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            playContent.mutate(content.id);
+          }}
           className="w-full bg-blue-primary hover:bg-blue-600 text-white font-semibold mt-2 px-1 border border-white/20 hover:border-white/30"
           disabled={playContent.isPending}
           data-testid={`button-play-${content.id}`}
@@ -363,6 +362,5 @@ export function ContentCard({
         </Button>
       </div>
     </div>
-    </Link>
   );
 }
