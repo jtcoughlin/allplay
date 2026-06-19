@@ -14,6 +14,7 @@ import Preferences from "@/pages/preferences";
 import Profile from "@/pages/profile";
 import Music from "@/pages/music";
 import LiveTV from "@/pages/live-tv";
+import ContentDetail from "@/pages/content-detail";
 import { MediaCardTest } from "@/pages/MediaCardTest";
 import NotFound from "@/pages/not-found";
 
@@ -49,6 +50,7 @@ function Router() {
           <Route path="/profile" component={Profile} />
           <Route path="/music" component={Music} />
           <Route path="/live-tv" component={LiveTV} />
+          <Route path="/content/:id" component={ContentDetail} />
           <Route path="/test-media" component={MediaCardTest} />
           <Route component={NotFound} />
         </Switch>
