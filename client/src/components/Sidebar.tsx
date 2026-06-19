@@ -53,6 +53,13 @@ export function Sidebar({ className }: SidebarProps) {
       testId: "nav-tv-movies"
     },
     {
+      title: "Live TV",
+      href: "/live-tv",
+      icon: Tv,
+      active: location === "/live-tv",
+      testId: "nav-live-tv"
+    },
+    {
       title: "Music",
       href: "/music",
       icon: Music,
