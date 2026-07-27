@@ -2,6 +2,7 @@ import {
   users,
   serviceConnections,
   content,
+  contentItems,
   favorites,
   watchHistory,
   userPreferences,
@@ -10,6 +11,7 @@ import {
   type ServiceConnection,
   type InsertServiceConnection,
   type Content,
+  type ContentItem,
   type InsertContent,
   type Favorite,
   type InsertFavorite,
@@ -20,6 +22,36 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, ilike, or } from "drizzle-orm";
+
+// Favorites and watch history reference the catalog (content_items), but the
+// client's favorites/continue-watching consumers still expect the legacy
+// Content shape. Adapt server-side — the same fabrication the client's own
+// adaptCatalogItem does in home-v2.tsx — so no client changes are needed.
+function catalogItemToLegacyContent(item: ContentItem): Content {
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description ?? "",
+    type: item.contentType === "series" ? "show" : "movie",
+    genre: item.contentType === "series" ? "drama" : "action",
+    service: "catalog",
+    serviceContentId: item.id,
+    directUrl: null,
+    imageUrl: item.posterUrl ?? "",
+    posterSource: "tmdb",
+    posterLocked: false,
+    rating: null,
+    year: item.releaseYear,
+    artist: null,
+    album: null,
+    duration: item.runtimeMinutes,
+    isLive: false,
+    category: null,
+    availability: null,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  };
+}
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
@@ -164,9 +196,12 @@ export class DatabaseStorage implements IStorage {
     const rows = await db
       .select()
       .from(favorites)
-      .innerJoin(content, eq(favorites.contentId, content.id))
+      .innerJoin(contentItems, eq(favorites.contentId, contentItems.id))
       .where(eq(favorites.userId, userId));
-    return (rows ?? []).map(row => ({ ...row.favorites, content: row.content }));
+    return (rows ?? []).map(row => ({
+      ...row.favorites,
+      content: catalogItemToLegacyContent(row.content_items),
+    }));
   }
 
   async addToFavorites(favorite: InsertFavorite): Promise<Favorite> {
@@ -197,10 +232,13 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(watchHistory)
-      .innerJoin(content, eq(watchHistory.contentId, content.id))
+      .innerJoin(contentItems, eq(watchHistory.contentId, contentItems.id))
       .where(eq(watchHistory.userId, userId))
       .orderBy(desc(watchHistory.lastWatched))
-      .then(rows => (rows ?? []).map(row => ({ ...row.watch_history, content: row.content })));
+      .then(rows => (rows ?? []).map(row => ({
+        ...row.watch_history,
+        content: catalogItemToLegacyContent(row.content_items),
+      })));
   }
 
   async getContinueWatching(userId: string): Promise<(WatchHistory & { content: Content })[]> {
@@ -208,7 +246,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(watchHistory)
-      .innerJoin(content, eq(watchHistory.contentId, content.id))
+      .innerJoin(contentItems, eq(watchHistory.contentId, contentItems.id))
       .where(
         and(
           eq(watchHistory.userId, userId),
@@ -217,7 +255,10 @@ export class DatabaseStorage implements IStorage {
       )
       .orderBy(desc(watchHistory.lastWatched))
       .limit(10)
-      .then(rows => (rows ?? []).map(row => ({ ...row.watch_history, content: row.content })));
+      .then(rows => (rows ?? []).map(row => ({
+        ...row.watch_history,
+        content: catalogItemToLegacyContent(row.content_items),
+      })));
   }
 
   async updateWatchProgress(watchHistoryData: InsertWatchHistory): Promise<WatchHistory> {

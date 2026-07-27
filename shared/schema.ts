@@ -82,19 +82,20 @@ export const content = pgTable("content", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// User favorites
+// User favorites — content_id references the catalog (content_items), not
+// the legacy Live TV `content` table. See migrations/0002.
 export const favorites = pgTable("favorites", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  contentId: varchar("content_id").notNull().references(() => content.id, { onDelete: "cascade" }),
+  contentId: uuid("content_id").notNull().references(() => contentItems.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Watch history and progress
+// Watch history and progress — content_id references the catalog, as above.
 export const watchHistory = pgTable("watch_history", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  contentId: varchar("content_id").notNull().references(() => content.id, { onDelete: "cascade" }),
+  contentId: uuid("content_id").notNull().references(() => contentItems.id, { onDelete: "cascade" }),
   progress: integer("progress").default(0), // percentage or time in seconds
   lastWatched: timestamp("last_watched").defaultNow(),
   isCompleted: boolean("is_completed").default(false),
@@ -137,19 +138,14 @@ export const serviceConnectionsRelations = relations(serviceConnections, ({ one 
   }),
 }));
 
-export const contentRelations = relations(content, ({ many }) => ({
-  favorites: many(favorites),
-  watchHistory: many(watchHistory),
-}));
-
 export const favoritesRelations = relations(favorites, ({ one }) => ({
   user: one(users, {
     fields: [favorites.userId],
     references: [users.id],
   }),
-  content: one(content, {
+  content: one(contentItems, {
     fields: [favorites.contentId],
-    references: [content.id],
+    references: [contentItems.id],
   }),
 }));
 
@@ -158,9 +154,9 @@ export const watchHistoryRelations = relations(watchHistory, ({ one }) => ({
     fields: [watchHistory.userId],
     references: [users.id],
   }),
-  content: one(content, {
+  content: one(contentItems, {
     fields: [watchHistory.contentId],
-    references: [content.id],
+    references: [contentItems.id],
   }),
 }));
 
@@ -312,6 +308,8 @@ export const contentPlatformAvailability = pgTable("content_platform_availabilit
 
 export const contentItemsRelations = relations(contentItems, ({ one, many }) => ({
   availability: many(contentPlatformAvailability),
+  favorites: many(favorites),
+  watchHistory: many(watchHistory),
   parentSeries: one(contentItems, {
     fields: [contentItems.parentSeriesId],
     references: [contentItems.id],

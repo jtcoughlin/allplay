@@ -146,22 +146,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!contentId) {
       return res.status(400).json({ message: "Content ID is required" });
     }
-    
-    const favorite = await storage.addToFavorites({
-      userId: req.user.id,
-      contentId
-    });
-    
-    res.json(favorite);
+
+    try {
+      const favorite = await storage.addToFavorites({
+        userId: req.user.id,
+        contentId
+      });
+      res.json(favorite);
+    } catch (err) {
+      // FK violation (content not in catalog) or malformed UUID — this was
+      // the unhandled rejection behind the Day 3 502/white-screen.
+      console.error("addToFavorites error:", err);
+      res.status(400).json({ message: "Content not found in catalog" });
+    }
   });
 
   app.delete("/api/favorites/:contentId", isAuthenticated, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
-    await storage.removeFromFavorites(req.user.id, req.params.contentId);
-    res.json({ message: "Removed from favorites" });
+
+    try {
+      await storage.removeFromFavorites(req.user.id, req.params.contentId);
+      res.json({ message: "Removed from favorites" });
+    } catch (err) {
+      console.error("removeFromFavorites error:", err);
+      res.status(400).json({ message: "Invalid content ID" });
+    }
   });
 
   // Watch history routes
@@ -187,15 +198,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!contentId || progress === undefined) {
       return res.status(400).json({ message: "Content ID and progress are required" });
     }
-    
-    const watchHistory = await storage.updateWatchProgress({
-      userId: req.user.id,
-      contentId,
-      progress,
-      lastWatched: new Date()
-    });
-    
-    res.json(watchHistory);
+
+    try {
+      const watchHistory = await storage.updateWatchProgress({
+        userId: req.user.id,
+        contentId,
+        progress,
+        lastWatched: new Date()
+      });
+      res.json(watchHistory);
+    } catch (err) {
+      console.error("updateWatchProgress error:", err);
+      res.status(400).json({ message: "Content not found in catalog" });
+    }
   });
 
   // Service connection routes
@@ -273,9 +288,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!contentId) {
       return res.status(400).json({ message: "Content ID is required" });
     }
-    
-    const result = await storage.toggleFavorite(req.user.id, contentId);
-    res.json(result);
+
+    try {
+      const result = await storage.toggleFavorite(req.user.id, contentId);
+      res.json(result);
+    } catch (err) {
+      console.error("toggleFavorite error:", err);
+      res.status(400).json({ message: "Content not found in catalog" });
+    }
   });
 
   // Play content routes
