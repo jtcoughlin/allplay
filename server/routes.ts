@@ -89,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Live TV routes with new TV Media API integration
   app.use('/api/tv-media', tvMediaRoutes);
 
-  // Supabase catalog routes (content_items + availability)
+  // Catalog routes (Neon: content_items + availability, via Drizzle)
   app.use('/api/catalog', catalogRoutes);
 
   // User authentication and profile
