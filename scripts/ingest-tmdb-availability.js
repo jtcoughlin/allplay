@@ -5,22 +5,24 @@
  * content_items row that has a tmdb_id, and upsert it into
  * content_platform_availability.
  *
+ * Ported from Supabase to Neon 2026-07-27 (consolidation Phase 5); the TMDb
+ * fetching, provider mapping, and reporting are unchanged.
+ *
  * IMPORTANT: this script does NOT delete stale rows. It upserts on the unique
  * constraint (content_item_id, platform_id, region_code, availability_type).
  * Existing subscription rows for an (item, platform) pair are overwritten,
- * but rows for pairs the script does NOT touch are left in place. For the
- * first real-data run, consider clearing synthetic leftovers manually first:
+ * but rows for pairs the script does NOT touch are left in place. To clear
+ * stale leftovers manually first (Replit Shell):
  *
- *   DELETE FROM content_platform_availability
- *    WHERE region_code = 'US' AND availability_type = 'subscription';
+ *   psql "$DATABASE_URL" -c "DELETE FROM content_platform_availability
+ *     WHERE region_code = 'US' AND availability_type = 'subscription';"
  *
  * Usage:
  *   node scripts/ingest-tmdb-availability.js [--dry-run] [--limit N] [--sleep-ms M]
  *
  * Required env vars:
  *   TMDB_API_KEY                 (v3 API key, query-param style)
- *   SUPABASE_URL
- *   SUPABASE_SERVICE_ROLE_KEY
+ *   DATABASE_URL                 (Neon)
  *
  * Flags:
  *   --dry-run       Fetch from TMDb and compute the rows we'd insert, but do
@@ -29,19 +31,23 @@
  *   --sleep-ms M    Politeness sleep between TMDb calls (default 300).
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { neon } from "@neondatabase/serverless";
 
 // ---------------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------------
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!TMDB_API_KEY) throw new Error("Missing TMDB_API_KEY");
-if (!SUPABASE_URL) throw new Error("Missing SUPABASE_URL");
-if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
+if (!DATABASE_URL) throw new Error("Missing DATABASE_URL");
+
+const sql = neon(DATABASE_URL);
+async function q(text, params = []) {
+  if (typeof sql.query === "function") return sql.query(text, params);
+  return sql(text, params);
+}
 
 const REGION = "US";
 const AVAILABILITY_TYPE = "subscription";
@@ -49,8 +55,16 @@ const QUALITY_LABEL = "HD";
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const DEFAULT_SLEEP_MS = 300;
 const UPSERT_BATCH_SIZE = 100;
+// Matches the content_platform_unique constraint in Neon (same as Supabase).
 const UPSERT_CONFLICT_TARGET =
-  "content_item_id,platform_id,region_code,availability_type";
+  "(content_item_id, platform_id, region_code, availability_type)";
+
+// Columns written per availability row, in parameter order.
+const UPSERT_COLUMNS = [
+  "content_item_id", "platform_id", "is_available", "availability_type",
+  "deep_link_url", "web_link_url", "region_code", "quality_label",
+  "last_verified_at",
+];
 
 // Mapping locked in by user — maps TMDb watch-provider IDs to our platform
 // slugs. Multiple TMDb IDs can map to the same slug (different tiers, ad
@@ -108,38 +122,23 @@ function parseArgs(argv) {
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
-async function fetchAllContentItems(supabase, limit) {
-  const PAGE_SIZE = 1000;
-  let all = [];
-  let from = 0;
-
-  while (true) {
-    const { data, error } = await supabase
-      .from("content_items")
-      .select("id, content_type, title, tmdb_id")
-      .not("tmdb_id", "is", null)
-      .order("title")
-      .range(from, from + PAGE_SIZE - 1);
-
-    if (error) throw new Error(`Failed to fetch content_items: ${error.message}`);
-
-    all = all.concat(data);
-    if (data.length < PAGE_SIZE) break;
-    from += PAGE_SIZE;
-  }
-
+async function fetchAllContentItems(limit) {
+  let all = await q(
+    `SELECT id, content_type, title, tmdb_id
+       FROM content_items
+      WHERE tmdb_id IS NOT NULL
+      ORDER BY title`
+  );
   if (limit !== null) all = all.slice(0, limit);
   return all;
 }
 
-async function fetchActivePlatformsBySlug(supabase) {
-  const { data, error } = await supabase
-    .from("platforms")
-    .select("id, slug, name, website_url, deep_link_base, is_active")
-    .eq("is_active", true);
-
-  if (error) throw new Error(`Failed to fetch platforms: ${error.message}`);
-
+async function fetchActivePlatformsBySlug() {
+  const data = await q(
+    `SELECT id, slug, name, website_url, deep_link_base, is_active
+       FROM platforms
+      WHERE is_active = true`
+  );
   const bySlug = new Map();
   for (const p of data) bySlug.set(p.slug, p);
   return bySlug;
@@ -220,7 +219,28 @@ function buildRowsForItem(item, slugs, platformsBySlug, nowIso) {
 // Upsert
 // ---------------------------------------------------------------------------
 
-async function upsertBatches(supabase, rows) {
+function buildBatchUpsert(batch) {
+  const nCols = UPSERT_COLUMNS.length;
+  const params = [];
+  const tuples = batch.map((row, i) => {
+    for (const col of UPSERT_COLUMNS) params.push(row[col]);
+    const ph = UPSERT_COLUMNS.map((_, j) => `$${i * nCols + j + 1}`);
+    return `(${ph.join(", ")})`;
+  });
+  const text =
+    `INSERT INTO content_platform_availability (${UPSERT_COLUMNS.join(", ")}) ` +
+    `VALUES ${tuples.join(", ")} ` +
+    `ON CONFLICT ${UPSERT_CONFLICT_TARGET} DO UPDATE SET ` +
+    `is_available = EXCLUDED.is_available, ` +
+    `deep_link_url = EXCLUDED.deep_link_url, ` +
+    `web_link_url = EXCLUDED.web_link_url, ` +
+    `quality_label = EXCLUDED.quality_label, ` +
+    `last_verified_at = EXCLUDED.last_verified_at, ` +
+    `updated_at = now()`;
+  return { text, params };
+}
+
+async function upsertBatches(rows) {
   let totalUpserted = 0;
   let totalErrored = 0;
   const batchErrors = [];
@@ -229,17 +249,15 @@ async function upsertBatches(supabase, rows) {
     const batch = rows.slice(b, b + UPSERT_BATCH_SIZE);
     const batchNum = Math.floor(b / UPSERT_BATCH_SIZE) + 1;
 
-    const { error } = await supabase
-      .from("content_platform_availability")
-      .upsert(batch, { onConflict: UPSERT_CONFLICT_TARGET });
-
-    if (error) {
-      console.error(`  ❌ Batch ${batchNum} failed: [${error.code}] ${error.message}`);
-      batchErrors.push({ batchNum, error: error.message, code: error.code });
-      totalErrored += batch.length;
-    } else {
+    try {
+      const { text, params } = buildBatchUpsert(batch);
+      await q(text, params);
       console.log(`  ✅ Batch ${batchNum}: ${batch.length} rows upserted`);
       totalUpserted += batch.length;
+    } catch (error) {
+      console.error(`  ❌ Batch ${batchNum} failed: [${error.code ?? "?"}] ${error.message}`);
+      batchErrors.push({ batchNum, error: error.message, code: error.code ?? "?" });
+      totalErrored += batch.length;
     }
   }
 
@@ -252,7 +270,6 @@ async function upsertBatches(supabase, rows) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
   const nowIso = new Date().toISOString();
 
   console.log("=== Vuno Real Availability Ingestion (TMDb) ===");
@@ -264,7 +281,7 @@ async function main() {
   console.log("");
 
   console.log("🏷️  Fetching active platforms...");
-  const platformsBySlug = await fetchActivePlatformsBySlug(supabase);
+  const platformsBySlug = await fetchActivePlatformsBySlug();
   console.log(`   Found ${platformsBySlug.size} active platforms: ${Array.from(platformsBySlug.keys()).join(", ")}`);
 
   // Coverage sanity check — surface any mapping/DB drift up front
@@ -280,7 +297,7 @@ async function main() {
   console.log("");
 
   console.log("📋 Fetching content_items with tmdb_id...");
-  const items = await fetchAllContentItems(supabase, args.limit);
+  const items = await fetchAllContentItems(args.limit);
   const movies = items.filter((c) => c.content_type === "movie");
   const series = items.filter((c) => c.content_type === "series");
   console.log(`   Total: ${items.length}  (${movies.length} movies, ${series.length} series)`);
@@ -413,7 +430,7 @@ async function main() {
   }
 
   console.log(`🔄 Upserting ${rowsToUpsert.length} rows into content_platform_availability...`);
-  const { totalUpserted, totalErrored, batchErrors } = await upsertBatches(supabase, rowsToUpsert);
+  const { totalUpserted, totalErrored, batchErrors } = await upsertBatches(rowsToUpsert);
 
   console.log("");
   console.log("=== DB write result ===");
@@ -429,12 +446,11 @@ async function main() {
   console.log("");
   console.log("NOTE: this script does NOT delete rows. Any pre-existing subscription rows");
   console.log("      in content_platform_availability for (item, platform) pairs that this");
-  console.log("      run did NOT write will remain in place. If this is the first real-data");
-  console.log("      run and you want to clear synthetic leftovers, run this manually in");
-  console.log("      Supabase BEFORE the next run:");
+  console.log("      run did NOT write will remain in place. To clear stale leftovers,");
+  console.log("      run this manually in the Replit Shell BEFORE the next run:");
   console.log("");
-  console.log("        DELETE FROM content_platform_availability");
-  console.log("         WHERE region_code = 'US' AND availability_type = 'subscription';");
+  console.log("        psql \"$DATABASE_URL\" -c \"DELETE FROM content_platform_availability");
+  console.log("         WHERE region_code = 'US' AND availability_type = 'subscription';\"");
   console.log("");
 
   if (totalErrored > 0) process.exit(1);
