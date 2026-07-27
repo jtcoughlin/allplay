@@ -23,3 +23,5 @@
 
 ## Backlog
 - [ ] C2 — Deep linking improvements
+- [ ] Infra — Migrate Neon from eu-central-1 (Frankfurt) to a US region before beta launch (users are US-based; found during Phase 0 audit 2026-07-27)
+- [ ] C2a — Real title-level deep links: deep_link_url values are bare app schemes (netflix:// etc.), not title-level links. Build as part of Day 3b or after (found during Phase 0 audit 2026-07-27)
