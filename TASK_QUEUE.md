@@ -23,3 +23,8 @@
 
 ## Backlog
 - [ ] C2 — Deep linking improvements
+- [ ] Infra — Migrate Neon from eu-central-1 (Frankfurt) to a US region before beta launch (users are US-based; found during Phase 0 audit 2026-07-27)
+- [ ] C2a — Real title-level deep links: deep_link_url values are bare app schemes (netflix:// etc.), not title-level links. Build as part of Day 3b or after (found during Phase 0 audit 2026-07-27)
+- [ ] UX — Home platform filter chips only affect the Movies and TV Shows rows; For You and Continue Watching are exempt by design. Decide whether chips should apply to all rows. (Pre-existing behavior, verified not a consolidation regression, logged 2026-07-27)
+- [ ] Content — Seed curation before next live seed run: TMDb's raw popular list includes non-US daily soaps (Tagesschau, 7de Laan, Rote Rosen). Needs a filtering/curation strategy — product decision. (Found in Phase 5 dry-run 2026-07-27)
+- [ ] Content — Provider mapping gaps in ingest-tmdb-availability.js: consider adding Netflix Standard with Ads (1796), YouTube TV (2528), and Paramount+ channel variants (1853, 582, 633). (Found in Phase 5 dry-run 2026-07-27)

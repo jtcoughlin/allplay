@@ -1,11 +1,23 @@
 import { Router } from "express";
-import { supabase } from "../supabaseClient.js";
+import { and, asc, eq } from "drizzle-orm";
+import { db } from "../db";
+import {
+  contentItems,
+  contentPlatformAvailability,
+  contentTypeEnum,
+  platforms,
+} from "@shared/schema";
 
 const router = Router();
 
+// Response shapes are kept byte-compatible with the previous Supabase-backed
+// implementation (snake_case keys, same key order, same nesting — including
+// the plural "platforms" embed key PostgREST used) so no client changes are
+// needed. See the consolidation plan for the field-level audit.
+
 /**
  * GET /api/catalog/items
- * List content items from Supabase.
+ * List content items from the catalog.
  * Optional query params:
  *   type   - filter by content_type ("movie" | "series")
  *   limit  - max rows to return (default 50, max 200)
@@ -17,56 +29,44 @@ router.get("/items", async (req, res) => {
     const limit = Math.min(Number(req.query.limit) || 50, 200);
     const offset = Number(req.query.offset) || 0;
 
-    let query = supabase
-      .from("content_items")
-      .select(
-        `
-        id,
-        content_type,
-        title,
-        original_title,
-        description,
-        release_year,
-        runtime_minutes,
-        poster_url,
-        backdrop_url,
-        tmdb_id,
-        imdb_id,
-        content_platform_availability (
-          is_available,
-          region_code,
-          platforms ( slug )
-        )
-      `
-      )
-      .order("title")
-      .range(offset, offset + limit - 1);
-
-    if (type) {
-      query = query.eq("content_type", type);
-    }
-
-    const { data, error, count } = await query;
-
-    if (error) {
-      console.error("[catalog] list error:", error.message);
-      return res.status(500).json({ error: "Failed to fetch content items" });
-    }
-
-    const items = (data ?? []).map((row: any) => {
-      const availability = Array.isArray(row.content_platform_availability)
-        ? row.content_platform_availability
-        : [];
-      const slugs = availability
-        .filter((a: any) => a.is_available && a.region_code === "US")
-        .map((a: any) => a.platforms?.slug)
-        .filter((s: any): s is string => typeof s === "string");
-      const platform_slugs = Array.from(new Set(slugs));
-      const { content_platform_availability, ...rest } = row;
-      return { ...rest, platform_slugs };
+    const rows = await db.query.contentItems.findMany({
+      where: type
+        ? eq(contentItems.contentType, type as (typeof contentTypeEnum.enumValues)[number])
+        : undefined,
+      orderBy: asc(contentItems.title),
+      limit,
+      offset,
+      with: {
+        availability: {
+          with: { platform: true },
+        },
+      },
     });
 
-    res.json({ items, offset, limit, total: count ?? null });
+    const items = rows.map((row) => {
+      const slugs = row.availability
+        .filter((a) => a.isAvailable && a.regionCode === "US")
+        .map((a) => a.platform?.slug)
+        .filter((s): s is string => typeof s === "string");
+      return {
+        id: row.id,
+        content_type: row.contentType,
+        title: row.title,
+        original_title: row.originalTitle,
+        description: row.description,
+        release_year: row.releaseYear,
+        runtime_minutes: row.runtimeMinutes,
+        poster_url: row.posterUrl,
+        backdrop_url: row.backdropUrl,
+        tmdb_id: row.tmdbId,
+        imdb_id: row.imdbId,
+        platform_slugs: Array.from(new Set(slugs)),
+      };
+    });
+
+    // The Supabase implementation never requested a count, so `total` was
+    // always null. Preserved as-is; no client reads it.
+    res.json({ items, offset, limit, total: null });
   } catch (err) {
     console.error("[catalog] list unexpected error:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -81,23 +81,32 @@ router.get("/items/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { data, error } = await supabase
-      .from("content_items")
-      .select(
-        "id, content_type, title, original_title, description, release_year, runtime_minutes, poster_url, backdrop_url, tmdb_id, imdb_id, season_number, episode_number, parent_series_id"
-      )
-      .eq("id", id)
-      .single();
+    const [row] = await db
+      .select()
+      .from(contentItems)
+      .where(eq(contentItems.id, id))
+      .limit(1);
 
-    if (error) {
-      if (error.code === "PGRST116") {
-        return res.status(404).json({ error: "Content item not found" });
-      }
-      console.error("[catalog] item fetch error:", error.message);
-      return res.status(500).json({ error: "Failed to fetch content item" });
+    if (!row) {
+      return res.status(404).json({ error: "Content item not found" });
     }
 
-    res.json(data);
+    res.json({
+      id: row.id,
+      content_type: row.contentType,
+      title: row.title,
+      original_title: row.originalTitle,
+      description: row.description,
+      release_year: row.releaseYear,
+      runtime_minutes: row.runtimeMinutes,
+      poster_url: row.posterUrl,
+      backdrop_url: row.backdropUrl,
+      tmdb_id: row.tmdbId,
+      imdb_id: row.imdbId,
+      season_number: row.seasonNumber,
+      episode_number: row.episodeNumber,
+      parent_series_id: row.parentSeriesId,
+    });
   } catch (err) {
     console.error("[catalog] item unexpected error:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -114,40 +123,42 @@ router.get("/items/:id/availability", async (req, res) => {
     const { id } = req.params;
     const region = (req.query.region as string) || "US";
 
-    const { data, error } = await supabase
-      .from("content_platform_availability")
-      .select(
-        `
-        id,
-        is_available,
-        availability_type,
-        deep_link_url,
-        web_link_url,
-        region_code,
-        quality_label,
-        price_numeric,
-        currency_code,
-        last_verified_at,
-        platforms (
-          id,
-          slug,
-          name,
-          logo_url,
-          website_url,
-          deep_link_base
-        )
-      `
-      )
-      .eq("content_item_id", id)
-      .eq("region_code", region)
-      .eq("is_available", true);
+    const rows = await db
+      .select()
+      .from(contentPlatformAvailability)
+      .innerJoin(platforms, eq(contentPlatformAvailability.platformId, platforms.id))
+      .where(
+        and(
+          eq(contentPlatformAvailability.contentItemId, id),
+          eq(contentPlatformAvailability.regionCode, region),
+          eq(contentPlatformAvailability.isAvailable, true),
+        ),
+      );
 
-    if (error) {
-      console.error("[catalog] availability fetch error:", error.message);
-      return res.status(500).json({ error: "Failed to fetch availability" });
-    }
+    const availability = rows.map(({ content_platform_availability: a, platforms: p }) => ({
+      id: a.id,
+      is_available: a.isAvailable,
+      availability_type: a.availabilityType,
+      deep_link_url: a.deepLinkUrl,
+      web_link_url: a.webLinkUrl,
+      region_code: a.regionCode,
+      quality_label: a.qualityLabel,
+      // PostgREST serialized numeric as a JSON number; node-postgres returns
+      // a string. Normalize so the contract doesn't drift when prices land.
+      price_numeric: a.priceNumeric === null ? null : Number(a.priceNumeric),
+      currency_code: a.currencyCode,
+      last_verified_at: a.lastVerifiedAt,
+      platforms: {
+        id: p.id,
+        slug: p.slug,
+        name: p.name,
+        logo_url: p.logoUrl,
+        website_url: p.websiteUrl,
+        deep_link_base: p.deepLinkBase,
+      },
+    }));
 
-    res.json({ content_item_id: id, region, availability: data });
+    res.json({ content_item_id: id, region, availability });
   } catch (err) {
     console.error("[catalog] availability unexpected error:", err);
     res.status(500).json({ error: "Internal server error" });
